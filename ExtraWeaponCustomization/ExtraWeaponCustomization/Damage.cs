@@ -1,6 +1,7 @@
 ﻿using Agents;
 using Enemies;
 using EWC.CustomWeapon.Enums;
+using EWC.CustomWeapon.Structs;
 using Player;
 using ReplayRecorder.API;
 using ReplayRecorder.API.Attributes;
@@ -9,19 +10,19 @@ namespace ReplayRecorder.EWC {
     [ReplayData("EWC.Damage", "0.0.2")]
     internal class rEWCDamage : ReplayEvent {
         internal static class Hooks {
-            public static void Shrapnel(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? player, OwnerType ownerType) {
-                if (player == null) return;
-                Sync.Trigger(new rEWCDamage(Type.Shrapnel, damage, player, enemy, ownerType.HasFlag(OwnerType.Sentry)));
+            public static void Shrapnel(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? source, pCWC cwc) {
+                if (source == null) return;
+                Sync.Trigger(new rEWCDamage(Type.Shrapnel, damage, source, enemy, cwc.ownerType.HasFlag(OwnerType.Sentry)));
             }
 
-            public static void Explosive(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? player, OwnerType ownerType) {
-                if (player == null) return;
-                Sync.Trigger(new rEWCDamage(Type.Explosive, damage, player, enemy, ownerType.HasFlag(OwnerType.Sentry)));
+            public static void Explosive(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? source, pCWC cwc) {
+                if (source == null) return;
+                Sync.Trigger(new rEWCDamage(Type.Explosive, damage, source, enemy, cwc.ownerType.HasFlag(OwnerType.Sentry)));
             }
 
-            public static void DoT(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? player, OwnerType ownerType) {
-                if (player == null) return;
-                Sync.Trigger(new rEWCDamage(Type.DoT, damage, player, enemy, ownerType.HasFlag(OwnerType.Sentry)));
+            public static void DoT(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? source, pCWC cwc) {
+                if (source == null) return;
+                Sync.Trigger(new rEWCDamage(Type.DoT, damage, source, enemy, cwc.ownerType.HasFlag(OwnerType.Sentry)));
             }
         }
 

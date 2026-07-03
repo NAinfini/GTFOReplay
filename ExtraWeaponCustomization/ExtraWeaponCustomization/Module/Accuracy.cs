@@ -4,6 +4,7 @@ using Enemies;
 using EWC.CustomWeapon;
 using EWC.CustomWeapon.Enums;
 using EWC.CustomWeapon.Properties.Traits.CustomProjectile.Components;
+using EWC.CustomWeapon.Structs;
 using EWC.Utils;
 using Gear;
 using HarmonyLib;
@@ -32,6 +33,7 @@ namespace ReplayRecorder.EWC {
 
         public static void OnProjectileDespawn(EWCProjectileComponentBase projectile) {
             if (!projectile.IsManaged) return;
+            if (projectile.Settings.CWC.Owner.Player == null) return;
 
             if (!projectiles.ContainsKey(projectile.SyncID)) {
                 projectiles.Add(projectile.SyncID, new BulletInfo());
@@ -97,6 +99,7 @@ namespace ReplayRecorder.EWC {
         private static BulletInfo currentBullet = new BulletInfo();
 
         public static void PreShotFired(HitData hit, Ray ray, WeaponType weaponType) {
+            if (hit.owner == null) return;
             if (!SNet.IsMaster && hit.owner.Owner.IsBot) return;
             if (!hit.owner.Owner.IsBot && !hit.owner.IsLocallyOwned) return;
 
@@ -126,7 +129,7 @@ namespace ReplayRecorder.EWC {
             currentBullet.hits = 0;
         }
 
-        public static void OnExplosiveDamage(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? player, OwnerType ownerType) {
+        public static void OnExplosiveDamage(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? source, pCWC cwc) {
             if (!enemy.Alive) return;
 
             // EWC handler
@@ -146,8 +149,8 @@ namespace ReplayRecorder.EWC {
             }
         }
 
-        public static void OnShrapnelDamage(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? player, OwnerType ownerType) {
-            OnExplosiveDamage(damage, enemy, limb, player, ownerType);
+        public static void OnShrapnelDamage(float damage, EnemyAgent enemy, Dam_EnemyDamageLimb limb, PlayerAgent? source, pCWC cwc) {
+            OnExplosiveDamage(damage, enemy, limb, source, cwc);
         }
 
         [HarmonyPatch(typeof(Dam_EnemyDamageLimb), nameof(Dam_EnemyDamageLimb.BulletDamage))]

@@ -3,7 +3,7 @@ import { Signal, signal } from "@esm/@/rhu/signal.js";
 import { Style } from "@esm/@/rhu/style.js";
 import * as icons from "@esm/@root/main/global/components/atoms/icons/index.js";
 import type { View } from "@esm/@root/main/routes/player/components/view/index.js";
-import { OnParserFinish, Render } from "@esm/@root/main/routes/player/index.js";
+import { Render } from "@esm/@root/main/routes/player/index.js";
 
 let disposeController = new AbortController();
 export const dispose = {
@@ -43,7 +43,6 @@ import { Finder } from "./pages/finder.js";
 import { Info } from "./pages/info.js";
 import { Settings } from "./pages/settings.js";
 import { Stats } from "./pages/stats.js";
-import { StatTracker } from "../parser/stattracker/stattracker.js";
 
 const style = Style(({ css }) => {
     const wrapper = css.class`
@@ -188,15 +187,4 @@ Render((doc, view) => {
     const main = ui();
     main.view(view);
     doc.append(...main);
-});
-
-// TODO(randomuserhi): remove, this is just here to extract data
-OnParserFinish((view, persistent, path) => {
-    if (persistent.temp == undefined) persistent.temp = [];
-
-    const replay = view.replay();
-    if (replay) {
-        const last = replay.api(replay.getSnapshot(Infinity)!);
-        persistent.temp.push({ stats: StatTracker.from(last), player: last.get("Vanilla.Player"), backpack: last.get("Vanilla.Player.Backpack"), boosters: last.get("Vanilla.Player.Boosters"), path });
-    }
 });

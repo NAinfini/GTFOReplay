@@ -35,6 +35,8 @@ declare module "@asl/vanilla/parser/enemy/enemy.js" {
     }
 }
 
+// TODO(randomuserhi): Implement same mechanism for players (currently EWC damage is only tracked for enemies)
+
 EnemyOnDeathEvents.register("EWC", (snapshot: ReplayApi, enemy: Enemy, hitData: EWCDamage) => {
     // Update kill to last player that hit enemy
     const statTracker = StatTracker.from(snapshot);

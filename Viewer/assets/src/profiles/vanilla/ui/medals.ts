@@ -52,7 +52,16 @@ export const MedalDatablock = new Map<string, MedalRequirement>(([
                     meleeDamage += damage.value;
                 }
 
-                const total = bulletDamage + meleeDamage;
+                // TODO(randomuserhi): Crude way of doing this, should adjust API
+                let customDamage = 0;
+                for (const [key, set] of stats.enemyDamage.custom.entries()) {
+                    if (key.includes(".Sentry.")) continue;
+                    for (const damage of set.values()) {
+                        customDamage += damage.value;
+                    }
+                }
+
+                const total = bulletDamage + meleeDamage + customDamage;
                 if (total > maxDamage) {
                     chosen = [];
                     maxDamage = total;

@@ -17,6 +17,7 @@ namespace ReplayRecorder.Net {
             FailedToConnect,    // client -> viewer : failed to connect to host
             InGameMessage,      // viewer <> client : chat message being sent or recieved between host and viewer
             AckInGameMessage,   // client -> viewer : host has acknowledged and recieved the sent chat message
+            Custom,             // client <> viewer : custom channel used by replay extensions
         }
 
         public static TCPServer socket = new TCPServer();
@@ -60,6 +61,16 @@ namespace ReplayRecorder.Net {
                 if (endPointToSteam.ContainsKey(endPoint)) {
                     // Convert message type
                     BitHelper.WriteBytes((ushort)HostClient.MessageType.InGameMessage, buffer, 0);
+
+                    // Forward in game messages via slave socket to avoid congestion with replay stream
+                    endPointToSteam[endPoint].slave.Send(buffer);
+                }
+                break;
+            }
+            case MessageType.Custom: {
+                if (endPointToSteam.ContainsKey(endPoint)) {
+                    // Convert message type
+                    BitHelper.WriteBytes((ushort)HostClient.MessageType.Custom, buffer, 0);
 
                     // Forward in game messages via slave socket to avoid congestion with replay stream
                     endPointToSteam[endPoint].slave.Send(buffer);

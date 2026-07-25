@@ -1,8 +1,9 @@
+import { Enemy } from "@asl/vanilla/parser/enemy/enemy.js";
 import { signal } from "@esm/@/rhu/signal.js";
 import { DataStore } from "@esm/@root/replay/datastore.js";
 import { ReplayApi } from "@esm/@root/replay/moduleloader.js";
 import type { Renderer } from "@esm/@root/replay/renderer.js";
-import { PerspectiveCamera, Quaternion, Vector2, Vector3, Vector3Like } from "@esm/three";
+import { PerspectiveCamera, Quaternion, Raycaster, Sphere, Vector2, Vector3, Vector3Like } from "@esm/three";
 import { OrbitControls } from "@esm/three/examples/jsm/controls/OrbitControls.js";
 import { Factory } from "../library/factory.js";
 import { dispose, ui } from "../ui/main.js";
@@ -26,8 +27,8 @@ declare module "@esm/@root/replay/datastore.js" {
 const move = new Vector3();
 const tp_temp = new Vector3();
 export class Controls {
-    private readonly camera: Camera;
-    private readonly renderer: Renderer;
+    readonly camera: Camera;
+    readonly renderer: Renderer;
 
     private readonly fakeCamera: PerspectiveCamera;
     private readonly orbitControls: OrbitControls;
@@ -48,20 +49,30 @@ export class Controls {
     targetSlot = signal<number | undefined>(undefined);
     relativeRot = signal(false);
 
-    up: boolean;
-    down: boolean;
-    forward: boolean;
-    backward: boolean;
-    left: boolean;
-    right: boolean;
-    shift: boolean;
+    up: boolean = false;
+    down: boolean = false;
+    forward: boolean = false;
+    backward: boolean = false;
+    left: boolean = false;
+    right: boolean = false;
+    shift: boolean = false;
 
     mouseRight: boolean = false;
     mouseLeft: boolean = false;
     mouseMiddle: boolean = false;
     mousePos: Vector2 = new Vector2();
+    
+    isSelecting = signal<boolean>(false);
+    doSelect: boolean = false;
+    selectStart = new Vector2();
+    selectStartScreen = new Vector2();
+    selectEnd = new Vector2();
 
     speed: number;
+
+    public static hooks = new Set<(self: Controls, snapshot: ReplayApi, dt: number) => void>();
+    public static keydownhooks = new Set<(self: Controls, e: KeyboardEvent) => boolean>();
+    public static keyuphooks = new Set<(self: Controls, e: KeyboardEvent) => boolean>();
 
     public saveState() {
         DataStore.set("ControlState", {
@@ -138,6 +149,10 @@ export class Controls {
 
             const display = ui().display;
 
+            for (const keyuphook of Controls.keyuphooks) {
+                if (!keyuphook(this, e)) return;
+            }
+
             switch (e.keyCode) {
             case 32:
                 e.preventDefault();
@@ -163,6 +178,15 @@ export class Controls {
                 e.preventDefault();
                 this.backward = false;
                 break;
+
+            case 81: // q key
+                {
+                    const rect = canvas.getBoundingClientRect();
+                    this.selectEnd.set((mouse.x / rect.width) * 2 - 1, -(mouse.y / rect.height) * 2 + 1);
+                    this.isSelecting(false);
+                    this.doSelect = true;
+                }
+                break;
     
             case 16: // shift key
                 e.preventDefault();
@@ -182,6 +206,10 @@ export class Controls {
             const display = ui().display;
             const view = display.view();
             if (view === undefined) return;
+
+            for (const keydownhook of Controls.keydownhooks) {
+                if (!keydownhook(this, e)) return;
+            }
 
             switch (e.keyCode) {
             case 70:
@@ -212,23 +240,6 @@ export class Controls {
                 e.preventDefault();
                 this.backward = true;
                 break;
-    
-            case 49:
-                e.preventDefault();
-                this.targetSlot(0);
-                break;
-            case 50:
-                e.preventDefault();
-                this.targetSlot(1);
-                break;
-            case 51:
-                e.preventDefault();
-                this.targetSlot(2);
-                break;
-            case 52:
-                e.preventDefault();
-                this.targetSlot(3);
-                break;
 
             case 38:
                 e.preventDefault();
@@ -252,9 +263,35 @@ export class Controls {
                 display.scoreboard.wrapper.style.display = "block";
                 break;
 
+            case 81: // q key
+                {
+                    this.isSelecting(true);
+                    const rect = canvas.getBoundingClientRect();
+                    this.selectStart.set((mouse.x / rect.width) * 2 - 1, -(mouse.y / rect.height) * 2 + 1);
+                    this.selectStartScreen.set(mouse.x + rect.left, mouse.y + rect.top);
+                }
+                break;
+
             case 16: // shift key
                 e.preventDefault();
                 this.shift = true;
+                break;
+
+            case 49:
+                e.preventDefault();
+                this.targetSlot(0);
+                break;
+            case 50:
+                e.preventDefault();
+                this.targetSlot(1);
+                break;
+            case 51:
+                e.preventDefault();
+                this.targetSlot(2);
+                break;
+            case 52:
+                e.preventDefault();
+                this.targetSlot(3);
                 break;
             }
         };
@@ -318,6 +355,16 @@ export class Controls {
         canvas.addEventListener("mouseup", this.mouseup, { signal: dispose.signal });
     }
 
+    public raycaster = new Raycaster();
+    private clicked2 = false;
+
+    public static selected = signal<number[] | undefined>(undefined);
+    private clickSphere: Sphere = new Sphere(undefined, 1);
+    public enableMindControl = false;
+
+    private static FUNC_update = {
+        dir: new Vector3()
+    } as const;
     public update(snapshot: ReplayApi, dt: number) {
         const renderer = this.renderer;
         const camera = this.camera;
@@ -337,6 +384,100 @@ export class Controls {
             camera.root.getWorldPosition(worldPos);
             camera.root.parent = renderer.scene;
             camera.root.position.copy(worldPos);
+        }
+
+        this.raycaster.setFromCamera(this.mousePos, camera.root);
+
+        if (this.mouseMiddle && !this.clicked2) {
+            this.clicked2 = true;
+
+            let enemy: Enemy | undefined = undefined;
+            let dist: number | undefined = undefined;
+
+            const enemies = snapshot.getOrDefault("Vanilla.Enemy", Factory("Map"));
+            for (const e of enemies.values()) {
+                if (e.dimension !== renderer.get("Dimension")) continue;
+
+                this.clickSphere.center.copy(e.position);
+                this.clickSphere.center.setY(this.clickSphere.center.y + 1);
+                if (this.raycaster.ray.intersectsSphere(this.clickSphere)) {
+                    const p = e.position;
+                    const d = camera.root.position.distanceToSquared(p);
+                    if (enemy === undefined || dist === undefined || d < dist) {
+                        dist = d;
+                        enemy = e;
+                    }
+                }
+            }
+
+            if (enemy !== undefined) {
+                Controls.selected([enemy.id]);
+                console.log(`Selected: ${Controls.selected()}`);
+            } else {
+                Controls.selected(undefined);
+            }
+        } else if (!this.mouseMiddle) {
+            this.clicked2 = false;
+        }
+
+        // todo: clean up
+        if (this.doSelect) {
+            this.doSelect = false;
+            const selectedEnemies: number[] = [];
+            const minX = Math.min(this.selectStart.x, this.selectEnd.x);
+            const minY = Math.min(this.selectStart.y, this.selectEnd.y);
+            const maxX = Math.max(this.selectStart.x, this.selectEnd.x);
+            const maxY = Math.max(this.selectStart.y, this.selectEnd.y);
+
+            const { dir } = Controls.FUNC_update;
+
+            const enemies = snapshot.getOrDefault("Vanilla.Enemy", Factory("Map"));
+            for (const e of enemies.values()) {
+                if (e.dimension !== renderer.get("Dimension")) continue;
+
+                dir.copy(e.position);
+                dir.setY(e.position.y + 1);
+                dir.project(camera.root);
+                if (dir.x > minX && dir.x < maxX && dir.y > minY && dir.y < maxY) {
+                    dir.copy(e.position);
+                    dir.setY(e.position.y + 1);
+                    const dist = dir.distanceToSquared(camera.root.position);
+                    let skip = false;
+
+                    // check line of sight
+                    this.raycaster.set(camera.root.position, dir.sub(camera.root.position));
+                    const geometryGroups = renderer.getOrDefault("Maps", Factory("Map"));
+                    const group = geometryGroups.get(renderer.get("Dimension")!);
+                    if (group !== undefined) {
+                        for (const geom of group) {
+                            const intersects = this.raycaster.intersectObject(geom, false);
+                            if (intersects.length > 0) {
+                                for (let i = 0; i < intersects.length; ++i) {
+                                    const p = intersects[i].point;
+                                    const d = camera.root.position.distanceToSquared(p);
+                                    if (d < dist) {
+                                        skip = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (!skip) selectedEnemies.push(e.id);
+                }
+            }
+
+            if (selectedEnemies.length > 0) {
+                Controls.selected(selectedEnemies);
+                console.log(`Selected: ${Controls.selected()}`);
+            } else {
+                Controls.selected(undefined);
+            }
+        } 
+        
+        for (const hook of Controls.hooks) {
+            hook(this, snapshot, dt);
         }
 
         if (this.slot !== undefined) {

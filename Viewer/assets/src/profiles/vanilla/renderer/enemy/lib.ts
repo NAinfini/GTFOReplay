@@ -15,7 +15,7 @@ export class EnemyModelWrapper {
     model: Model<[enemy: Enemy, anim?: EnemyAnimState, ragdoll?: EnemyRagdoll]>;
 
     tmp?: Text;
-    tmpHeight: number;
+    tmpHeight?: number;
     tag?: Text;
 
     animHandle?: EnemyAnimHandle;
@@ -72,7 +72,7 @@ export class EnemyModelWrapper {
     public updateTmp(enemy: Enemy, anim: EnemyAnimState | undefined, camera: Camera, players: (Player | undefined)[]) {
         if (this.tmp === undefined || this.tag === undefined) return;
 
-        this.tmp.position.y = this.tmpHeight;
+        this.tmp.position.y = this.tmpHeight ?? 0;
         
         if (!this.model.isVisible()) {
             this.tmp.visible = false;
@@ -110,6 +110,9 @@ Target: `;
         this.tmp.text += target;
 
         this.tmp.visible = EnemyModelWrapper.showInfo();
+        if (Controls.selected() !== undefined && Controls.selected()!.some(e => e === enemy.id)) {
+            this.tmp.visible = true;
+        }
 
         this.orientateText(this.tmp, camera, 0.3, 0.05);
         this.orientateText(this.tag, camera, 0.5, 0.1);
@@ -152,4 +155,5 @@ module.ready();
 /* eslint-disable-next-line sort-imports */
 import { EnemyRagdoll } from "../../parser/enemy/enemyRagdoll.js";
 import { HumanoidEnemyModel } from "./models/humanoid.js";
+import { Controls } from "../controls.js";
 

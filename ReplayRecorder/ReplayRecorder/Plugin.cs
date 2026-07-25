@@ -27,6 +27,7 @@ public class Plugin : BasePlugin {
         RundownManager.OnExpeditionGameplayStarted += (Action)OnGameplayStart;
 
         RNet.Init(); // Communication between players
+        VNet.Init(); // Communication with viewer
         ClientViewer.Init(); // Communcation between Game and Viewer
         HostClient.Init(); // Communication between Host and Client (Spectator)
     }

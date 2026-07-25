@@ -7,6 +7,7 @@ using ReplayRecorder;
 namespace Vanilla.BepInEx;
 
 [BepInPlugin(Module.GUID, Module.Name, Module.Version)]
+[BepInDependency(ReplayRecorder.BepInEx.Module.GUID, BepInDependency.DependencyFlags.HardDependency)]
 [BepInDependency(OldBulkheadSoundGUID, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency(ExtraWeaponCustomizationGUID, BepInDependency.DependencyFlags.SoftDependency)]
 public class Plugin : BasePlugin {

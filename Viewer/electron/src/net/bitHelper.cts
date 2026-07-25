@@ -163,17 +163,18 @@ export function writeBool(bool: boolean, stream: ByteStream) {
     writeByte(bool ? 1 : 0, stream);
 }
 
-export function writeBytes(bytes: Uint8Array, stream: ByteStream) {
-    writeUShort(bytes.byteLength, stream);
-    reserve(bytes.byteLength, stream);
-    for (let i = 0; i < bytes.byteLength; ++i) {
+export function writeBytes(bytes: Uint8Array, length: number, stream: ByteStream) {
+    writeUShort(length, stream);
+    reserve(length, stream);
+    for (let i = 0; i < length; ++i) {
         writeByte(bytes[i], stream);
     }
 }
 
 const textEncoder = new TextEncoder();
 export function writeString(message: string, stream: ByteStream) {
-    writeBytes(textEncoder.encode(message), stream);
+    const buffer = textEncoder.encode(message);
+    writeBytes(buffer, buffer.byteLength, stream);
 }
 
 export function writeULong(ulong: bigint, stream: ByteStream) {

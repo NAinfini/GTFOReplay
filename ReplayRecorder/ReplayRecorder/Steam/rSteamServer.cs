@@ -48,10 +48,12 @@ namespace ReplayRecorder.Steam {
             public bool running = true;
 
             public string name = "Unknown";
+            public ulong steamID = 0;
 
-            public Connection(rSteamServer server, HSteamNetConnection connection) {
+            public Connection(rSteamServer server, HSteamNetConnection connection, ulong steamID) {
                 this.connection = connection;
                 this.server = server;
+                this.steamID = steamID;
 
                 _ = ReceiveMessages();
             }
@@ -220,7 +222,7 @@ namespace ReplayRecorder.Steam {
 
             case ESteamNetworkingConnectionState.k_ESteamNetworkingConnectionState_Connected: {
                 APILogger.Warn($"[{debugName}] Connection established: {connectionInfo.m_szConnectionDescription}");
-                Connection conn = new Connection(this, connection);
+                Connection conn = new Connection(this, connection, steamID);
                 currentConnections.AddOrUpdate(connection, conn, (key, old) => { return conn; });
                 onAccept?.Invoke(connection);
                 break;

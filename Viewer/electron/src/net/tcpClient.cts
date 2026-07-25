@@ -18,6 +18,7 @@ interface MessageTypes
     "failedToConnect": void;
     "inGameMessage": void;
     "ackInGameMessage": void;
+    "custom": void;
 }
 const messageTypes: (keyof MessageTypes)[] = [
     "startGame",
@@ -28,15 +29,16 @@ const messageTypes: (keyof MessageTypes)[] = [
     "failedToConnect",
     "inGameMessage",
     "ackInGameMessage",
+    "custom"
 ];
 const messageTypeMap: Map<keyof MessageTypes, number>  = new Map([...messageTypes.entries()].map(([id, type]) => [type, id]));
 
 export class TcpClient {
-    private socket: net.Socket | null;
+    private socket: net.Socket | null = null;
     private sockId: number = 0;
     private eventMap: Map<string, Set<Function>>;
 
-    onClose: () => void | undefined;
+    onClose: () => void | undefined = () => {};
 
     constructor() {
         this.eventMap = new Map();

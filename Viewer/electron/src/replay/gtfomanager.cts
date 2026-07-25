@@ -62,6 +62,12 @@ export class GTFOManager {
     public setupIPC(ipc: Electron.IpcMain) {
         let messageId = 0;
 
+        ipc.handle("sendCustom", async (_, packetName: string, bytes: Uint8Array, length: number) => {
+            const packet = new ByteStream();
+            BitHelper.writeString(packetName, packet);
+            BitHelper.writeBytes(bytes, length, packet);
+            this.client.send("custom", packet);
+        });
         ipc.handle("sendChatMessage", async (_, message: string) => {
             if (!this.client.active()) return;
             const packet = new ByteStream();
@@ -76,7 +82,7 @@ export class GTFOManager {
                 await this.client.connect(ip, port);
                 return undefined;
             } catch (err) {
-                return `${ip}(${port}): ${err.message}`;
+                return `${ip}(${port}): ${(err as Error).message}`;
             }
         });
         ipc.handle("goLive", (_, id: bigint) => {

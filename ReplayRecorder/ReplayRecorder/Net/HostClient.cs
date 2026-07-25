@@ -410,6 +410,15 @@ namespace ReplayRecorder.Net {
                     }
                     break;
                 }
+                case MessageType.Custom: {
+                    if (!SNet.IsMaster) return;
+                    if (socket.currentConnections.TryGetValue(connection, out rSteamServer.Connection? conn) && conn != null) {
+                        MainThread.Run(() => {
+                            VNet.Receive(new ArraySegment<byte>(buffer.Array!, buffer.Offset + index, buffer.Count - index), conn.steamID);
+                        });
+                    }
+                    break;
+                }
                 default: {
                     APILogger.Error($"[SlaveServer] No behaviour defined for message of type '{type}'");
                     break;
@@ -482,6 +491,7 @@ namespace ReplayRecorder.Net {
             ForwardMessage,
             Connected,
             InGameMessage,
+            Custom,
         }
 
         private const int mainVPort = 10420;

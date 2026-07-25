@@ -49,7 +49,7 @@ class AlertModel extends ObjectWrapper<Group> {
 
     public update(enemy: EnemyModelWrapper) {
         enemy.model.root.add(this.root);
-        this.root.position.set(0, enemy.tmpHeight + 1, 0);
+        this.root.position.set(0, (enemy.tmpHeight ?? 0) + 1, 0);
     }
 }
 

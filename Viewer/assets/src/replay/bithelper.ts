@@ -311,6 +311,7 @@ export async function readFloat32Array(stream: ByteStream | FileStream, length: 
 function reserve(numBytes: number, stream: ByteStream) {
     const size = stream.index + numBytes;
     let capacity = stream.view.byteLength;
+    if (capacity <= 0) capacity = 1024;
     while (size > capacity) {
         capacity *= 2;
     }
@@ -333,56 +334,57 @@ export function writeBool(bool: boolean, stream: ByteStream) {
     writeByte(bool ? 1 : 0, stream);
 }
 
-export function writeBytes(bytes: Uint8Array, stream: ByteStream) {
-    writeUShort(bytes.byteLength, stream);
-    reserve(bytes.byteLength, stream);
-    for (let i = 0; i < bytes.byteLength; ++i) {
+export function writeBytes(bytes: Uint8Array, length: number, stream: ByteStream) {
+    writeUShort(length, stream);
+    reserve(length, stream);
+    for (let i = 0; i < length; ++i) {
         writeByte(bytes[i], stream);
     }
 }
 
 const textEncoder = new TextEncoder();
 export function writeString(message: string, stream: ByteStream) {
-    writeBytes(textEncoder.encode(message), stream);
+    const buffer = textEncoder.encode(message);
+    writeBytes(buffer, buffer.byteLength, stream);
 }
 
 export function writeULong(ulong: bigint, stream: ByteStream) {
     const sizeof = 8;
     reserve(sizeof, stream);
-    stream.view.setBigUint64(stream.index, ulong);
+    stream.view.setBigUint64(stream.index, ulong, true);
     stream.index += sizeof;
 }
 export function writeUInt(uint: number, stream: ByteStream) {
     const sizeof = 4;
     reserve(sizeof, stream);
-    stream.view.setUint32(stream.index, uint);
+    stream.view.setUint32(stream.index, uint, true);
     stream.index += sizeof;
 }
 export function writeUShort(ushort: number, stream: ByteStream) {
     if (ushort < 0 || ushort > 65535) throw new TypeError("Value is not of type 'ushort'.");
     const sizeof = 2;
     reserve(sizeof, stream);
-    stream.view.setUint16(stream.index, ushort);
+    stream.view.setUint16(stream.index, ushort, true);
     stream.index += sizeof;
 }
 
 export function writeLong(long: bigint, stream: ByteStream) {
     const sizeof = 8;
     reserve(sizeof, stream);
-    stream.view.setBigInt64(stream.index, long);
+    stream.view.setBigInt64(stream.index, long, true);
     stream.index += sizeof;
 }
 export function writeInt(int: number, stream: ByteStream) {
     const sizeof = 4;
     reserve(sizeof, stream);
-    stream.view.setInt32(stream.index, int);
+    stream.view.setInt32(stream.index, int, true);
     stream.index += sizeof;
 }
 export function writeShort(short: number, stream: ByteStream) {
     if (short < 0 || short > 65535) throw new TypeError("Value is not of type 'short'.");
     const sizeof = 2;
     reserve(sizeof, stream);
-    stream.view.setInt16(stream.index, short);
+    stream.view.setInt16(stream.index, short, true);
     stream.index += sizeof;
 }
 
@@ -401,11 +403,12 @@ export function writeHalf(float: number, stream: ByteStream) {
     const e = (b & 0x7F800000) >> 23; // exponent
     const m = b & 0x007FFFFF; // mantissa; in line below: 0x007FF000 = 0x00800000-0x00001000 = decimal indicator flag - initial rounding
 
-    writeUShort((b & 0x80000000) >> 16 | ToInt(e > 112) * ((((e - 112) << 10) & 0x7C00) | m >> 13) | (ToInt(e < 113) & ToInt(e > 101)) * ((((0x007FF000 + m) >> (125 - e)) + 1) >> 1) | ToInt(e > 143) * 0x7FFF, stream);
+    const ushort = (b & 0x80000000) >> 16 | ToInt(e > 112) * ((((e - 112) << 10) & 0x7C00) | m >> 13) | (ToInt(e < 113) & ToInt(e > 101)) * ((((0x007FF000 + m) >> (125 - e)) + 1) >> 1) | ToInt(e > 143) * 0x7FFF;
+    writeUShort(ushort & 0xFFFF, stream);
 }
 export function writeFloat(float: number, stream: ByteStream) {
     const sizeof = 4;
     reserve(sizeof, stream);
-    stream.view.setFloat32(stream.index, float);
+    stream.view.setFloat32(stream.index, float, true);
     stream.index += sizeof;
 }

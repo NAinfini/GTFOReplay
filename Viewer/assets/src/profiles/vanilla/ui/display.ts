@@ -115,6 +115,8 @@ export const Display = () => {
         readonly view: Signal<html<typeof View> | undefined>;
         readonly scoreboard: html<typeof Scoreboard>;
         readonly mount: HTMLDivElement;
+        
+        readonly debug: html<typeof Debug>;
     }
     interface Private {
         readonly seeker: html<typeof Seeker>;
@@ -123,7 +125,6 @@ export const Display = () => {
         readonly playIcon: html<typeof icons.play>;
         readonly liveButton: HTMLButtonElement;
         readonly liveDot: HTMLSpanElement;
-        readonly debug: html<typeof Debug>;
         readonly objective: html<typeof ObjectiveDisplay>;
     }
 

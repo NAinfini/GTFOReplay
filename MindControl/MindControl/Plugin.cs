@@ -44,8 +44,6 @@ public class Plugin : BasePlugin {
     private static void OnMindControlSpawnCommand(ulong from, ArraySegment<byte> buffer) {
         if (!SNet.IsMaster) return;
 
-
-
         int index = 0;
         Vector3 pos = BitHelper.ReadHalfVector3(buffer, ref index);
         Quaternion rot = Quaternion.identity;

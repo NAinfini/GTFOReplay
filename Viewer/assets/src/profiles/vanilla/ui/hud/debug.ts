@@ -2,7 +2,7 @@ import { html, Mutable } from "@esm/@/rhu/html.js";
 import { signal, Signal } from "@esm/@/rhu/signal.js";
 import { Style } from "@esm/@/rhu/style.js";
 import { View } from "../../../../main/routes/player/components/view/index.js";
-import { dispose } from "../main.js";
+import { ui, dispose } from "../main.js";
 
 const style = Style(({ css }) => {
     const wrapper = css.class`
@@ -19,15 +19,39 @@ const style = Style(({ css }) => {
     z-index: 1000;
     `;
 
+    const inputWrapper = css.class`
+    margin-top: 10px;
+    `;
+
+    const input = css.class`
+    background-color: #1c1c32;
+    padding: 3px 5px;
+    border-radius: 4px;
+    color: white;
+    width: 100%;
+    `;
+
     return {
         wrapper,
-        selectBox
+        selectBox,
+        inputWrapper,
+        input
     };
 });
+
+const debugInput = signal(false);
+export function enableDebugInput() {
+    debugInput(true);
+}
+
+export function getDebugValue() {
+    return ui().display.debug.debugInput.value;
+}
 
 export const Debug = () => {
     interface Debug {
         readonly view: Signal<html<typeof View> | undefined>;
+        readonly debugInput: HTMLInputElement;
     }
     interface Private {
         readonly selectBox: HTMLDivElement;
@@ -37,11 +61,18 @@ export const Debug = () => {
 
     const dom = html<Mutable<Private & Debug>>/**//*html*/`
         <div class="${style.wrapper}">
-            ${position}
+            <div style="text-align:right">${position}</div>
+            <div class="${style.inputWrapper}">
+                <input m-id="debugInput" class="${style.input}" style="display: none;" />
+            </div>
         </div>
         <div m-id="selectBox" class="${style.selectBox}" style="display: block; top: 0px; left: 0px; width: 0px; height: 0px;">
 		`;
     html(dom).box();
+
+    debugInput.on((value) => {
+        dom.debugInput.style.display = value ? "block" : "none";
+    }, {signal: dispose.signal});
 
     dom.view = signal<html<typeof View> | undefined>(undefined);
 
@@ -95,3 +126,5 @@ export const Debug = () => {
 
     return dom as html<Debug>;
 };
+
+module.ready();

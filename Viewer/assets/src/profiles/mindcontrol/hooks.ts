@@ -4,6 +4,9 @@ import { Factory } from "@asl/vanilla/library/factory.js";
 import { Sphere, Vector3, Vector3Like } from "@esm/three";
 import { ByteStream } from "@esm/@root/replay/stream.js";
 import * as BitHelper from "@esm/@root/replay/bithelper.js";
+import { enableDebugInput, getDebugValue } from "@asl/vanilla/ui/hud/debug.js";
+
+enableDebugInput();
 
 function Attack(id: number[] | undefined, slot: number) {
     if (id === undefined) return;
@@ -175,7 +178,12 @@ Controls.hooks.add((self, snapshot, dt) => {
         }
 
         if (point !== undefined) {
-            SpawnEnemy(31, point);
+            try {
+                const enemyId = parseInt(getDebugValue());
+                SpawnEnemy(enemyId, point);
+            } catch (err) {
+                console.log(err);
+            }
         }
     } else if (!g_key) {
         clicked2 = false;

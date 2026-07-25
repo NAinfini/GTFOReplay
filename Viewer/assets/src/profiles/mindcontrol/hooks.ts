@@ -70,8 +70,20 @@ function Clear(id: number[] | undefined) {
     window.api.invoke("sendCustom", "MindControl", packet.bytes, packet.index);
 }
 
+function SpawnEnemy(id: number, pos: Vector3Like) {
+    const packet = new ByteStream();
+    BitHelper.writeHalf(-pos.x, packet);
+    BitHelper.writeHalf(pos.y, packet);
+    BitHelper.writeHalf(pos.z, packet);
+    BitHelper.writeUInt(id, packet);
+
+    window.api.invoke("sendCustom", "MindControl.SpawnEnemy", packet.bytes, packet.index);
+}
+
 const clickSphere = new Sphere(undefined, 1);
 let clicked1 = false;
+let g_key = false;
+let clicked2 = false;
 Controls.hooks.add((self, snapshot, dt) => {
     const renderer = self.renderer;
     const camera = self.camera;
@@ -136,6 +148,38 @@ Controls.hooks.add((self, snapshot, dt) => {
     } else if (!self.mouseRight) {
         clicked1 = false;
     }
+
+    if (g_key === true && !clicked2) {
+        clicked2 = true;
+
+        let point: Vector3 | undefined = undefined;
+        let dist: number | undefined = undefined;
+    
+        // Click geometry
+        const geometryGroups = renderer.getOrDefault("Maps", Factory("Map"));
+        const group = geometryGroups.get(renderer.get("Dimension")!);
+        if (group !== undefined) {
+            for (const geom of group) {
+                const intersects = self.raycaster.intersectObject(geom, false);
+                if (intersects.length > 0) {
+                    for (let i = 0; i < intersects.length; ++i) {
+                        const p = intersects[i].point;
+                        const d = camera.root.position.distanceToSquared(p);
+                        if (point === undefined || dist === undefined || d < dist) {
+                            dist = d;
+                            point = p;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (point !== undefined) {
+            SpawnEnemy(31, point);
+        }
+    } else if (!g_key) {
+        clicked2 = false;
+    }
 });
 
 Controls.keydownhooks.add((self, e) => {
@@ -174,6 +218,20 @@ Controls.keydownhooks.add((self, e) => {
             Clear(Controls.selected());
             return false;
         }
+        break;
+    case 71:
+        e.preventDefault();
+        g_key = true;        
+        break;
+    }
+    return true;
+});
+
+Controls.keyuphooks.add((self, e) => {
+    switch (e.keyCode) {
+    case 71:
+        e.preventDefault();
+        g_key = false;    
         break;
     }
     return true;

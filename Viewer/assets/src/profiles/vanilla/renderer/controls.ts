@@ -313,9 +313,6 @@ export class Controls {
                 e.preventDefault();
             }
 
-            const rect = canvas.getBoundingClientRect();
-            this.mousePos.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
-
             old.x = mouse.x;
             old.y = mouse.y;
             origin.x = mouse.x;
@@ -326,6 +323,8 @@ export class Controls {
             const rect = canvas.getBoundingClientRect();
             mouse.x = e.clientX - rect.left;
             mouse.y = e.clientY - rect.top;
+
+            this.mousePos.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
             
             if (mouse.left) {
                 const deltaY = mouse.x - old.x;

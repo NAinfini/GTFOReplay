@@ -1,8 +1,12 @@
-﻿using API;
+﻿using Agents;
+using AIGraph;
+using API;
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
+using Enemies;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
+using LevelGeneration;
 using Player;
 using ReplayRecorder;
 using ReplayRecorder.Net;
@@ -24,6 +28,35 @@ public class Plugin : BasePlugin {
         APILogger.Log("Debug is " + (ConfigManager.Debug ? "Enabled" : "Disabled"));
 
         VNet.Register("MindControl", OnMindControlCommand);
+        VNet.Register("MindControl.SpawnEnemy", OnMindControlSpawnCommand);
+    }
+
+    private static AIG_CourseNode? GetNode(Vector3 position) {
+        if (AIG_GeomorphNodeVolume.TryGetNode(0, Dimension.GetDimensionFromPos(position).DimensionIndex, position, out var node2) && AIG_NodeCluster.TryGetNodeCluster(node2.ClusterID, out var nodeCluster)) {
+            if (nodeCluster.CourseNode == null) {
+                return null;
+            }
+            return nodeCluster.CourseNode;
+        }
+        return null;
+    }
+
+    private static void OnMindControlSpawnCommand(ulong from, ArraySegment<byte> buffer) {
+        if (!SNet.IsMaster) return;
+
+
+
+        int index = 0;
+        Vector3 pos = BitHelper.ReadHalfVector3(buffer, ref index);
+        Quaternion rot = Quaternion.identity;
+        uint id = BitHelper.ReadUInt(buffer, ref index);
+
+        MainThread.Run(() => {
+            var node = GetNode(pos);
+            if (node == null) node = PlayerManager.GetLocalPlayerAgent().CourseNode;
+
+            var enemy = EnemyAllocator.Current.SpawnEnemy(id, node, AgentMode.Hibernate, pos, rot);
+        });
     }
 
     enum CommandType {
@@ -34,13 +67,13 @@ public class Plugin : BasePlugin {
     }
 
     private static void OnMindControlCommand(ulong from, ArraySegment<byte> buffer) {
+        if (!SNet.IsMaster) return;
+
         int index = 0;
         CommandType type = (CommandType)BitHelper.ReadUShort(buffer, ref index);
         APILogger.Debug($"Received command of type '{type}'.");
         switch (type) {
         case CommandType.MindControlClear: {
-            if (!SNet.IsMaster) return;
-
             int numEnemies = BitHelper.ReadInt(buffer, ref index);
             APILogger.Debug($"Num Enemies '{numEnemies}'.");
             MainThread.Run(() => {
@@ -54,8 +87,6 @@ public class Plugin : BasePlugin {
             break;
         }
         case CommandType.MindControlPosition: {
-            if (!SNet.IsMaster) return;
-
             Vector3 pos = BitHelper.ReadHalfVector3(buffer, ref index);
             int numEnemies = BitHelper.ReadInt(buffer, ref index);
             APILogger.Debug($"Num Enemies '{numEnemies}'.");
@@ -71,8 +102,6 @@ public class Plugin : BasePlugin {
             break;
         }
         case CommandType.MindControlAttackPosition: {
-            if (!SNet.IsMaster) return;
-
             Vector3 pos = BitHelper.ReadHalfVector3(buffer, ref index);
             int numEnemies = BitHelper.ReadInt(buffer, ref index);
             APILogger.Debug($"Num Enemies '{numEnemies}'.");
@@ -88,8 +117,6 @@ public class Plugin : BasePlugin {
             break;
         }
         case CommandType.MindControlAttack: {
-            if (!SNet.IsMaster) return;
-
             byte slot = BitHelper.ReadByte(buffer, ref index);
             int numEnemies = BitHelper.ReadInt(buffer, ref index);
             APILogger.Debug($"Num Enemies '{numEnemies}'.");

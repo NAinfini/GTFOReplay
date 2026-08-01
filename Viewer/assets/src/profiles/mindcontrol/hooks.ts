@@ -73,6 +73,20 @@ function Clear(id: number[] | undefined) {
     window.api.invoke("sendCustom", "MindControl", packet.bytes, packet.index);
 }
 
+function Kill(id: number[] | undefined) {
+    if (id === undefined) return;
+
+    const packet = new ByteStream();
+    BitHelper.writeUShort(4, packet);
+
+    BitHelper.writeInt(id.length, packet);
+    for (const i of id) {
+        BitHelper.writeUShort(i, packet);
+    }
+
+    window.api.invoke("sendCustom", "MindControl", packet.bytes, packet.index);
+}
+
 function SpawnEnemy(id: number, pos: Vector3Like) {
     const packet = new ByteStream();
     BitHelper.writeHalf(-pos.x, packet);
@@ -87,6 +101,8 @@ const clickSphere = new Sphere(undefined, 1);
 let clicked1 = false;
 let g_key = false;
 let clicked2 = false;
+let del_key = false;
+let clicked3 = false;
 Controls.hooks.add((self, snapshot, dt) => {
     const renderer = self.renderer;
     const camera = self.camera;
@@ -188,6 +204,13 @@ Controls.hooks.add((self, snapshot, dt) => {
     } else if (!g_key) {
         clicked2 = false;
     }
+
+    if (del_key === true && !clicked3) {
+        clicked3 = true;
+        Kill(Controls.selected());
+    } else if (!del_key) {
+        clicked3 = false;
+    }
 });
 
 Controls.keydownhooks.add((self, e) => {
@@ -231,6 +254,10 @@ Controls.keydownhooks.add((self, e) => {
         e.preventDefault();
         g_key = true;        
         break;
+    case 46:
+        e.preventDefault();
+        del_key = true;    
+        break;
     }
     return true;
 });
@@ -240,6 +267,11 @@ Controls.keyuphooks.add((self, e) => {
     case 71:
         e.preventDefault();
         g_key = false;    
+        break;
+
+    case 46:
+        e.preventDefault();
+        del_key = false;    
         break;
     }
     return true;

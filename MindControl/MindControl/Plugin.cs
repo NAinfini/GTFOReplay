@@ -58,10 +58,11 @@ public class Plugin : BasePlugin {
     }
 
     enum CommandType {
-        MindControlPosition,      // send location to move enemy
-        MindControlClear,         // clear commands on enemy
-        MindControlAttack,        // enemy attack a given target 
-        MindControlAttackPosition // send location to move enemy, enemy attacks players in range
+        MindControlPosition,       // send location to move enemy
+        MindControlClear,          // clear commands on enemy
+        MindControlAttack,         // enemy attack a given target 
+        MindControlAttackPosition, // send location to move enemy, enemy attacks players in range
+        MindControlKill,           // kill enemies
     }
 
     private static void OnMindControlCommand(ulong from, ArraySegment<byte> buffer) {
@@ -130,6 +131,19 @@ public class Plugin : BasePlugin {
                                 controller.AddTarget(player);
                             }
                         }
+                    }
+                }
+            });
+            break;
+        }
+        case CommandType.MindControlKill: {
+            int numEnemies = BitHelper.ReadInt(buffer, ref index);
+            APILogger.Debug($"Num Enemies '{numEnemies}'.");
+            MainThread.Run(() => {
+                for (int i = 0; i < numEnemies; ++i) {
+                    ushort selectedEnemy = BitHelper.ReadUShort(buffer, ref index);
+                    if (EnemyController.controllers.TryGetValue(selectedEnemy, out var controller)) {
+                        controller.Suicide();
                     }
                 }
             });

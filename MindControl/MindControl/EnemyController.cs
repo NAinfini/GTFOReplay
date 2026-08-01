@@ -238,6 +238,11 @@ namespace MindControl {
             }
         }
 
+        public void Suicide() {
+            PlayerAgent player = PlayerManager.GetLocalPlayerAgent();
+            agent.Damage.BulletDamage(100000, null, player.transform.position, player.TargetLookDir, Vector3.up, true, 0, 100, 100, 0);
+        }
+
         // NavMesh.SamplePosition(target, out hit, float.PositiveInfinity, 1)
 
         // Is enemy under manual controll?

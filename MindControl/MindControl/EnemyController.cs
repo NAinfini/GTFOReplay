@@ -147,6 +147,17 @@ namespace MindControl {
             private static bool Prefix_FlyerTryAttacks(EB_InCombat __instance, ref bool __result) {
                 return InCombatPatch(__instance.m_ai, ref __result);
             }*/
+
+            // Prevent switching EB State for bad pathing (Used over the native patch due to mod compatability)
+            [HarmonyPatch(typeof(EB_InCombat), nameof(EB_InCombat.TryUpdateNavigation))]
+            [HarmonyPrefix]
+            private static bool Prefix_TryUpdateNavigation(EB_InCombat __instance, out bool __result, EnemyCourseNavigationMode currentExpectedMode) {
+                __result = false;
+                if (!controllers.TryGetValue(__instance.m_ai.m_enemyAgent.GlobalID, out var controller) || !controller.IsControlled) {
+                    return true;
+                }
+                return false;
+            }
         }
 
         // List of all controllers, mapped by globalid.
@@ -236,6 +247,8 @@ namespace MindControl {
                 // Important or enemy might not be in the right state
                 Patches.DontRecurse = true;
                 behaviour.ChangeState(EB_States.InCombat);
+                behaviour.m_updatebehaviour = 0;
+                behaviour.UpdateState();
                 Patches.DontRecurse = false;
             }
         }
@@ -310,6 +323,8 @@ namespace MindControl {
         private Vector3 throughPortalPosition;
 
         private void MoveCommand(Command command) {
+            ES_StateEnum locomotionState = (ES_StateEnum)locomotion.m_currentState.ENUM_ID;
+
             if (command.type == Command.Type.MoveAttack) {
                 if (currentTarget != null) {
                     float meleeDistSqrd = agent.EnemyBehaviorData.MeleeAttackDistance.Max;
@@ -342,7 +357,7 @@ namespace MindControl {
                     }
 
                     // Allow attacks
-                    switch (locomotion.CurrentStateEnum) {
+                    switch (locomotionState) {
                     case ES_StateEnum.ShooterAttack:
                     case ES_StateEnum.StrikerAttack:
                     case ES_StateEnum.StrikerMelee:
@@ -352,7 +367,7 @@ namespace MindControl {
             }
 
             // Allow hitreact and ladders
-            switch (locomotion.CurrentStateEnum) {
+            switch (locomotionState) {
             case ES_StateEnum.Hitreact:
             case ES_StateEnum.HitReactFlyer:
             case ES_StateEnum.FloaterHitReact:
@@ -374,23 +389,15 @@ namespace MindControl {
             }
 
             // Set state to move to goal
-            if (locomotion.CurrentStateEnum != ES_StateEnum.PathMove) {
+            if (locomotionState != ES_StateEnum.PathMove) {
                 locomotion.ChangeState(ES_StateEnum.PathMove);
             }
 
-
-            EB_InCombat_MoveToPoint? state = behaviour.m_currentState.TryCast<EB_InCombat_MoveToPoint>();
-            if (state == null) {
+            if ((EB_States)behaviour.m_currentState.ENUM_ID != EB_States.InCombat_MoveToPoint) {
                 Patches.DontRecurse = true;
-                behaviour.ChangeState(EB_States.InCombat);
-                behaviour.m_updatebehaviour = 0;
-                behaviour.UpdateState();
-
-                behaviour.ChangeState(EB_States.InCombat_MoveToTarget);
-                behaviour.m_updatebehaviour = 0;
-                behaviour.UpdateState();
-
                 behaviour.ChangeState(EB_States.InCombat_MoveToPoint);
+                behaviour.m_updatebehaviour = 0;
+                behaviour.UpdateState();
                 Patches.DontRecurse = false;
             }
 

@@ -7,7 +7,6 @@ using Enemies;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
 using LevelGeneration;
-using MindControl.NativePatches;
 using Player;
 using ReplayRecorder;
 using ReplayRecorder.Net;
@@ -25,8 +24,6 @@ public class Plugin : BasePlugin {
         harmony.PatchAll();
 
         ClassInjector.RegisterTypeInIl2Cpp<EnemyController>();
-
-        ChangeStatePatches.ApplyNativePatch();
 
         APILogger.Log("Debug is " + (ConfigManager.Debug ? "Enabled" : "Disabled"));
 

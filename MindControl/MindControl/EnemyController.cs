@@ -6,7 +6,6 @@ using HarmonyLib;
 using LevelGeneration;
 using Player;
 using SNetwork;
-using StateMachines;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -89,6 +88,17 @@ namespace MindControl {
                     ai.SetTarget(controller.currentTarget);
                     patch = true;
                 }
+            }
+
+            // Prevent switching EB State for bad pathing
+            [HarmonyPatch(typeof(EB_InCombat), nameof(EB_InCombat.TryUpdateNavigation))]
+            [HarmonyPrefix]
+            private static bool Prefix_TryUpdateNavigation(EB_InCombat __instance, out bool __result, EnemyCourseNavigationMode currentExpectedMode) {
+                __result = false;
+                if (!controllers.TryGetValue(__instance.m_ai.m_enemyAgent.GlobalID, out var controller) || !controller.IsControlled) {
+                    return true;
+                }
+                return false;
             }
 
             [HarmonyPatch(typeof(EB_InCombat), nameof(EB_InCombat.TryAttacks))]
@@ -512,26 +522,6 @@ namespace MindControl {
                 navDataMap.Add(destination.NodeID, navData);
             }
             return navDataMap[destination.NodeID];
-        }
-
-        public static bool ChangeStatePrefix(StateMachine<EB_StateBase> __instance, EB_StateBase newState) {
-            EnemyController? controller = __instance.GetComponent<EnemyController>();
-            if (controller == null || !controller.IsControlled) return true;
-
-            // Perform move command
-            Command command = controller.commandBuffer.Peek();
-            EB_States state = (EB_States)newState.ENUM_ID;
-
-            switch (command.type) {
-            case Command.Type.MoveAttack:
-            case Command.Type.Move:
-                if (state == EB_States.InCombat_MoveToNextNode || state == EB_States.InCombat_MoveToTarget) return false;
-                break;
-            case Command.Type.Attack:
-                break;
-            }
-
-            return true;
         }
 
 

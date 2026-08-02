@@ -82,7 +82,9 @@ public class Plugin : BasePlugin {
                 for (int i = 0; i < numEnemies; ++i) {
                     ushort selectedEnemy = BitHelper.ReadUShort(buffer, ref index);
                     if (EnemyController.controllers.TryGetValue(selectedEnemy, out var controller)) {
-                        controller.ClearCommands();
+                        if (controller.commandBuffer.Count > 0) {
+                            controller.ClearCommands();
+                        }
                     }
                 }
             });
@@ -96,7 +98,18 @@ public class Plugin : BasePlugin {
                 for (int i = 0; i < numEnemies; ++i) {
                     ushort selectedEnemy = BitHelper.ReadUShort(buffer, ref index);
                     if (EnemyController.controllers.TryGetValue(selectedEnemy, out var controller)) {
-                        controller.ClearCommands();
+                        if (controller.commandBuffer.Count > 0) {
+                            switch (controller.commandBuffer.Peek().type) {
+                            case EnemyController.Command.Type.MoveAttack:
+                            case EnemyController.Command.Type.Move:
+                                // Don't reset state and just clear buffer to prevent stutter
+                                controller.commandBuffer.Clear();
+                                break;
+                            default:
+                                controller.ClearCommands();
+                                break;
+                            }
+                        }
                         controller.AddPosition(pos);
                     }
                 }
@@ -111,7 +124,18 @@ public class Plugin : BasePlugin {
                 for (int i = 0; i < numEnemies; ++i) {
                     ushort selectedEnemy = BitHelper.ReadUShort(buffer, ref index);
                     if (EnemyController.controllers.TryGetValue(selectedEnemy, out var controller)) {
-                        controller.ClearCommands();
+                        if (controller.commandBuffer.Count > 0) {
+                            switch (controller.commandBuffer.Peek().type) {
+                            case EnemyController.Command.Type.MoveAttack:
+                            case EnemyController.Command.Type.Move:
+                                // Don't reset state and just clear buffer to prevent stutter
+                                controller.commandBuffer.Clear();
+                                break;
+                            default:
+                                controller.ClearCommands();
+                                break;
+                            }
+                        }
                         controller.AddAttackPosition(pos);
                     }
                 }
@@ -130,7 +154,17 @@ public class Plugin : BasePlugin {
                         for (int i = 0; i < numEnemies; ++i) {
                             ushort selectedEnemy = BitHelper.ReadUShort(buffer, ref index);
                             if (EnemyController.controllers.TryGetValue(selectedEnemy, out var controller)) {
-                                controller.ClearCommands();
+                                if (controller.commandBuffer.Count > 0) {
+                                    switch (controller.commandBuffer.Peek().type) {
+                                    case EnemyController.Command.Type.Attack:
+                                        // Don't reset state and just clear buffer to prevent stutter
+                                        controller.commandBuffer.Clear();
+                                        break;
+                                    default:
+                                        controller.ClearCommands();
+                                        break;
+                                    }
+                                }
                                 controller.AddTarget(player);
                             }
                         }

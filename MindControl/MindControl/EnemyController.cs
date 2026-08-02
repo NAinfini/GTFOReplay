@@ -252,7 +252,7 @@ namespace MindControl {
                 // Important or enemy may freeze waiting for advance timer
                 behaviourData.m_advanceTimer = 0.0f;
 
-                // Important or enemy might not be in the right state
+                // Reset state
                 Patches.DontRecurse = true;
                 behaviour.ChangeState(EB_States.InCombat);
                 behaviour.m_updatebehaviour = 0;

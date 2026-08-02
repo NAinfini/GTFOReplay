@@ -566,6 +566,9 @@ namespace ReplayRecorder {
 
         public static string ReadString(ArraySegment<byte> source, ref int index) {
             int length = ReadUShort(source, ref index);
+            if (length == 0) {
+                return "";
+            }
             string temp = Encoding.UTF8.GetString(source.Array!, source.Offset + index, length);
             index += length;
             return temp;

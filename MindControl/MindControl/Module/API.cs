@@ -6,7 +6,7 @@ namespace MindControl.BepInEx {
     public static class Module {
         public const string GUID = "randomuserhi.MindControl";
         public const string Name = "MindControl";
-        public const string Version = "0.0.1";
+        public const string Version = "0.0.3";
     }
 }
 

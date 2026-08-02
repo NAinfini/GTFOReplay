@@ -27,7 +27,11 @@ namespace ReplayRecorder.Net {
 
         [HideFromIl2Cpp]
         internal static void Receive(ArraySegment<byte> packet, ulong from) {
+            if (packet.Count < sizeof(ushort) + 1) return;
+
             int index = 0;
+            byte messageId = BitHelper.ReadByte(packet, ref index);
+            if (messageId != 2) return; // VNet message identifier
 
             string packetName = BitHelper.ReadString(packet, ref index);
             if (!packetMap.ContainsKey(packetName)) {
@@ -44,6 +48,7 @@ namespace ReplayRecorder.Net {
         public static void Register(string packetName, Action<ulong, ArraySegment<byte>> callback) {
             if (!packetMap.ContainsKey(packetName)) {
                 ByteBuffer header = new ByteBuffer();
+                BitHelper.WriteBytes((byte)2, header);
                 BitHelper.WriteBytes(packetName, header);
                 byte[] headerBytes = new byte[header.Count];
                 Array.Copy(header.Array.Array!, header.Array.Offset, headerBytes, 0, header.Count);

@@ -23,9 +23,11 @@ namespace ReplayRecorder.Core {
         }
 
         private static void Receive(ArraySegment<byte> packet, ulong from) {
+            if (packet.Count < 1) return;
+
             int index = 0;
             byte messageId = BitHelper.ReadByte(packet, ref index);
-            if (messageId != 0) return;
+            if (messageId != 0) return; // PlayerManager message identifier
 
             rPlayer? player = players.FirstOrDefault((p) => p != null && p.snet == from, null);
             if (player?.agent?.Owner == null) {

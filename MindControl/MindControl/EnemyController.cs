@@ -6,7 +6,9 @@ using HarmonyLib;
 using LevelGeneration;
 using Player;
 using SNetwork;
+using StateMachines;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace MindControl {
     [HarmonyPatch]
@@ -305,7 +307,7 @@ namespace MindControl {
 
         private AIG_CoursePortal? targetPortal = null;
         private Vector3 towardsPortalPosition;
-        private Vector3 portalPosition;
+        private Vector3 throughPortalPosition;
 
         private void MoveCommand(Command command) {
             if (command.type == Command.Type.MoveAttack) {
@@ -375,6 +377,8 @@ namespace MindControl {
             if (locomotion.CurrentStateEnum != ES_StateEnum.PathMove) {
                 locomotion.ChangeState(ES_StateEnum.PathMove);
             }
+
+
             EB_InCombat_MoveToPoint? state = behaviour.m_currentState.TryCast<EB_InCombat_MoveToPoint>();
             if (state == null) {
                 Patches.DontRecurse = true;
@@ -394,10 +398,12 @@ namespace MindControl {
 
             // Set pathing goal
             if (ai.m_navMeshAgent.isOnNavMesh) {
+                if (NavMesh.SamplePosition(command.position, out NavMeshHit hit, 1, 1)) {
+                    destination = hit.position;
+                } else {
+                    destination = command.position;
+                }
 
-                ai.m_navMeshAgent.destination = command.position;
-
-                destination = ai.m_navMeshAgent.destination;
                 destinationCourseNode = GetNode(destination);
 
                 if (destinationCourseNode != null) {
@@ -423,10 +429,10 @@ namespace MindControl {
                         }
 
                         if (minPortal != null) {
-                            if (targetPortal == null || (targetPortal.m_nodeA.NodeID != minPortal.m_nodeA.NodeID && targetPortal.m_nodeB.NodeID != minPortal.m_nodeB.NodeID)) {
+                            if (targetPortal == null || (targetPortal.Pointer != minPortal.Pointer)) {
                                 targetPortal = minPortal;
                                 towardsPortalPosition = minPortal.RandomPositionOn_TowardsNode(source);
-                                portalPosition = minPortal.RandomPositionOn;
+                                throughPortalPosition = minPortal.RandomPositionOn_TowardsNode(minPortal.GetOppositeNode(source));
                             }
                             iLG_Door_Core? door = minPortal.Gate?.SpawnedDoor;
                             if (door != null) {
@@ -438,13 +444,21 @@ namespace MindControl {
                                         EB_InCombat_MoveToNextNode_DestroyDoor.s_globalRetryTimer = Clock.Time + UnityEngine.Random.Range(0.5f, 1f);
                                         door.AttemptDamage(eDoorDamageType.EnemyLight, agent.m_position, agent);
                                     }
-                                } else {
-                                    ai.m_navMeshAgent.destination = portalPosition;
+
+                                    goto skip;
+                                } else if (minNodeDist > 0) {
+                                    ai.m_navMeshAgent.destination = throughPortalPosition;
+                                    goto skip;
                                 }
                             }
                         }
+                    } else {
+                        targetPortal = null;
                     }
                 }
+
+                ai.m_navMeshAgent.destination = command.position;
+            skip:;
             }
 
             // TODO(randomuserhi)
@@ -499,6 +513,27 @@ namespace MindControl {
             }
             return navDataMap[destination.NodeID];
         }
+
+        public static bool ChangeStatePrefix(StateMachine<EB_StateBase> __instance, EB_StateBase newState) {
+            EnemyController? controller = __instance.GetComponent<EnemyController>();
+            if (controller == null || !controller.IsControlled) return true;
+
+            // Perform move command
+            Command command = controller.commandBuffer.Peek();
+            EB_States state = (EB_States)newState.ENUM_ID;
+
+            switch (command.type) {
+            case Command.Type.MoveAttack:
+            case Command.Type.Move:
+                if (state == EB_States.InCombat_MoveToNextNode || state == EB_States.InCombat_MoveToTarget) return false;
+                break;
+            case Command.Type.Attack:
+                break;
+            }
+
+            return true;
+        }
+
 
         [ReplayRecorder.API.Attributes.ReplayInit]
         private static void Init() {

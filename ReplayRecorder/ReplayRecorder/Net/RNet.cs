@@ -28,9 +28,11 @@ namespace ReplayRecorder {
 
         [HideFromIl2Cpp]
         private static void Receive(ArraySegment<byte> packet, ulong from) {
+            if (packet.Count < sizeof(ushort) + 1) return;
+
             int index = 0;
             byte messageId = BitHelper.ReadByte(packet, ref index);
-            if (messageId != 1) return;
+            if (messageId != 1) return; // RNet message identifier
 
             string eventName = BitHelper.ReadString(packet, ref index);
             if (!eventMap.ContainsKey(eventName)) {

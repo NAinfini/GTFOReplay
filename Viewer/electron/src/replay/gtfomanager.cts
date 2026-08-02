@@ -64,6 +64,7 @@ export class GTFOManager {
 
         ipc.handle("sendCustom", async (_, packetName: string, bytes: Uint8Array, length: number) => {
             const packet = new ByteStream();
+            BitHelper.writeByte(2, packet);
             BitHelper.writeString(packetName, packet);
             BitHelper.writeBytes(bytes, length, packet);
             this.client.send("custom", packet);

@@ -289,6 +289,11 @@ namespace MindControl {
                 AttackCommand(command);
                 break;
             }
+
+            // If command buffer is clear after running commands, return to regular state
+            if (commandBuffer.Count == 0) {
+                ResetState();
+            }
         }
 
         private void AttackCommand(Command command) {
@@ -487,11 +492,6 @@ namespace MindControl {
                 APILogger.Debug("Destination reached!");
             }
             */
-
-            // If command buffer is clear, return to regular state
-            if (commandBuffer.Count == 0) {
-                ResetState();
-            }
         }
 
         private AIG_CourseNode? GetNode(Vector3 position) {

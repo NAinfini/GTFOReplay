@@ -158,6 +158,14 @@ namespace MindControl {
                 }
                 return false;
             }
+            [HarmonyPatch(typeof(EB_InCombat_MoveToPoint), nameof(EB_InCombat_MoveToPoint.UpdateBehaviourStuckingCheck))]
+            [HarmonyPrefix]
+            private static bool Prefix_UpdateBehaviourStuckingCheck(EB_InCombat_MoveToPoint __instance) {
+                if (!controllers.TryGetValue(__instance.m_ai.m_enemyAgent.GlobalID, out var controller) || !controller.IsControlled) {
+                    return true;
+                }
+                return false;
+            }
         }
 
         // List of all controllers, mapped by globalid.

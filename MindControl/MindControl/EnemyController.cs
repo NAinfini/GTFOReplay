@@ -1,7 +1,9 @@
 ﻿using Agents;
+using AIGraph;
 using API;
 using Enemies;
 using HarmonyLib;
+using LevelGeneration;
 using Player;
 using SNetwork;
 using UnityEngine;
@@ -171,12 +173,10 @@ namespace MindControl {
             public PlayerAgent? target = null;
 
             public Vector3 position;
-            public Vector3 destination;
 
             public Command(Vector3 pos) {
                 type = Type.Move;
                 position = pos;
-                destination = pos;
             }
 
             public Command(PlayerAgent target) {
@@ -300,6 +300,13 @@ namespace MindControl {
         }
 
         private PlayerAgent? currentTarget = null;
+        private Vector3 destination;
+        private AIG_CourseNode? destinationCourseNode = null;
+
+        private AIG_CoursePortal? targetPortal = null;
+        private Vector3 towardsPortalPosition;
+        private Vector3 portalPosition;
+
         private void MoveCommand(Command command) {
             if (command.type == Command.Type.MoveAttack) {
                 if (currentTarget != null) {
@@ -359,7 +366,7 @@ namespace MindControl {
             }
 
             if (ai.m_target == null || !ai.m_target.m_hasLineOfSight) {
-                ai.m_enemyAgent.TargetLookDir = (command.destination - ai.transform.position).normalized;
+                ai.m_enemyAgent.TargetLookDir = (destination - ai.transform.position).normalized;
             } else {
                 ai.m_enemyAgent.TargetLookDir = ai.m_target.m_dir;
             }
@@ -388,17 +395,56 @@ namespace MindControl {
             // Set pathing goal
             if (ai.m_navMeshAgent.isOnNavMesh) {
 
-                // if enemy and destination are on the same course node
                 ai.m_navMeshAgent.destination = command.position;
-                command.destination = ai.m_navMeshAgent.destination;
 
-                // TODO(randomuserhi): Handle when enemy is not in same course node / path is blocked
-                //                     needs to path to nearest location within course node etc...
-                //                     Refer to in-game methods that handle this sort of thing
-                //                     EB_InCombat_MoveToNextNode etc...
-                //
-                //                     I essentially have to write this behaviour manually as the existing
-                //                     coursenode navigation stuff won't work for this
+                destination = ai.m_navMeshAgent.destination;
+                destinationCourseNode = GetNode(destination);
+
+                if (destinationCourseNode != null) {
+                    AIG_CourseNode source = agent.CourseNode;
+                    if (source.NodeID != destinationCourseNode.NodeID && source.m_dimension.DimensionIndex == destinationCourseNode.m_dimension.DimensionIndex) {
+                        // If enemy and destination are not on the same coursenode, we need to navigate through portals
+                        NavData nav = GetNavData(destinationCourseNode);
+
+                        // Find portal that leads to the shortest node distance to destination
+                        // Tie break using sqr dist from true position
+                        int minNodeDist = int.MaxValue;
+                        float minDist = float.MaxValue;
+                        AIG_CoursePortal? minPortal = null;
+                        foreach (AIG_CoursePortal portal in source.m_portals) {
+                            AIG_CourseNode nextNode = portal.GetOppositeNode(source);
+                            int nodeDist = nav.nodeDistanceMap[nextNode.NodeID];
+                            float dist = (portal.m_position - destination).sqrMagnitude;
+                            if (minPortal == null || nodeDist < minNodeDist || (nodeDist == minNodeDist && dist < minDist)) {
+                                minPortal = portal;
+                                minNodeDist = nodeDist;
+                                minDist = dist;
+                            }
+                        }
+
+                        if (minPortal != null) {
+                            if (targetPortal == null || (targetPortal.m_nodeA.NodeID != minPortal.m_nodeA.NodeID && targetPortal.m_nodeB.NodeID != minPortal.m_nodeB.NodeID)) {
+                                targetPortal = minPortal;
+                                towardsPortalPosition = minPortal.RandomPositionOn_TowardsNode(source);
+                                portalPosition = minPortal.RandomPositionOn;
+                            }
+                            iLG_Door_Core? door = minPortal.Gate?.SpawnedDoor;
+                            if (door != null) {
+                                if (door.LastStatus != eDoorStatus.Destroyed && door.LastStatus != eDoorStatus.Open && door.LastStatus != eDoorStatus.Opening) {
+                                    ai.m_navMeshAgent.destination = towardsPortalPosition;
+
+                                    // Perform door break
+                                    if (EB_InCombat_MoveToNextNode_DestroyDoor.s_globalRetryTimer < Clock.Time && (agent.m_position - towardsPortalPosition).sqrMagnitude < 6.25f) {
+                                        EB_InCombat_MoveToNextNode_DestroyDoor.s_globalRetryTimer = Clock.Time + UnityEngine.Random.Range(0.5f, 1f);
+                                        door.AttemptDamage(eDoorDamageType.EnemyLight, agent.m_position, agent);
+                                    }
+                                } else {
+                                    ai.m_navMeshAgent.destination = portalPosition;
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             // TODO(randomuserhi)
@@ -407,6 +453,56 @@ namespace MindControl {
                 commandBuffer.Dequeue();
                 APILogger.Debug("Destination reached!");
             }*/
+        }
+
+        private AIG_CourseNode? GetNode(Vector3 position) {
+            if (AIG_GeomorphNodeVolume.TryGetNode(0, Dimension.GetDimensionFromPos(position).DimensionIndex, position, out var node2) && AIG_NodeCluster.TryGetNodeCluster(node2.ClusterID, out var nodeCluster)) {
+                if (nodeCluster.CourseNode == null) {
+                    return null;
+                }
+                return nodeCluster.CourseNode;
+            }
+            return null;
+        }
+
+        private class NavData {
+            // Uses AIG_CourseNode.NodeID as keys
+            public Dictionary<int, int> nodeDistanceMap = new Dictionary<int, int>();
+        }
+
+        // Uses AIG_CourseNode.NodeID as keys
+        private static Dictionary<int, NavData> navDataMap = new Dictionary<int, NavData>();
+        private NavData GetNavData(AIG_CourseNode destination) {
+            if (!navDataMap.ContainsKey(destination.NodeID)) {
+                NavData navData = new NavData();
+
+                // BFS to compute node distance maps
+                AIG_SearchID.IncrementSearchID();
+                ushort searchID = AIG_SearchID.SearchID;
+                Queue<(AIG_CourseNode, int)> queue = new Queue<(AIG_CourseNode, int)>();
+                queue.Enqueue((destination, 0));
+                destination.m_searchID = searchID;
+
+                while (queue.Count > 0) {
+                    var (current, dist) = queue.Dequeue();
+                    foreach (AIG_CoursePortal portal in current.m_portals) {
+                        AIG_CourseNode nextNode = portal.GetOppositeNode(current);
+                        if (nextNode.m_searchID == searchID) continue;
+                        nextNode.m_searchID = searchID;
+                        queue.Enqueue((nextNode, dist + 1));
+                    }
+
+                    navData.nodeDistanceMap.Add(current.NodeID, dist);
+                }
+
+                navDataMap.Add(destination.NodeID, navData);
+            }
+            return navDataMap[destination.NodeID];
+        }
+
+        [ReplayRecorder.API.Attributes.ReplayInit]
+        private static void Init() {
+            navDataMap.Clear();
         }
     }
 }

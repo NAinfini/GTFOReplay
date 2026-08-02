@@ -537,6 +537,7 @@ namespace MindControl {
 
         [ReplayRecorder.API.Attributes.ReplayInit]
         private static void Init() {
+            APILogger.Debug("Clear old nav data.");
             navDataMap.Clear();
         }
     }

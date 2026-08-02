@@ -248,17 +248,20 @@ namespace MindControl {
         public void ClearCommands() {
             if (commandBuffer.Count > 0) {
                 commandBuffer.Clear();
-
-                // Important or enemy may freeze waiting for advance timer
-                behaviourData.m_advanceTimer = 0.0f;
-
-                // Reset state
-                Patches.DontRecurse = true;
-                behaviour.ChangeState(EB_States.InCombat);
-                behaviour.m_updatebehaviour = 0;
-                behaviour.UpdateState();
-                Patches.DontRecurse = false;
+                ResetState();
             }
+        }
+
+        private void ResetState() {
+            // Important or enemy may freeze waiting for advance timer
+            behaviourData.m_advanceTimer = 0.0f;
+
+            // Reset state
+            Patches.DontRecurse = true;
+            behaviour.ChangeState(EB_States.InCombat);
+            behaviour.m_updatebehaviour = 0;
+            behaviour.UpdateState();
+            Patches.DontRecurse = false;
         }
 
         public void Suicide() {
@@ -476,12 +479,19 @@ namespace MindControl {
             skip:;
             }
 
-            // TODO(randomuserhi)
+            // TODO(randomuserhi): dequeue commands as they complete
             // Dequeue move action if close enough
-            /*if (state != null && (agent.transform.position - target.destination).sqrMagnitude < 4) {
+            /*
+            if (state != null && (agent.transform.position - target.destination).sqrMagnitude < 4) {
                 commandBuffer.Dequeue();
                 APILogger.Debug("Destination reached!");
-            }*/
+            }
+            */
+
+            // If command buffer is clear, return to regular state
+            if (commandBuffer.Count == 0) {
+                ResetState();
+            }
         }
 
         private AIG_CourseNode? GetNode(Vector3 position) {

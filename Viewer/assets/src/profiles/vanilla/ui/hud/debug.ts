@@ -20,7 +20,11 @@ const style = Style(({ css }) => {
     `;
 
     const inputWrapper = css.class`
-    margin-top: 10px;
+    position: absolute;
+    right: 0;
+    bottom: 40px;
+    color: #aaa;
+    padding: 10px;
     `;
 
     const input = css.class`
@@ -62,9 +66,9 @@ export const Debug = () => {
     const dom = html<Mutable<Private & Debug>>/**//*html*/`
         <div class="${style.wrapper}">
             <div style="text-align:right">${position}</div>
-            <div class="${style.inputWrapper}">
-                <input m-id="debugInput" class="${style.input}" style="display: none;" />
-            </div>
+        </div>
+        <div class="${style.inputWrapper}">
+            <input m-id="debugInput" class="${style.input}" style="display: none;" />
         </div>
         <div m-id="selectBox" class="${style.selectBox}" style="display: block; top: 0px; left: 0px; width: 0px; height: 0px;">
 		`;

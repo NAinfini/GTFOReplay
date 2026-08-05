@@ -319,6 +319,7 @@ namespace MindControl {
             if (command.target == null) return;
 
             // Set target
+            // Maybe needs rebinding to stop constant target switching breaking pathing?
             if (ai.m_target == null || ai.m_target.m_agent == null || ai.m_target.m_agent.GlobalID != command.target.GlobalID) {
                 ai.SetTarget(command.target);
             }

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../ReplayRecorder/ReplayRecorder/Replay.Session.cs" Link="Replay.Session.cs" />
+    <Compile Include="../../ReplayRecorder/ReplayRecorder/IO/HeaderSequence.cs" Link="HeaderSequence.cs" />
+    <Compile Include="../../ReplayRecorder/ReplayRecorder/IO/BufferWriteQueue.cs" Link="BufferWriteQueue.cs" />
+    <Compile Include="../../ReplayRecorder/ReplayRecorder/IO/ReplayContainer.cs" Link="ReplayContainer.cs" />
+    <Compile Include="../../ReplayRecorder/ReplayRecorder/IO/CallbackGuard.cs" Link="CallbackGuard.cs" />
+    <Compile Include="../../ReplayRecorder/ReplayRecorder/IO/PacketSendQueue.cs" Link="PacketSendQueue.cs" />
+    <Compile Include="../../ReplayRecorder/ReplayRecorder/IO/MessageFramer.cs" Link="MessageFramer.cs" />
+    <Compile Include="../../ReplayRecorder/ReplayRecorder/Net/TCPServer.cs" Link="TCPServer.cs" />
+    <Compile Include="../../Vanilla/Vanilla/Enemy/EnemyStateCodec.cs" Link="EnemyStateCodec.cs" />
+  </ItemGroup>
+</Project>

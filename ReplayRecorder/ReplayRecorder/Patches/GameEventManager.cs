@@ -2,6 +2,7 @@
 using HarmonyLib;
 using ReplayRecorder.BepInEx;
 using ReplayRecorder.Snapshot;
+using ReplayRecorder.IO;
 using SNetwork;
 using UnityEngine;
 
@@ -15,15 +16,15 @@ namespace ReplayRecorder {
             if (initialized) return;
 
             initialized = true;
-            Replay.OnPluginLoad?.Invoke();
+            SnapshotManager.Invoke("Plugin load", Replay.OnPluginLoad);
         }
 
         [HarmonyPatch(typeof(ElevatorRide), nameof(ElevatorRide.StartElevatorRide))]
         [HarmonyPostfix]
         private static void StartElevatorRide() {
             APILogger.Debug($"Entered elevator!");
-            SnapshotManager.OnElevatorStart();
-            Replay.OnExpeditionStart?.Invoke();
+            SnapshotManager.Guard("Start recording", SnapshotManager.OnElevatorStart);
+            if (SnapshotManager.Active) SnapshotManager.Invoke("Expedition start", Replay.OnExpeditionStart);
         }
 
         [HarmonyPatch(typeof(RundownManager), nameof(RundownManager.EndGameSession))]
@@ -44,17 +45,22 @@ namespace ReplayRecorder {
         [HarmonyPostfix]
         private static void StopElevatorRide() {
             APILogger.Debug($"Stop elevator!");
-            Replay.OnElevatorStop?.Invoke();
+            SnapshotManager.Invoke("Elevator stop", Replay.OnElevatorStop);
         }
 
         [HarmonyPatch(typeof(PUI_LocalPlayerStatus), nameof(PUI_LocalPlayerStatus.UpdateBPM))]
         [HarmonyWrapSafe]
         [HarmonyPostfix]
         public static void Initialize_Postfix(PUI_LocalPlayerStatus __instance) {
+            if (ConfigManager.ShowRecordingStatus && RecordingStatus.Current is { } status) {
+                string color = status.Phase == RecordingPhase.Failed ? "#ff6b6b" : "#a6d6b2";
+                __instance.m_pulseText.text += $" | <color={color}>{status.Caption}</color>";
+            }
             if (!ConfigManager.PerformanceDebug) return;
 
-            SnapshotInstance instance = SnapshotManager.GetInstance();
-            __instance.m_pulseText.text += $" | ({instance.pool.InUse}/{instance.pool.Size}) {Mathf.RoundToInt(instance.tickTime)}({Mathf.RoundToInt(instance.waitForWrite)})ms";
+            SnapshotInstance? instance = SnapshotManager.instance;
+            if (instance == null) return;
+            __instance.m_pulseText.text += $" | ({instance.pool.InUse}/{instance.pool.Size}) {Mathf.RoundToInt(instance.tickTime)}ms {instance.queuedBytes / 1024}KB queued";
         }
     }
 }

@@ -12,7 +12,7 @@ using Vanilla.BepInEx;
 using Vanilla.Metadata;
 
 namespace Vanilla.StaticItems {
-    [ReplayData("Vanilla.Map.ResourceContainers.State", "0.0.1")]
+    [ReplayData("Vanilla.Map.ResourceContainers.State", "0.0.2")]
     internal class rContainer : ReplayDynamic {
         private LG_ResourceContainer_Storage container;
         private LG_WeakResourceContainer core;
@@ -28,6 +28,8 @@ namespace Vanilla.StaticItems {
         public Vector3 position;
         public Quaternion rotation;
         public ushort serialNumber => (ushort)core.m_serialNumber;
+        public Vector3 scale => container.transform.lossyScale;
+        public LG_WeakLock? weakLock => core.m_weakLock;
 
         public rContainer(LG_ResourceContainer_Storage container, bool isLocker, byte dimension) : base(container.GetInstanceID()) {
             this.container = container;
@@ -41,39 +43,33 @@ namespace Vanilla.StaticItems {
         }
 
         public override bool Active => core != null;
-        public override bool IsDirty => _closed != closed;
+        public override bool IsDirty => _closed != closed || _lockType != lockType;
 
         private bool closed => sync.m_stateReplicator.State.status != eResourceContainerStatus.Open;
         private bool _closed = true;
 
-        private bool weaklock => core.m_weakLock != null && core.m_weakLock.Status == eWeakLockStatus.LockedMelee;
-        private bool hacklock => core.m_weakLock != null && core.m_weakLock.Status == eWeakLockStatus.LockedHackable;
+        private byte lockType => core.m_weakLock == null ? (byte)0 : core.m_weakLock.Status switch {
+            eWeakLockStatus.LockedMelee => (byte)1,
+            eWeakLockStatus.LockedHackable => (byte)2,
+            _ => (byte)0
+        };
+        private byte _lockType;
 
         public override void Write(ByteBuffer buffer) {
             _closed = closed;
+            _lockType = lockType;
 
             BitHelper.WriteBytes(_closed, buffer);
+            BitHelper.WriteBytes(_lockType, buffer);
         }
 
         public override void Spawn(ByteBuffer buffer) {
             Write(buffer);
-            eWeakLockType type = eWeakLockType.None;
-            if (core.m_weakLock != null) {
-                switch (core.m_weakLock.Status) {
-                case eWeakLockStatus.LockedMelee:
-                    type = eWeakLockType.Melee;
-                    break;
-                case eWeakLockStatus.LockedHackable:
-                    type = eWeakLockType.Hackable;
-                    break;
-                }
-            }
-            BitHelper.WriteBytes((byte)type, buffer);
         }
     }
 
     [HarmonyPatch]
-    [ReplayData("Vanilla.Map.ResourceContainers", "0.0.3")]
+    [ReplayData("Vanilla.Map.ResourceContainers", "0.0.4")]
     internal class rContainers : ReplayHeader {
         [HarmonyPatch]
         private static class Patches {
@@ -216,6 +212,14 @@ namespace Vanilla.StaticItems {
                 BitHelper.WriteBytes(container.consumableType, buffer);
                 BitHelper.WriteBytes(container.registered, buffer);
                 BitHelper.WriteBytes((byte)container.assignedLock, buffer);
+                BitHelper.WriteBytes(container.scale, buffer);
+                var weakLock = container.weakLock;
+                BitHelper.WriteBytes(weakLock != null, buffer);
+                if (weakLock != null) {
+                    BitHelper.WriteBytes(weakLock.transform.position, buffer);
+                    BitHelper.WriteHalf(weakLock.transform.rotation, buffer);
+                    BitHelper.WriteBytes(weakLock.transform.lossyScale, buffer);
+                }
             }
         }
     }

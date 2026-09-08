@@ -1,7 +1,13 @@
 import * as BitHelper from "@esm/@root/replay/bithelper.js";
 import { ModuleLoader } from "@esm/@root/replay/moduleloader.js";
+import { describeParticipants } from "../library/eventParticipants.js";
+import { enemyNames } from "../library/enemyNames.js";
 
 ModuleLoader.registerASLModule(module.src);
+ModuleLoader.library.index.add((event, snapshot) => {
+    const participants = describeParticipants(event, snapshot.get('Vanilla.Player') ?? new Map(), snapshot.get('Vanilla.Enemy') ?? new Map(), snapshot.get('Vanilla.Mine.Detonate') ?? new Map(), enemyNames);
+    if (participants.length) event.participants = participants;
+});
 
 export interface Metadata {
     version: string;

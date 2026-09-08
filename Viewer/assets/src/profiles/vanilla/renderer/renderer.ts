@@ -136,8 +136,8 @@ ModuleLoader.registerRender("ReplayRecorder.Init", (name, api) => {
             light.position.set(cameraPos.x, cameraPos.y + 50, cameraPos.z); 
             light.target.position.set(cameraPos.x, cameraPos.y - 10, cameraPos.z);
 
-            camera.update();
             controls.update(snapshot, dt);
+            camera.update();
         } 
     }, ...renderLoop]);
 });

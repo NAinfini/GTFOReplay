@@ -1,3 +1,4 @@
+import { readScale } from "./transform.js";
 import * as BitHelper from "@esm/@root/replay/bithelper.js";
 import { ModuleLoader } from "@esm/@root/replay/moduleloader.js";
 import * as Pod from "@esm/@root/replay/pod.js";
@@ -11,6 +12,7 @@ export interface DisinfectStation {
     dimension: number;
     position: Pod.Vector;
     rotation: Pod.Quaternion;
+    scale?: Pod.Vector;
     serialNumber: number;
 }
 
@@ -22,7 +24,7 @@ declare module "@esm/@root/replay/moduleloader.js" {
     }
 }
 
-ModuleLoader.registerHeader("Vanilla.Map.DisinfectStations", "0.0.1", {
+for (const version of ["0.0.1", "0.0.2"]) ModuleLoader.registerHeader("Vanilla.Map.DisinfectStations", version, {
     parse: async (data, header, snapshot) => {
         const stations = header.getOrDefault("Vanilla.Map.DisinfectStations", Factory("Map"));
         const count = await BitHelper.readUShort(data);
@@ -39,6 +41,7 @@ ModuleLoader.registerHeader("Vanilla.Map.DisinfectStations", "0.0.1", {
                 position,
                 rotation,
                 serialNumber,
+                scale: version === "0.0.2" ? await readScale(data) : undefined
             });
 
             // Spawn an item to generate an item finder entry

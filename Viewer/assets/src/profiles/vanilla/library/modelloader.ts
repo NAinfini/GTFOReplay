@@ -2,6 +2,7 @@ import { BufferGeometry, Group, Mesh, Texture, TextureLoader } from '@esm/three'
 import { DRACOLoader } from '@esm/three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFLoader } from '@esm/three/examples/jsm/loaders/GLTFLoader.js';
 import * as BufferGeometryUtils from '@esm/three/examples/jsm/utils/BufferGeometryUtils.js';
+import { clone as cloneSkeleton } from '@esm/three/examples/jsm/utils/SkeletonUtils.js';
 
 const loadedGLTFGeometry = new Map<string, BufferGeometry>();
 const loadingGLTFGeometry = new Map<string, { promise: Promise<BufferGeometry>; terminate: (reason: any) => void }>();
@@ -96,7 +97,8 @@ export async function loadGLTF(path: string): Promise<() => Group> {
         terminate = reject;
         loader.load(path, function (gltf) {
             try {
-                const factory = () => gltf.scene.clone();
+                gltf.scene.animations = gltf.animations;
+                const factory = () => cloneSkeleton(gltf.scene) as Group;
                 loadedGLTF.set(path, factory);
                 resolve(factory);
             } catch(error) {

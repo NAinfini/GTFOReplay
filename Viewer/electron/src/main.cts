@@ -43,9 +43,16 @@ export default class Program {
 
         Program.fileManager = new FileManager();
         Program.fileManager.setupIPC(ipcMain);
-        Program.app.on("before-quit", () => {
-            // NOTE(randomuserhi): Clean up temporary files generated 
-            Program.fileManager?.dispose();
+        let shutdownComplete = false, shuttingDown = false;
+        Program.app.on("before-quit", event => {
+            if (shutdownComplete) return;
+            event.preventDefault();
+            if (shuttingDown) return;
+            shuttingDown = true;
+            void Program.fileManager.dispose().catch(error => console.error("Viewer shutdown:", error)).finally(() => {
+                shutdownComplete = true;
+                Program.app.quit();
+            });
         });
 
         Program.gtfoManager = new GTFOManager(Program.fileManager);

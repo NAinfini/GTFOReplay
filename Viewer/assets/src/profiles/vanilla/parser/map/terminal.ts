@@ -1,3 +1,4 @@
+import { readScale } from "./transform.js";
 import * as BitHelper from "@esm/@root/replay/bithelper.js";
 import { ModuleLoader } from "@esm/@root/replay/moduleloader.js";
 import * as Pod from "@esm/@root/replay/pod.js";
@@ -11,6 +12,8 @@ export interface Terminal {
     dimension: number;
     position: Pod.Vector;
     rotation: Pod.Quaternion;
+    scale?: Pod.Vector;
+    modelName?: string;
     serialNumber: number; // 65535 - ushort.MaxValue indicates no serial number is available (old version)
 }
 
@@ -39,7 +42,7 @@ ModuleLoader.registerHeader("Vanilla.Map.Terminals", "0.0.1", {
     }
 });
 
-ModuleLoader.registerHeader("Vanilla.Map.Terminals", "0.0.2", {
+for (const version of ["0.0.2", "0.0.3"]) ModuleLoader.registerHeader("Vanilla.Map.Terminals", version, {
     parse: async (data, header, snapshot) => {
         const terminals = header.getOrDefault("Vanilla.Map.Terminals", Factory("Map"));
         const count = await BitHelper.readUShort(data);
@@ -50,7 +53,9 @@ ModuleLoader.registerHeader("Vanilla.Map.Terminals", "0.0.2", {
                 dimension: await BitHelper.readByte(data),
                 position: await BitHelper.readVector(data),
                 rotation: await BitHelper.readHalfQuaternion(data),
-                serialNumber: await BitHelper.readUShort(data)
+                serialNumber: await BitHelper.readUShort(data),
+                scale: version === "0.0.3" ? await readScale(data) : undefined,
+                modelName: version === "0.0.3" ? await BitHelper.readString(data) : undefined
             };
             terminals.set(id, terminal);
 

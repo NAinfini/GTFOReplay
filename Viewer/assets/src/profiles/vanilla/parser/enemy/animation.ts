@@ -82,6 +82,7 @@ declare module "@esm/@root/replay/moduleloader.js" {
 
         interface Data {
             "Vanilla.Enemy.Animation": Map<number, EnemyAnimState>;
+            "Vanilla.Enemy.Animation.Despawned": Set<number>;
         }
     }
 }
@@ -265,6 +266,7 @@ ModuleLoader.registerDynamic("Vanilla.Enemy.Animation", "0.0.1", {
             const anims = snapshot.getOrDefault("Vanilla.Enemy.Animation", Factory("Map"));
 
             if (anims.has(id)) throw new Error(`EnemyAnim of id '${id}' already exists.`);
+            snapshot.get("Vanilla.Enemy.Animation.Despawned")?.delete(id);
             anims.set(id, { 
                 ...data,
                 lastStateTime: -Infinity,
@@ -306,6 +308,7 @@ ModuleLoader.registerDynamic("Vanilla.Enemy.Animation", "0.0.1", {
 
             if (!anims.has(id)) throw new Error(`EnemyAnim of id '${id}' did not exist.`);
             anims.delete(id);
+            snapshot.getOrDefault("Vanilla.Enemy.Animation.Despawned", () => new Set()).add(id);
         }
     }
 });

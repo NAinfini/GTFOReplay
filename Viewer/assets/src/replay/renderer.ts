@@ -196,7 +196,7 @@ export class Renderer {
             try {
                 func.pass(this, header);
             } catch (e) {
-                console.error(`An error occured executing render init pass '${func.name}':\n\n${ASL_VM.verboseError(e)}`);
+                throw new Error(`Render init pass '${func.name}' failed:\n${ASL_VM.verboseError(e)}`);
             }
         }
     }
@@ -210,7 +210,7 @@ export class Renderer {
             try {
                 func.pass(this, snapshot, dt);
             } catch (e) {
-                console.error(`An error occured executing render pass '${func.name}':\n\n${ASL_VM.verboseError(e)}`);
+                throw new Error(`Render pass '${func.name}' failed:\n${ASL_VM.verboseError(e)}`);
             }
         }
         for (const manager of DynamicInstanceManager.all) {

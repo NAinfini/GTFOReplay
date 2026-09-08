@@ -189,10 +189,16 @@ class DoorModel extends ObjectWrapper<Group> {
         (this.right.material as MeshPhongMaterial).color.setHex(color);
         (this.shutter.material as MeshPhongMaterial).color.setHex(color);
 
-        const isWeak = weakDoor !== undefined;
+        // Destruction removes the obstruction; assigning visibility every update
+        // also restores it when seeking back before the destruction event.
+        const destroyed = door.status === "Destroyed";
+        this.shutter.visible = !destroyed;
+        const isWeak = weakDoor !== undefined && !destroyed;
 
         this.lock0.anchor.visible = isWeak;
         this.lock1.anchor.visible = isWeak;
+
+        this.root.position.copy(this.position);
 
         if (isWeak) {
             this.lock0.update(weakDoor.lock0);
@@ -202,11 +208,8 @@ class DoorModel extends ObjectWrapper<Group> {
             const shakeTime = (t - weakDoor.lastPunch) / shakeDuration;
             if (shakeTime > 0.1 && shakeTime < 1) {
                 const idx = Math.round(shakeTime * (this.shake.length - 1));
-                this.root.position.copy(this.position);
                 this.root.position.x += this.shake[idx][0] * (1 - shakeTime);
                 this.root.position.z += this.shake[idx][1] * (1 - shakeTime);
-            } else {
-                this.root.position.copy(this.position);
             }
         }
     }

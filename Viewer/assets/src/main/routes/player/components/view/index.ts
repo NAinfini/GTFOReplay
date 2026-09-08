@@ -1,4 +1,5 @@
 import { html, Mutable } from "@/rhu/html.js";
+import { advanceTime } from "../../../../../replay/transport.js";
 import { always, Signal, signal } from "@/rhu/signal.js";
 import { Style } from "@/rhu/style.js";
 import { ReplayApi } from "../../../../../replay/moduleloader.js";
@@ -65,6 +66,7 @@ export const View = () => {
         
         addLog(err: { message: string, verbose: string, type: undefined | "warning" | "error" }): void;
         clearLogs(): void;
+        diagnosticLogs(): readonly { message: string; verbose: string; type?: "warning" | "error"; time: number }[];
 
         readonly renderer: Renderer;
         readonly replay: Signal<Replay | undefined>;
@@ -80,18 +82,20 @@ export const View = () => {
         lerp: number;
     }
     interface Private {
+        readonly loadingText: HTMLDivElement;
         reset(): void;
 
         prevTime: number;
     }
     
+    const history: { message: string; verbose: string; type?: "warning" | "error"; time: number }[] = [];
     const logs = signal<{ message: string, verbose: string, type: undefined | "warning" | "error" }[]>([], always);
     const logList = html.map(logs, undefined, (kv, el?: html<{message: Signal<string>; text: HTMLSpanElement; close: HTMLButtonElement, index: number}>) => {
         const [k,v] = kv;
         
         if (el === undefined) {
             el = html`
-            <div class="${style.log}" style="display:${k < 3 ? "block" : "hidden"}; background-color: ${v.type == "warning" ? "orange" : "red"};">
+            <div class="${style.log}" style="display:${k < 3 ? "block" : "none"}; background-color: ${v.type == "warning" ? "orange" : "red"};">
                 <span m-id="text" class="${style.logText}">${html.bind(signal(""), "message")}</span>
                 <span style="flex: 1;"></span>
                 <button m-id="close" class="${style.cross}">${icons.cross()}</button>
@@ -117,6 +121,7 @@ export const View = () => {
     });
 
     const dom = html<Mutable<Private & View>>/**//*html*/`
+        <div m-id="loadingText" role="status" style="position:absolute;left:16px;top:16px;z-index:5;color:white;background:#181b22;padding:8px;pointer-events:none;"></div>
         <div class="${style.logs}">${logList}</div>
         <canvas m-id="canvas" class="${style.canvas}" tabindex="-1"></canvas>
         `;
@@ -152,18 +157,27 @@ export const View = () => {
         
         this.reset();
 
-        this.renderer.init(replay);
+        try {
+            this.renderer.init(replay);
+        } catch (e) {
+            replay.error = e instanceof Error ? e : new Error(String(e));
+            this.pause(true);
+            this.addLog({ message: String(e), verbose: ASL_VM.verboseError(e), type: "error" });
+        }
 
         requestAnimationFrame(() => this.canvas.focus());
     };
 
     dom.reset = function reset() {
+        this.snapshot = undefined;
+        this.api(undefined);
         this.time(0);
         this.timescale(1);     
         this.length(0);
         this.pause(false);  
     };
 
+    let pendingSnapshot = false;
     dom.update = function update() {
         if (this.time() < 0) this.time(0);
         
@@ -177,25 +191,42 @@ export const View = () => {
             try {
                 this.length(replay.length());
 
-                if (!this.pause()) {
+                this.loadingText.textContent = replay.loading ? window.ReplayInterface.t("loadingSegment") : "";
+                this.loadingText.hidden = !this.loadingText.textContent;
+                if (!this.pause() && !replay.loading) {
                     if (this.live()) {
                         const time = this.time();
                         this.time(time + (this.length() - time) * dt / 1000 * this.lerp);
-                    } else this.time(this.time() + dt * this.timescale());
+                    } else {
+                        this.time(advanceTime(this.time(), dt * this.timescale(), replay.loadedLength(), replay.looping ? replay.range : undefined));
+                        if (!replay.looping && replay.complete && (this.time() >= this.length() || this.time() <= replay.startTime && this.timescale() < 0)) this.pause(true);
+                    }
                 }
                 const time = this.time();
 
-                if (this.snapshot?.time !== time) {
-                    this.snapshot = replay.getSnapshot(time);
+                if (!pendingSnapshot && !replay.error && this.snapshot?.time !== time) {
+                    pendingSnapshot = true;
+                    void replay.getSnapshot(time).then(snapshot => {
+                        if (this.replay() === replay && Math.abs(this.time() - time) < 500) this.snapshot = snapshot;
+                    }).catch((error: unknown) => {
+                        if (this.replay() !== replay) return;
+                        replay.error = error instanceof Error ? error : new Error(String(error));
+                        this.pause(true);
+                        this.addLog({ message: String(error), verbose: String(error), type: "error" });
+                    }).finally(() => { pendingSnapshot = false; });
                 }
 
-                if (this.snapshot !== undefined) {
+                if (this.snapshot !== undefined && !replay.error) {
                     const api = replay.api(this.snapshot);
                     this.api(api);
                     this.renderer.render(dt / 1000, api);
                 }
             } catch (e) {
-                console.error(ASL_VM.verboseError(e));
+                const verbose = ASL_VM.verboseError(e);
+                replay.error = e instanceof Error ? e : new Error(String(e));
+                this.pause(true);
+                this.addLog({ message: String(e), verbose, type: "error" });
+                console.error(verbose);
             }
         }
 
@@ -209,16 +240,21 @@ export const View = () => {
 
     dom.time.guard = (time) => {
         const replay = dom.replay();
-        return Math.clamp(time, 0, replay !== undefined ? replay.length() : 0);
+        return Math.clamp(time, replay?.startTime ?? 0, replay !== undefined ? replay.loadedLength() : 0);
     };
     
+    dom.diagnosticLogs = () => history.slice();
     dom.addLog = (log) => {
+        history.push({ ...log, time: dom.time() });
+        if (history.length > 500) history.shift();
         const l = logs();
         l.unshift(log);
+        if (l.length > 50) l.length = 50;
         logs(l);
     };
 
     dom.clearLogs = () => {
+        history.length = 0;
         logs([]);
     };
     

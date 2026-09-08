@@ -1,3 +1,4 @@
+import { readScale } from "./transform.js";
 import * as BitHelper from "@esm/@root/replay/bithelper.js";
 import { ModuleLoader } from "@esm/@root/replay/moduleloader.js";
 import * as Pod from "@esm/@root/replay/pod.js";
@@ -40,6 +41,8 @@ export interface Door {
     id: number;
     position: Pod.Vector;
     rotation: Pod.Quaternion;
+    scale?: Pod.Vector;
+    modelName?: string;
     dimension: number;
     serialNumber: number;
     isCheckpoint: boolean;
@@ -101,7 +104,7 @@ declare module "@esm/@root/replay/moduleloader.js" {
     }
 }
 
-ModuleLoader.registerHeader("Vanilla.Map.Doors", "0.0.1", {
+for (const version of ["0.0.1", "0.0.2"]) ModuleLoader.registerHeader("Vanilla.Map.Doors", version, {
     parse: async (data, header, snapshot) => {
         const doors = new Map<number, Door>();
 
@@ -122,6 +125,8 @@ ModuleLoader.registerHeader("Vanilla.Map.Doors", "0.0.1", {
                 id,
                 dimension, position, rotation,
                 serialNumber, isCheckpoint, type, size,
+                scale: version === "0.0.2" ? await readScale(data) : undefined,
+                modelName: version === "0.0.2" ? await BitHelper.readString(data) : undefined,
             });
 
             // Spawn an item to generate an item finder entry

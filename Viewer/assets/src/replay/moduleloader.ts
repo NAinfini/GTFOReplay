@@ -1,5 +1,6 @@
 import { Renderer, RendererApi } from "./renderer.js";
 import { ByteStream } from "./stream.js";
+import type { IndexedEvent } from "../main/interface.js";
 
 export declare namespace Typemap {
     interface Headers {
@@ -91,6 +92,7 @@ export namespace ModuleLoader {
         dynamic: ModuleLibrary<DynamicModule>
         render: Map<string, RenderModule>
         tick: Set<(snapshot: ReplayApi) => void>
+        index: Set<(event: IndexedEvent, snapshot: ReplayApi) => void>
         dispose: Set<(renderer: Renderer) => void>
     } = {
         init: new Set(),
@@ -99,6 +101,7 @@ export namespace ModuleLoader {
         dynamic: new Map(),
         render: new Map(),
         tick: new Set(),
+        index: new Set(),
         dispose: new Set(),
     };
 
@@ -109,6 +112,7 @@ export namespace ModuleLoader {
         library.dynamic.clear();
         library.render.clear();
         library.tick.clear();
+        library.index.clear();
         library.dispose.clear();
     }
 

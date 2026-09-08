@@ -142,6 +142,7 @@ Target: `;
     }
 
     public dispose(): void {
+        this.model.dispose();
         this.tag?.dispose();
         this.tag = undefined;
 

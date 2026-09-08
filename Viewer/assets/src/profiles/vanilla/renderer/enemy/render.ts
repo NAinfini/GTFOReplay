@@ -1,9 +1,16 @@
 import { ModuleLoader } from "@esm/@root/replay/moduleloader.js";
-import { Mesh, MeshPhongMaterial } from "@esm/three";
+import { Mesh, MeshPhongMaterial, Vector3 } from "@esm/three";
 import { Factory } from "../../library/factory.js";
 import { isCulled } from "../../library/models/lib.js";
 import { UnitySphere } from "../../library/models/primitives.js";
 import { EnemyModelWrapper } from "./lib.js";
+const cameraPosition = new Vector3();
+
+ModuleLoader.registerDispose(renderer => {
+    for (const key of ["Enemies", "Enemies.Ragdolls"] as const)
+        for (const wrapper of renderer.get(key)?.values() ?? []) wrapper.dispose();
+    for (const limb of renderer.get("Enemy.LimbCustom")?.values() ?? []) limb.material.dispose();
+});
 
 declare module "@esm/@root/replay/moduleloader.js" {
     namespace Typemap {
@@ -28,6 +35,7 @@ ModuleLoader.registerRender("Enemies", (name, api) => {
             const enemies = snapshot.getOrDefault("Vanilla.Enemy", Factory("Map"));
             const anims = snapshot.getOrDefault("Vanilla.Enemy.Animation", Factory("Map"));
             const camera = renderer.get("Camera")!;
+            camera.root.getWorldPosition(cameraPosition);
             const players = snapshot.getOrDefault("Vanilla.Player.Slots", Factory("Array"));
             for (const [id, enemy] of enemies) {
                 if (!models.has(id)) {
@@ -64,6 +72,7 @@ ModuleLoader.registerRender("Enemies", (name, api) => {
             const models = renderer.getOrDefault("Enemies.Ragdolls", Factory("Map"));
             const ragdolls = snapshot.getOrDefault("Vanilla.Enemy.Ragdoll", Factory("Map"));
             const camera = renderer.get("Camera")!;
+            camera.root.getWorldPosition(cameraPosition);
             const players = snapshot.getOrDefault("Vanilla.Player.Slots", Factory("Array"));
             for (const [id, ragdoll] of ragdolls) {
                 if (!models.has(id)) {

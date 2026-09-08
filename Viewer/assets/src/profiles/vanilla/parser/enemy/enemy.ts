@@ -20,9 +20,9 @@ declare module "@esm/@root/replay/moduleloader.js" {
                     position: Pod.Vector;
                     rotation: Pod.Quaternion;
                     tagged: boolean;
-                    consumedPlayerSlotIndex: number;
-                    targetPlayerSlotIndex: number;
-                    stagger: number;
+                    consumedPlayerSlotIndex?: number;
+                    targetPlayerSlotIndex?: number;
+                    stagger?: number;
                     canStagger: boolean;
                 };
                 spawn: {
@@ -110,9 +110,9 @@ let enemyParser: ModuleLoader.DynamicModule<"Vanilla.Enemy"> = ModuleLoader.regi
             const enemy = enemies.get(id)!;
             DynamicTransform.lerp(enemy, data, lerp);
             enemy.tagged = data.tagged;
-            enemy.consumedPlayerSlotIndex = data.consumedPlayerSlotIndex;
-            enemy.targetPlayerSlotIndex = data.targetPlayerSlotIndex;
-            enemy.stagger = data.stagger;
+            if (data.consumedPlayerSlotIndex !== undefined) enemy.consumedPlayerSlotIndex = data.consumedPlayerSlotIndex;
+            if (data.targetPlayerSlotIndex !== undefined) enemy.targetPlayerSlotIndex = data.targetPlayerSlotIndex;
+            if (data.stagger !== undefined) enemy.stagger = data.stagger;
             enemy.canStagger = data.canStagger;
         }
     },
@@ -220,6 +220,24 @@ enemyParser = ModuleLoader.registerDynamic("Vanilla.Enemy", "0.0.4", {
                 canStagger: await BitHelper.readBool(data)
             };
             return result;
+        }
+    }
+});
+
+ModuleLoader.registerDynamic("Vanilla.Enemy", "0.0.5", {
+    ...enemyParser,
+    main: {
+        ...enemyParser.main,
+        parse: async data => {
+            const transform = await DynamicTransform.parse(data);
+            const mask = await BitHelper.readByte(data);
+            if (mask & 224) throw new Error("Invalid enemy state mask.");
+            return {
+                ...transform, tagged: !!(mask & 1), canStagger: !!(mask & 2),
+                consumedPlayerSlotIndex: mask & 4 ? await BitHelper.readByte(data) : undefined,
+                targetPlayerSlotIndex: mask & 8 ? await BitHelper.readByte(data) : undefined,
+                stagger: mask & 16 ? await BitHelper.readByte(data) / 255 : undefined
+            };
         }
     }
 });

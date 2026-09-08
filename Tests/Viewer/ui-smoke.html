@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GTFO Replay — synthetic interface test</title>
+<link rel="stylesheet" href="../../Viewer/assets/src/main/default.css">
+<link rel="stylesheet" href="../../Viewer/assets/build/interface/interface.css">
+<style>html,body{height:100%}body{margin:0;background:#10141a;color:#a7b1c1;font:14px 'Segoe UI',sans-serif}main{min-height:40vh;padding:32px}#controls{position:fixed;bottom:0;width:100%}</style>
+<div class="replay-workspace"><div data-replay-nav></div><div data-react-panel></div><div class="replay-stage"><main><h1>Interface interaction preview</h1><p>Synthetic events and players for interface testing. This is not a game recording.</p></main><div id="controls" style="position:absolute"></div></div></div><script src="../../Viewer/assets/build/interface/interface.js"></script>
+<script>
+const state = {identity:'synthetic',startTime:0,time: 123456, duration: 1800000, cameraAuto:true, firstPerson:false, paused: true, speed: 1, indexing: false, looping: false, players:[{slot:0,nickname:'Bishop'},{slot:1,nickname:'Woods'},{slot:2,nickname:'Hackett'},{slot:3,nickname:'Dauda'}],
+events: Array.from({length:25000}, (_,id)=>({id,time:id*60,kind:id%7?'Vanilla.StatTracker.Damage':'ReplayRecorder.Marker',data:id%7?{source:1,target:36,damage:12.5}:{label:'Test marker '+id}}))};
+window.testState = state;
+Object.assign(state, { loadedUntil: 600000, indexing: true, loadFailed: false, live: false });
+ReplayInterface.mountControls(document.getElementById('controls'), {
+firstPerson:value=>{state.cameraAuto=false;state.firstPerson=value},autoCamera:()=>{state.cameraAuto=true;state.firstPerson=false},follow:slot=>{state.cameraAuto=false;state.following=slot;if(slot===undefined)state.firstPerson=false},clearRange:()=>{state.range=undefined;state.looping=false},state:()=>({...state}),seek:time=>state.time=Math.min(state.duration,Math.max(0,time)),pause:value=>state.paused=value,speed:value=>state.speed=value,
+step:async direction=>{state.paused=true;state.time+=direction*50;}
+,range:(start,end)=>{if(end<=start)throw new Error('invalid');state.range={start,end}},loop:value=>state.looping=value
+,bookmarks:async()=>JSON.parse(localStorage.getItem('test-notes')||'[]'),saveBookmarks:async notes=>localStorage.setItem('test-notes',JSON.stringify(notes))
+,statistics:async()=>({players:[{player:'Test player',damage:1200.5,kills:12,assists:3,shots:20,hits:16,revives:1,packs:2,packsConsumed:2}],confirmedEnemyDeaths:15}),focusEvent:async event=>{state.time=Math.max(state.startTime,event.time-3000);state.paused=true;return !!event.data.label;}
+,screenshot:async()=>true,exportClip:async()=>true
+});
+</script></html>

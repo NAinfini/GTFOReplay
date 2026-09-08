@@ -40,7 +40,7 @@ ModuleLoader.registerRender("Players", (name, api) => {
                 }
 
                 const model = models.get(id)!;
-                model.setVisible(player.dimension === renderer.get("Dimension"));
+                model.setVisible(player.dimension === renderer.get("Dimension") && id !== renderer.get("Controls")?.firstPersonPlayer);
                 
                 const anim = anims.get(id);
                 if (anim !== undefined) {

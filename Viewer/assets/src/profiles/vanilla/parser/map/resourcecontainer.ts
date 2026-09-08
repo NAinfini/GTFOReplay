@@ -1,3 +1,4 @@
+import { readScale } from "./transform.js";
 import * as BitHelper from "@esm/@root/replay/bithelper.js";
 import { ModuleLoader } from "@esm/@root/replay/moduleloader.js";
 import * as Pod from "@esm/@root/replay/pod.js";
@@ -11,6 +12,8 @@ export interface ResourceContainer {
     dimension: number;
     position: Pod.Vector;
     rotation: Pod.Quaternion;
+    scale?: Pod.Vector;
+    lockTransform?: { position: Pod.Vector; rotation: Pod.Quaternion; scale: Pod.Vector };
     serialNumber: number;
     isLocker: boolean;
     consumableType: Identifier;
@@ -42,6 +45,7 @@ declare module "@esm/@root/replay/moduleloader.js" {
             "Vanilla.Map.ResourceContainers.State":  {
                 parse: {
                     closed: boolean;
+                    lockType?: LockType;
                 };
                 spawn: {
                     closed: boolean;
@@ -97,7 +101,7 @@ ModuleLoader.registerHeader("Vanilla.Map.ResourceContainers", "0.0.2", {
         }
     }
 });
-ModuleLoader.registerHeader("Vanilla.Map.ResourceContainers", "0.0.3", {
+for (const version of ["0.0.3", "0.0.4"]) ModuleLoader.registerHeader("Vanilla.Map.ResourceContainers", version, {
     parse: async (data, header, snapshot) => {
         const containers = header.getOrDefault("Vanilla.Map.ResourceContainers", Factory("Map"));
         const count = await BitHelper.readUShort(data);
@@ -112,17 +116,24 @@ ModuleLoader.registerHeader("Vanilla.Map.ResourceContainers", "0.0.3", {
                 isLocker: await BitHelper.readBool(data),
                 consumableType: await Identifier.parse(IdentifierData(snapshot), data),
                 registered: await BitHelper.readBool(data),
-                assignedLock: lockType[await BitHelper.readByte(data)]
+                assignedLock: lockType[await BitHelper.readByte(data)],
+                scale: version === "0.0.4" ? await readScale(data) : undefined,
+                lockTransform: version === "0.0.4" && await BitHelper.readBool(data) ? {
+                    position: await BitHelper.readVector(data),
+                    rotation: await BitHelper.readHalfQuaternion(data),
+                    scale: await readScale(data)
+                } : undefined
             });
         }
     }
 });
 
-ModuleLoader.registerDynamic("Vanilla.Map.ResourceContainers.State", "0.0.1", {
+for (const version of ["0.0.1", "0.0.2"]) ModuleLoader.registerDynamic("Vanilla.Map.ResourceContainers.State", version, {
     main: {
         parse: async (data) => {
             return {
-                closed: await BitHelper.readBool(data)
+                closed: await BitHelper.readBool(data),
+                lockType: version === "0.0.2" ? lockType[await BitHelper.readByte(data)] : undefined
             };
         }, 
         exec: (id, data, snapshot) => {
@@ -130,6 +141,7 @@ ModuleLoader.registerDynamic("Vanilla.Map.ResourceContainers.State", "0.0.1", {
     
             if (!resourceContainers.has(id)) throw new Error(`Resource container of id '${id}' was not found.`);
             const resourceContainer = resourceContainers.get(id)!;
+            if (data.lockType !== undefined) resourceContainer.lockType = data.lockType;
             if (resourceContainer.closed !== data.closed) {
                 resourceContainer.lastCloseTime = snapshot.time();
                 resourceContainer.closed = data.closed;

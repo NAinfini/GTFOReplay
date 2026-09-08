@@ -1,0 +1,36 @@
+import en from "./en";
+
+const zh: typeof en = {
+    goToBookmark: "跳转",
+    opening: { extracting: "正在解压录像…", readingDuration: "正在读取录像总时长…", loadingScene: "正在加载回放场景…", bytes: "{{percent}}% · {{loaded}} / {{total}} MiB" },
+    loadProgress: "已加载 {{percent}}% · {{loaded}} / {{total}}", loadComplete: "已全部加载 · {{total}}", loadStopped: "加载已停止 · 可播放至 {{loaded}}", liveLoaded: "实时录像 · 可播放至 {{loaded}}", unloadedHint: "浅色：已加载 · 深色：待加载。可在已加载范围内跳转。",
+    firstPerson: "第一人称", firstPersonHint: "跟随所选玩家的视线；关闭后返回第三人称。", selectPlayerForFirstPerson: "请先选择要跟随的玩家。",
+    camera: "镜头", autoCamera: "自动追踪事件", autoCameraHint: "自动跟随重要事件，通常至少停留 6 秒，更紧急事件可在 3 秒后切换。手动操作即接管镜头。",
+    languageName: "简体中文",
+    statsUnavailable: "未记录",
+    statsScope: "整个回放 · — 表示数据不可用",
+    statsMetric: "统计指标",
+    statsCoverage: "关于统计数据来源",
+    statsAtTime: "截至 {{time}} 的累计数据 · — 表示数据不可用。整局数据请查看行动统计。",
+    cameraControlsHint: "视图内：Shift 上升，Ctrl 下降。WASD 仅水平移动；持续按住 3 秒逐渐加速至 4 倍，松开后重置。Space 播放 / 暂停。",
+    eventGroups: "合并后 {{count}} 行", expandEvents: "展开 {{count}} 条事件", collapseEvents: "收起 {{count}} 条事件", groupHint: "两秒内的同类事件合并展示，可展开查看每条事件。",
+    participant: { player: "玩家 #{{id}}", enemy: "敌人 #{{id}}", entity: "实体 #{{id}}" },
+    captureHint: "保存当前画面，或前往回放信息导出诊断报告。", diagnosticsLink: "查看回放诊断",
+"close": "关闭", "settings": "设置", "players": "玩家统计", "finder": "物品查找", "chat": "队伍聊天", "info": "回放信息", "exports": "截图与导出", "analysis": "分析", "workspace": "工作区", "followPlayer": "跟随玩家", "freeCamera": "自由视角", "playerTrack": "跟踪玩家统计", "profile": "回放配置", "chooseProfile": "选择配置", "details": "显示详细事件", "detailsHint": "包含伤害与技术事件。射击始终排除，不影响回放数据。", "eventHint": "点击事件会提前 3 秒定位并跟随目标。时间轴与列表使用相同筛选条件，相邻标记会合并显示。", "languageHint": "立即应用到整个查看器。", "live": "实时连接", "liveHint": "输入录制端主机的 Steam ID，连接正在运行的录制器。", "connect": "连接", "invalidSteamId": "请输入 17 位 Steam ID。", "skipBack": "后退 5 秒", "skipForward": "前进 5 秒", "start": "跳到开头", "end": "跳到结尾", "shortcuts": "播放快捷键", "shortcutsHint": "空格：播放／暂停 · 左／右：跳转 5 秒 · Shift + 左／右：逐帧 · Home／End：开头／结尾", "saved": "已保存", "bookmarkRequired": "请输入书签标题。", "dialog": {"open": "打开录像", "folder": "选择录制目录", "save": "保存文件", "hint": "浏览文件夹，或输入完整的文件夹路径。", "up": "上级目录", "path": "文件夹路径", "go": "前往", "locations": "位置", "home": "主目录", "downloads": "下载", "filter": "筛选当前目录", "loading": "正在读取目录…", "empty": "没有匹配的文件或目录。", "filename": "文件名", "chooseFolder": "使用此目录", "overwrite": "已存在同名文件。", "replace": "替换文件"},
+    screenshot: "截图", exporting: "正在导出…", exportSaved: "文件已保存。", exportError: "导出失败。",
+    library: { title: "录制文件", subtitle: "管理录像，回看并检查每次行动。", addFolder: "添加录制目录", import: "打开文件", count: "{{count}} 个录像", folders: "{{count}} 个跟踪目录", folderSettings: "录制目录", folderHint: "包含子目录。打开更多文件时优先使用默认目录。此设置不会修改游戏内录制器的配置。", defaultFolder: "默认导入目录", setDefault: "设为默认", stopTracking: "停止跟踪", search: "搜索录像名称和路径", favorites: "收藏", sort: "录像排序", modified: "最新录像", name: "文件名", size: "文件大小", viewedAt: "最近观看", error: "文件库操作失败。", folderErrors: "部分目录无法读取", noMatches: "没有匹配的录像", empty: "添加你的录制目录", emptyHint: "文件库会自动跟踪新增录像，也可以单独打开一个文件。", favorite: "收藏 {{name}}", resume: "继续 {{time}}", open: "打开", restart: "从头播放", reveal: "在目录中显示 {{name}}", trash: "将 {{name}} 移到回收站", trashTitle: "将录像移到回收站？", trashMessage: "录像将从此目录移除，诊断日志和笔记会保留。", trashConfirm: "移到回收站", loading: "正在打开回放…", profileRequired: "请先选择回放配置，再打开录像。" },
+    statistics: "行动统计", statsHint: "本机资源包消耗只在使用后实际扣除资源时计数。明确死亡独立计数，不分配给玩家，也不与房主广播相加。缺少的伤害、击杀归属和队友命中数据仍显示不可用。", statsError: "无法计算区间统计。", emptyStats: "此区间没有记录玩家统计数据。",
+    focusEvent: "定位", noEventLocation: "此事件没有可用的已记录位置。",
+    statsConfirmedDeaths: "已确认怪物死亡", statsClientHint: "仅统计本机收到的明确死亡，不代表个人击杀或全场总数。",
+    stats: { player: "玩家", damage: "对敌伤害", kills: "击杀", assists: "助攻", shots: "射击", hits: "命中", revives: "救援", packs: "资源包接收", packsConsumed: "资源包消耗（本机）", accuracy: "命中率" },
+    bookmarks: "书签", addBookmark: "标记当前时刻", newBookmark: "新书签", notesHint: "在本机保存，并关联到当前回放。",
+    bookmarkTitle: "标题", note: "笔记", save: "保存", cancel: "取消", edit: "编辑", remove: "移除", undo: "撤销移除",
+    notesError: "无法读取或保存笔记。", loadingNotes: "正在加载书签…", emptyNotes: "标记需要回看的时刻，或记下发现的不一致。", previousPage: "上一页", nextPage: "下一页",
+    play: "播放", pause: "暂停", previousTick: "上一采样帧", nextTick: "下一采样帧", speed: "速度",
+    events: "事件", allEvents: "全部事件", filterEvents: "搜索已记录事件", emptyEvents: "没有符合筛选条件的已记录事件。",
+    language: "语言", indexing: "正在建立回放索引…", loadingSegment: "正在加载播放片段…",
+    interrupted: "录制曾中断，正在播放其中的完整部分。", eventCount: "{{count}} 个事件",
+    seek: "播放位置", hideEvents: "隐藏事件列表", showEvents: "显示事件列表",
+    kinds: { EnemyDeath: "已确认怪物死亡", PackConsumed: "资源包消耗（本机）", Gunshots: "射击", Pack: "资源使用", Alert: "敌人警觉", DoorStatusChange: "门状态变化", Detonate: "地雷引爆", Explode: "喷吐瘤爆炸", Downed: "玩家倒地", ScoutScream: "侦察者尖叫", Wakeup: "敌人苏醒", PouncerGrab: "捕手抓住玩家", PouncerSpit: "捕手释放玩家", BigFlyerCharge: "大型飞行者蓄力", Scream: "敌人尖叫", ConsumableThrow: "投掷消耗品", TongueDodge: "躲避舌击", AttackWindup: "攻击前摇", Hitreact: "受击反应", Melee: "敌人近战", Jump: "敌人跳跃", Heartbeat: "心跳", MeleeSwing: "近战挥击", MeleeShove: "近战推击", TongueEvent: "舌头攻击", LimbDestruction: "肢体破坏", Punch: "击打门", Marker: "标记", Damage: "伤害", Revive: "救援队友", PlayerRevived: "玩家被扶起", PackUse: "资源使用", Checkpoint: "检查点", GunshotInfo: "射击", WardenEventSurvival: "生存目标" }
+};
+export default zh;

@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GTFO Replay — synthetic library test</title><link rel="stylesheet" href="../../Viewer/assets/build/interface/interface.css">
+<style>body{margin:0;background:#171c24}#library{height:100vh}</style><div id="library"></div>
+<script src="../../Viewer/assets/build/interface/interface.js"></script><script>
+const state = {folders:['E:\\Replays'],defaultFolder:'E:\\Replays',errors:[],files:Array.from({length:1000},(_,i)=>({path:'E:\\Replays\\Test recording-'+i+'.gtfo',name:'Test recording-'+i+'.gtfo',size:5000000+i*10000,modified:1788744000000-i*10000,resume:i===0?123456:0,duration:3600000}))};
+ReplayInterface.mountLibrary(document.getElementById('library'), {
+snapshot:async()=>structuredClone(state),addFolder:async()=>{state.folders.push('E:\\Extra');},configure:async(folders,folder)=>{state.folders=folders;state.defaultFolder=folder;},
+importFile:async()=>{},open:async(path)=>{state.errors=['Synthetic open: '+path];},
+favorite:async(path,value)=>state.files.find(file=>file.path===path).favorite=value,reveal:async()=>{},trash:async()=>false
+});
+</script></html>

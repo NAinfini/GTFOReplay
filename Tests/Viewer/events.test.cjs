@@ -1,0 +1,40 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+test('default event view hides traffic without changing replay data, and details are opt-in', async () => {
+    const { visibleEvents, timelineEvents } = await import('../../Viewer/interface/src/events.ts');
+    const events = ['Heartbeat', 'Heartbeat', 'Damage', 'GunshotInfo', 'Marker', 'Revive', 'PackUse'].map((name, id) => ({ id, time: id * 10, kind: `Vanilla.${name}` }));
+    assert.deepEqual(visibleEvents(events, false).map(e => e.id), [4, 5, 6]);
+    assert.equal(visibleEvents(events, true).length, 6);
+    assert.equal(events.length, 7);
+    assert.equal(visibleEvents(events, true, 'Vanilla.Heartbeat').length, 2);
+    assert.equal(visibleEvents(events, false, '', 'revive').length, 1);
+    const clustered = timelineEvents(events, 0, 1000, 10);
+    assert.equal(clustered.size, 1);
+    assert.equal(clustered.get(0).kind, 'Vanilla.Marker');
+});
+test('two-second groups preserve every event, targets, important boundaries and search results', async () => {
+    const { groupEvents, visibleEvents, eventDetail } = await import('../../Viewer/interface/src/events.ts');
+    const event = (id,time,kind,slot=0) => ({id,time,kind,data:{slot},participants:[{role:'player',type:'player',id:slot,name:slot ? 'Alice' : '\u5c0f\u660e'}]});
+    const alert = 'Vanilla.Enemy.Alert', wake = 'Vanilla.Enemy.Animation.Wakeup';
+    const events = [event(1,0,alert),event(2,200,wake),event(3,1000,alert),event(4,1300,alert,1),event(5,1500,wake),event(6,2100,alert),event(7,2200,'ReplayRecorder.Marker'),event(8,2300,alert)];
+    const groups = groupEvents(events);
+    assert.deepEqual(groups.map(g=>g.events.map(e=>e.id)),[[1,3],[2,5],[4],[6],[7],[8]]);
+    assert.equal(groups[0].endTime,1000);
+    assert.equal(groups.reduce((sum,g)=>sum+g.events.length,0),events.length);
+    assert.equal(events.length,8);
+    assert.deepEqual(groupEvents([...events].reverse()).map(g=>g.events.map(e=>e.id)),groups.map(g=>g.events.map(e=>e.id)));
+    const filtered = visibleEvents(events,false,'','Alice',e=>eventDetail(e));
+    assert.deepEqual(groupEvents(filtered)[0].events.map(e=>e.id),[4]);
+});
+test('gunshots never count as visible events; significant animation events stay visible', async () => {
+    const { visibleEvents, eventKindKey, eventDetail } = await import('../../Viewer/interface/src/events.ts');
+    const events = ['Vanilla.Player.Gunshots', 'Vanilla.Player.Gunshots.Info', 'Vanilla.Enemy.Animation.Heartbeat', 'Vanilla.Player.Animation.Downed', 'Vanilla.Enemy.Animation.ScoutScream'].map((kind,id) => ({id,time:0,kind}));
+    assert.deepEqual(visibleEvents(events, false).map(e => e.id), [3,4]);
+    assert.equal(visibleEvents(events, true).length, 3);
+    assert.equal(visibleEvents(events, true, 'Vanilla.Player.Gunshots').length, 0);
+    assert.equal(eventKindKey(events[1].kind), 'GunshotInfo');
+    assert.notEqual(eventKindKey('Vanilla.Player.Animation.Revive'),eventKindKey('Vanilla.StatTracker.Revive'));
+    assert.equal(eventDetail({data:{},participants:[{type:'enemy',id:30,name:'Striker'}]}),'Striker #30');
+    assert.equal(eventDetail({...events[0],data:{owner:1,damage:30}}), '30.0');
+    assert.equal(eventDetail({...events[0],data:{source:1,target:2,damage:30},participants:[{role:'source',type:'player',id:1,name:'Alice'},{role:'target',type:'enemy',id:2}]}), 'Alice → enemy #2 · 30.0');
+});

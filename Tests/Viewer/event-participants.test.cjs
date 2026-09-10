@@ -1,0 +1,22 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+test('event names use historical IDs, slots and Steam IDs without confusing enemy or mine identifiers', async () => {
+    const { describeParticipants } = await import('../../Viewer/assets/src/profiles/vanilla/library/eventParticipants.ts');
+    const players = new Map([[10,{id:10,slot:0,nickname:'\u5c0f\u660e',snet:123n}],[20,{id:20,slot:1,nickname:'Alice',snet:456n}]]);
+    const enemies = new Map([[30,{type:{id:11}}],[31,{type:{id:13}}]]), mines = new Map([[99,{snet:456n}]]);
+    const describe = (kind,data) => describeParticipants({id:1,time:100,kind,data},players,enemies,mines,new Map([[11,'Striker'],[13,'Shooter']]));
+    const revive = describe('Vanilla.StatTracker.Revive',{source:10,target:20});
+    assert.deepEqual(revive.map(p=>p.name),['\u5c0f\u660e','Alice']);
+    players.set(10,{id:10,slot:0,nickname:'replacement',snet:789n});
+    assert.equal(revive[0].name,'\u5c0f\u660e');
+    assert.equal(describe('Vanilla.Enemy.Alert',{enemy:30,slot:1})[1].name,'Alice');
+    assert.equal(describe('ReplayRecorder.Marker',{player:456n})[0].name,'Alice');
+    assert.equal(describe('Vanilla.Player.Animation.Downed',{owner:20})[0].name,'Alice');
+    assert.equal(describe('Vanilla.StatTracker.Damage',{source:99,target:30,type:'Explosive'})[0].name,'Alice');
+    assert.equal(describe('Vanilla.StatTracker.Damage',{source:30,target:20,type:'Tongue'})[0].type,'enemy');
+    assert.equal(describe('Vanilla.StatTracker.Damage',{source:10,target:20,type:'Projectile'})[0].type,'entity');
+    assert.equal(describe('Vanilla.StatTracker.Pack',{source:999,target:20})[0].name,undefined);
+    assert.equal(describe('Vanilla.Enemy.Alert',{enemy:30,slot:1})[0].name, 'Striker');
+    assert.equal(describe('Vanilla.Enemy.Animation.Wakeup',{id:31})[0].name, 'Shooter');
+    assert.deepEqual(describe('Vanilla.Map.DoorStatusChange',{id:20}),[]);
+});

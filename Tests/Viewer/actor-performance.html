@@ -1,0 +1,105 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><base href="/Viewer/assets/assets/main/">
+<title>Actor rendering performance baseline</title><style>body{margin:0;background:#182128;color:#e8eff4;font:14px system-ui}canvas{display:block}#status{position:absolute;left:16px;top:12px;background:#10171cd9;padding:10px;white-space:pre}</style>
+<div id="status">Loading 4 players and 64 enemies…</div>
+<script type="importmap">{"imports":{"@esm/@/rhu/":"/Viewer/assets/js3party/rhu/","@esm/@root/":"/artifacts/tests/actor-performance/","@esm/three":"/Viewer/assets/node_modules/three/build/three.module.js","@esm/three/":"/Viewer/assets/node_modules/three/","three":"/Viewer/assets/node_modules/three/build/three.module.js"}}</script>
+<script type="module">
+import '/artifacts/tests/actor-performance/math.js';
+import * as T from '@esm/three';
+import {Actor} from '/artifacts/tests/actor-performance/actor.js';
+import {ActorRig} from '/artifacts/tests/actor-performance/replay/actor-rig.js';
+import {actorCatalog} from '/artifacts/tests/actor-performance/actor-catalog.js';
+import {AvatarSkeleton,Anim} from '/artifacts/tests/actor-performance/animations.js';
+import {HumanJoints,PlayerJoints,construct} from '/artifacts/tests/actor-performance/driver.js';
+import {HumanFingerJoints} from '/artifacts/tests/actor-performance/player-fingers.js';
+const status=document.querySelector('#status'),assert=(ok,message)=>{if(!ok)throw Error(message)};
+const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
+const percentile=(values,p)=>{const a=values.slice().sort((a,b)=>a-b);return a.length?a[Math.min(a.length-1,Math.floor(a.length*p))]:null};
+const stats=values=>({samples:values.length,mean:values.reduce((a,b)=>a+b,0)/values.length,p50:percentile(values,.5),p95:percentile(values,.95),p99:percentile(values,.99),max:values.length?Math.max(...values):null});
+window.addEventListener('unhandledrejection',e=>{window.setupError=String(e.reason?.stack||e.reason)});
+try{
+ const setupStart=performance.now(),presets=await(await fetch('/artifacts/tests/actor-performance/presets.json')).json();
+ const fingerRig=await(await fetch('../player-animations/rig.json')).json();
+ const players=['bishop','woods','hackett','dauda'];
+ const enemySpecies=['striker','shooter','charger','hybrid','big-striker','big-shooter','scout','zoomer-scout','shadow','big-charger','mother','big-mother','mega-mother','tank','snatcher','immortal-tank'];
+ const scene=new T.Scene();scene.background=new T.Color(0x182128);
+ scene.add(new T.HemisphereLight(0xdce7ff,0x665b43,2));
+ const light=new T.DirectionalLight(0xffedd8,3);light.position.set(3,7,5);scene.add(light);
+ const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);renderer.setSize(1920,1080);
+ renderer.outputColorSpace=T.SRGBColorSpace;document.body.append(renderer.domElement);
+ const camera=new T.PerspectiveCamera(60,1920/1080,.05,150);camera.position.set(0,4,5);camera.lookAt(0,1,-25);camera.updateMatrixWorld(true);
+ const gl=renderer.getContext(),debug=gl.getExtension('WEBGL_debug_renderer_info'),timer=gl.getExtension('EXT_disjoint_timer_query_webgl2');
+ const actors=[],clips=new Map(),clipSources=[];
+ function reference(keys,fingers){const d=new AvatarSkeleton(keys);construct(d,fingers);d.joints.hip.updateMatrixWorld(true);return new Map(keys.map(k=>[k,d.joints[k].matrixWorld.clone().invert()]))}
+ const fingers={...fingerRig,joints:HumanFingerJoints},humanReference=reference(HumanJoints),playerReference=reference(PlayerJoints,fingers);
+ async function add(id,index,isPlayer){
+  const keys=isPlayer?PlayerJoints:HumanJoints,parent=new T.Group(),driver=new AvatarSkeleton(keys);construct(driver,isPlayer?fingers:undefined);
+  if(isPlayer)parent.position.set((index-1.5)*2.4,0,-2);
+  else parent.position.set((index%8-3.5)*2.1,0,-[6,14,22,30,38,46,56,68][Math.floor(index/8)]);
+  parent.rotation.y=Math.PI;parent.add(driver.joints.hip);scene.add(parent);
+  const animationName=presets[id].presets.run||presets[id].presets.crawl||presets[id].presets[presets[id].default];
+  assert(animationName,'No verified native animation for '+id);
+  const file=presets[id].sampleFiles[animationName];assert(file,'Missing controller-backed file for '+id+'/'+animationName);
+  if(!clips.has(file))clips.set(file,(async()=>{const data=await(await fetch(file)).json();clipSources.push({file,name:animationName,rate:data.rate,duration:data.duration,frames:data.frames.length});return new Anim(keys,data.rate,data.duration,data.frames)})());
+  const clip=await clips.get(file),actor=new Actor(id,parent,driver,isPlayer?playerReference:humanReference);
+  const distance=parent.position.distanceTo(camera.position);
+  const entry={id,isPlayer,parent,driver,actor,clip,distance,phase:index*.137};actors.push(entry);
+  await actor.ready;assert(actor.active,'Actor failed to load '+id);actor.update(true,undefined,false,0);
+ }
+ await Promise.all([...players.map((id,i)=>add(id,i,true)),...Array.from({length:64},(_,i)=>add(enemySpecies[i%enemySpecies.length],i,false))]);
+ actors.sort((a,b)=>a.isPlayer===b.isPlayer?a.distance-b.distance:a.isPlayer?-1:1);
+ const checkPoint=new T.Vector3();
+ for(const entry of actors){
+  const model=entry.actor.active.scene;model.updateMatrixWorld(true);const box=new T.Box3().setFromObject(model,true);
+  assert(!box.isEmpty()&&box.getCenter(checkPoint).distanceTo(entry.parent.position)<10,'Actor placement invalid '+entry.id);
+ }
+ renderer.compile(scene,camera);renderer.render(scene,camera);
+ window.benchmarkDescription={resolution:[1920,1080],pixelRatio:renderer.getPixelRatio(),actors:actors.length,players:4,enemies:64,enemySpecies,clipSources,
+  shader:{antialias:true,lights:'Hemisphere + directional; no shadows',toneMapping:renderer.toneMapping,preserveDrawingBuffer:true},
+  driver:'Actual AvatarSkeleton + native sampled Anim + StickFigure.construct + Actor/ActorRig',
+  placement:'4 near players, 8 rows of 8 mixed enemies from 11 to 74 metres; all actor meshes submit using product Actor visibility policy',
+  setupMs:performance.now()-setupStart,webgl:{renderer:gl.getParameter(debug?debug.UNMASKED_RENDERER_WEBGL:gl.RENDERER),vendor:gl.getParameter(debug?debug.UNMASKED_VENDOR_WEBGL:gl.VENDOR),version:gl.getParameter(gl.VERSION),timerQueryAvailable:!!timer},
+  assets:actorCatalog.filter(d=>players.includes(d.id)||enemySpecies.includes(d.id)).map(d=>({id:d.id,model:d.model})),
+  limitations:['Isolated Actor workload: no replay decoding, walls, ground, equipment, HUD, shadows or gameplay state machine.','Electron offscreen rendering capped at 60 Hz; RAF intervals include offscreen presentation/readback and browser scheduling, not a visible replay window.','Local hardware only; older GPU 60 FPS is not validated.','Big Flyer excluded while its native 17-joint source is rebuilt.']};
+ let rigMs=0,profileRig=false;const originalApply=ActorRig.prototype.apply;
+ ActorRig.prototype.apply=function(...args){if(!profileRig)return originalApply.apply(this,args);const start=performance.now();const result=originalApply.apply(this,args);rigMs+=performance.now()-start;return result};
+ window.measureActors=async config=>{
+  const until=performance.now()+60000;
+  const costs={animationMs:[],actorUpdateMs:[],rigApplyMs:[],renderSubmitMs:[],cpuWorkMs:[],frameIntervalMs:[],gpuElapsedMs:[],triangles:[],drawCalls:[]};
+  let previous,queries=[],gpuDisjoint=0,startTime=0;
+  const modelCounts={low:actors.length};
+  const expectedTriangles=actors.reduce((n,e)=>n+e.actor.descriptor.model.triangles,0);
+  status.textContent=config.name+' · 4 players + 64 enemies\n'+JSON.stringify(modelCounts)+' · '+expectedTriangles.toLocaleString()+' source triangles';
+  for(let i=-120;i<config.frames;i++){
+   const now=await frame(),record=i>=0;if(i===0)startTime=now;
+   if(record&&previous!==undefined)costs.frameIntervalMs.push(now-previous);previous=now;
+   const workStart=performance.now();let animationMs=0,actorMs=0;rigMs=0;profileRig=record;
+   if(config.mode!=='render-only'){
+    let then=performance.now();for(const e of actors)e.driver.override(e.clip.sample(now/1000+e.phase));animationMs=performance.now()-then;
+    then=performance.now();for(const e of actors){e.actor.update(true,undefined,false,now)}actorMs=performance.now()-then;
+   }
+   profileRig=false;let renderMs=0,query;
+   if(config.mode!=='update-only'){
+    if(timer&&record&&i%4===0){query=gl.createQuery();gl.beginQuery(timer.TIME_ELAPSED_EXT,query)}
+    const then=performance.now();renderer.render(scene,camera);renderMs=performance.now()-then;
+    if(query){gl.endQuery(timer.TIME_ELAPSED_EXT);queries.push(query)}
+   }
+   const workMs=performance.now()-workStart;
+   if(record){costs.animationMs.push(animationMs);costs.actorUpdateMs.push(actorMs);costs.rigApplyMs.push(rigMs);costs.renderSubmitMs.push(renderMs);costs.cpuWorkMs.push(workMs);costs.triangles.push(config.mode==='update-only'?0:renderer.info.render.triangles);costs.drawCalls.push(config.mode==='update-only'?0:renderer.info.render.calls)}
+   if(timer){
+    const disjoint=gl.getParameter(timer.GPU_DISJOINT_EXT);if(disjoint)gpuDisjoint++;
+    while(queries.length&&gl.getQueryParameter(queries[0],gl.QUERY_RESULT_AVAILABLE)){const q=queries.shift();if(!disjoint)costs.gpuElapsedMs.push(gl.getQueryParameter(q,gl.QUERY_RESULT)/1e6);gl.deleteQuery(q)}
+   }
+  }
+  for(let tries=0;queries.length&&tries<60;tries++){
+   await frame();while(queries.length&&gl.getQueryParameter(queries[0],gl.QUERY_RESULT_AVAILABLE)){const q=queries.shift();if(!gl.getParameter(timer.GPU_DISJOINT_EXT))costs.gpuElapsedMs.push(gl.getQueryParameter(q,gl.QUERY_RESULT)/1e6);gl.deleteQuery(q)}
+  }
+  queries.forEach(q=>gl.deleteQuery(q));
+  const result={...config,modelCounts,expectedTriangles,gpuDisjoint,measurements:Object.fromEntries(Object.entries(costs).map(([name,values])=>[name,stats(values)])),
+   measuredFps:1000/(costs.frameIntervalMs.reduce((a,b)=>a+b,0)/costs.frameIntervalMs.length),over16_67ms:costs.frameIntervalMs.filter(ms=>ms>16.67).length,
+   memory:renderer.info.memory,heap:performance.memory?{usedJSHeapSize:performance.memory.usedJSHeapSize,totalJSHeapSize:performance.memory.totalJSHeapSize}:null};
+  return result;
+ };
+ window.disposeBenchmark=()=>{ActorRig.prototype.apply=originalApply;actors.forEach(e=>e.actor.dispose());renderer.dispose();return {actorsDisposed:actors.length}};
+ window.benchmarkReady=true;
+}catch(error){window.setupError=String(error.stack||error);status.textContent=window.setupError;console.error(error)}
+</script></html>

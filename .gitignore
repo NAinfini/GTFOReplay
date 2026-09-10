@@ -1,0 +1,21 @@
+/artifacts/
+/Tests/**/bin/
+/Tests/**/obj/
+
+# Local AI tooling, instructions and working notes are not project deliverables.
+.codex/
+.agents/
+.claude/
+.cursor/
+.aider*
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+SKILL.md
+MEMORY.md
+/IMPLEMENTATION.md
+/PLAN.md
+/PLANS.md
+/.github/copilot-instructions.md
+/.github/instructions/
+/.github/prompts/

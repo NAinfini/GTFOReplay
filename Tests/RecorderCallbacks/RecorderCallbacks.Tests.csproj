@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net6.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><CheckEolTargetFramework>false</CheckEolTargetFramework><NuGetAudit>false</NuGetAudit></PropertyGroup>
+  <ItemGroup><Compile Include="../../ReplayRecorder/ReplayRecorder/Patches/GameEventManager.cs" Link="GameEventManager.cs" /><Compile Include="../../Vanilla/Vanilla/Mines/Mine.cs" Link="Mine.cs" /><Compile Include="../../Vanilla/Vanilla/Cfoam/Cfoam.cs" Link="Cfoam.cs" /></ItemGroup>
+</Project>

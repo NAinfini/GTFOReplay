@@ -1,9 +1,7 @@
 import { ModuleLoader } from "@esm/@root/replay/moduleloader.js";
-import { Group, Mesh, MeshPhongMaterial } from "@esm/three";
 import { Factory } from "../../library/factory.js";
-import { loadGLTFGeometry } from "../../library/modelloader.js";
 import { DisinfectStation } from "../../parser/map/disinfectstation.js";
-import { ObjectWrapper } from "../objectwrapper.js";
+import { EnvironmentModel } from "./environment.js";
 
 declare module "@esm/@root/replay/moduleloader.js" {
     namespace Typemap {
@@ -17,32 +15,9 @@ declare module "@esm/@root/replay/moduleloader.js" {
     }
 }
 
-const material = new MeshPhongMaterial({
-    color: 0xa0c7eb
-});
 
-class DisinfectStationModel extends ObjectWrapper<Group> {
-    model: Group;
-    mesh: Mesh;
-
-    constructor(station: DisinfectStation) {
-        super();
-        this.root = new Group();
-
-        this.model = new Group();
-        this.root.add(this.model);
-
-        this.root.position.copy(station.position);
-        this.root.quaternion.copy(station.rotation);
-    
-        loadGLTFGeometry("../js3party/models/disinfect_station.glb").then((geometry) => {
-            this.mesh = new Mesh(geometry, material);
-            this.model.add(this.mesh);
-        });
-
-        this.model.scale.set(0.4, 0.4, 0.4);
-        this.model.position.set(0, 0.6, 0);
-    }
+class DisinfectStationModel extends EnvironmentModel {
+    constructor(value: DisinfectStation) { super("disinfect-station", value); }
 }
 
 ModuleLoader.registerRender("Vanilla.DisinfectStations", (name, api) => {
@@ -59,7 +34,7 @@ ModuleLoader.registerRender("Vanilla.DisinfectStations", (name, api) => {
                 }
 
                 const model = models.get(id)!;
-                const visible = generator.dimension === renderer.get("Dimension");
+                const visible = generator.dimension === renderer.get("Dimension") && model.inView(renderer.get("Camera")!);
                 model.setVisible(visible);
             }
         } 

@@ -1,10 +1,7 @@
 import { ModuleLoader } from "@esm/@root/replay/moduleloader.js";
-import { Group, Mesh, MeshPhongMaterial } from "@esm/three";
-import { white } from "../../library/constants.js";
 import { Factory } from "../../library/factory.js";
-import { loadGLTFGeometry } from "../../library/modelloader.js";
 import { BulkheadController } from "../../parser/map/bulkheadcontroller.js";
-import { ObjectWrapper } from "../objectwrapper.js";
+import { EnvironmentModel } from "./environment.js";
 
 declare module "@esm/@root/replay/moduleloader.js" {
     namespace Typemap {
@@ -18,34 +15,9 @@ declare module "@esm/@root/replay/moduleloader.js" {
     }
 }
 
-const material = new MeshPhongMaterial({
-    color: 0x535966
-});
-material.specular = white;
 
-class BulkheadControllerModel extends ObjectWrapper<Group> {
-    model: Group;
-    mesh: Mesh;
-
-    constructor(controller: BulkheadController) {
-        super();
-
-        this.root = new Group();
-
-        this.model = new Group();
-        this.root.add(this.model);
-
-        this.root.position.copy(controller.position);
-        this.root.quaternion.copy(controller.rotation);
-    
-        loadGLTFGeometry("../js3party/models/bulkhead_dc.glb").then((geometry) => {
-            this.mesh = new Mesh(geometry, material);
-            this.model.add(this.mesh);
-        });
-
-        this.model.scale.set(0.5, 0.5, 0.5);
-        this.model.position.set(0, 0.8, 0);
-    }
+class BulkheadControllerModel extends EnvironmentModel {
+    constructor(value: BulkheadController) { super("bulkhead-controller", value); }
 }
 
 ModuleLoader.registerRender("Vanilla.BulkheadControllers", (name, api) => {
@@ -62,7 +34,7 @@ ModuleLoader.registerRender("Vanilla.BulkheadControllers", (name, api) => {
                 }
 
                 const model = models.get(id)!;
-                const visible = controller.dimension === renderer.get("Dimension");
+                const visible = controller.dimension === renderer.get("Dimension") && model.inView(renderer.get("Camera")!);
                 model.setVisible(visible);
             }
         } 

@@ -1,15 +1,15 @@
 import { BufferGeometry, Group, Mesh, Texture, TextureLoader } from '@esm/three';
-import { DRACOLoader } from '@esm/three/examples/jsm/loaders/DRACOLoader.js';
-import { GLTFLoader } from '@esm/three/examples/jsm/loaders/GLTFLoader.js';
+import { modelLoader as loader } from '@esm/@root/replay/model-loader.js';
 import * as BufferGeometryUtils from '@esm/three/examples/jsm/utils/BufferGeometryUtils.js';
+import { clone as cloneSkeleton } from '@esm/three/examples/jsm/utils/SkeletonUtils.js';
+import { ownModelMaterials, disposeModelMaterials } from './modelMaterials.js';
+import { ModuleLoader } from '@esm/@root/replay/moduleloader.js';
+
+ModuleLoader.registerDispose(renderer => disposeModelMaterials(renderer.scene));
 
 const loadedGLTFGeometry = new Map<string, BufferGeometry>();
 const loadingGLTFGeometry = new Map<string, { promise: Promise<BufferGeometry>; terminate: (reason: any) => void }>();
 
-const loader = new GLTFLoader();
-const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath("../js3party/three/examples/jsm/libs/draco/");
-loader.setDRACOLoader( dracoLoader );
 
 export function deleteGLTFGeometryCache(path: string) {
     loadedGLTFGeometry.delete(path);
@@ -96,7 +96,8 @@ export async function loadGLTF(path: string): Promise<() => Group> {
         terminate = reject;
         loader.load(path, function (gltf) {
             try {
-                const factory = () => gltf.scene.clone();
+                gltf.scene.animations = gltf.animations;
+                const factory = () => { const model = cloneSkeleton(gltf.scene) as Group; ownModelMaterials(model); return model; };
                 loadedGLTF.set(path, factory);
                 resolve(factory);
             } catch(error) {

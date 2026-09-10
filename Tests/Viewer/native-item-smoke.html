@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Native item runtime checks</title>
+<style>body{margin:0;background:#181e25;color:#dde4ef;font:16px system-ui}pre{white-space:pre-wrap;padding:18px}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/Viewer/assets/node_modules/three/build/three.module.js","three/":"/Viewer/assets/node_modules/three/"}}</script>
+<pre id="status">Checking native items, original textures, grips, morph playback and rewind…</pre>
+<script type="module">
+import { Group,Matrix4,Quaternion,Vector3,Scene,PerspectiveCamera,WebGLRenderer,HemisphereLight,DirectionalLight,Box3,AnimationMixer } from 'three';
+import {modelLoader,configureModelLoader} from '/Viewer/assets/build/replay/model-loader.js';
+import { NativeItemModel } from './nativeItem.js';
+import { nativeItemCatalog } from './catalog.js';
+const status=document.querySelector('#status'),assert=(ok,message)=>{if(!ok)throw Error(message)};
+const renderer=new WebGLRenderer({antialias:true});
+configureModelLoader(renderer);
+const meshes=root=>{const result=[];root.traverse(o=>{if(o.isMesh)result.push(o)});return result};
+try{
+    const checks=[],models=[];
+    const item=new NativeItemModel(102);
+    assert(item.rightHandGrip && item.leftHandGrip,'Pack wrist targets must be available before GLB download');
+    await item.ready;models.push(item);
+    assert(item.visual.children.length===1,'Held model must load exactly once');
+    const sourceRight=item.visual.getObjectByName('RightHand');
+    assert(sourceRight,'Native right hand node must survive');
+    item.root.updateMatrixWorld(true);
+    assert(sourceRight.getWorldPosition(new Vector3()).distanceTo(new Vector3().copy(item.rightHandGrip.pos))<1e-5,'Grip metadata does not match original GLB hierarchy');
+    const wrist=new Group(),attachment=new Group(),equipped=new Group();
+    wrist.position.set(.3,1.2,-.7);wrist.rotation.set(.4,-.3,.8);
+    attachment.position.set(.1,.045,0);attachment.quaternion.set(.5,.5,.5,.5);
+    wrist.add(attachment);attachment.add(equipped);equipped.add(item.root);attachment.updateMatrix();
+    const grip=new Matrix4().compose(new Vector3().copy(item.rightHandGrip.pos),new Quaternion().copy(item.rightHandGrip.rot),new Vector3(1,1,1)).invert();
+    new Matrix4().copy(attachment.matrix).invert().multiply(grip).decompose(item.root.position,item.root.quaternion,item.root.scale);
+    wrist.updateMatrixWorld(true);
+    assert(sourceRight.getWorldPosition(new Vector3()).distanceTo(wrist.getWorldPosition(new Vector3()))<1e-5,'Native source wrist is not aligned with player wrist');
+    assert(sourceRight.getWorldQuaternion(new Quaternion()).normalize().angleTo(wrist.getWorldQuaternion(new Quaternion()).normalize())<1e-5,'Native wrist rotation mismatch');
+    checks.push('Native source wrist position/rotation matches player attachment, including parent transforms');
+    item.root.removeFromParent();item.root.position.set(0,0,0);item.root.quaternion.identity();item.root.scale.set(1,1,1);
+    item.inLevel();await item.ready;
+    assert(item.visual.children.length===1,'Ground switch retained duplicate held meshes');
+    assert(!item.visual.getObjectByName('RightHand'),'Ground switch kept held hierarchy');
+    assert(meshes(item.visual).every(m=>[].concat(m.material).every(mat=>mat.map||mat.normalMap||mat.aoMap)),'Pack lost native material maps');
+    item.inHand();await item.ready;assert(item.visual.getObjectByName('RightHand'),'Held switch did not restore source grips');
+    checks.push('Pickup/held switching uses separate native GLBs without old scale/rotation or material replacement');
+    const first=new NativeItemModel(170),second=new NativeItemModel(170);first.inLevel();second.inLevel();
+    await Promise.all([first.ready,second.ready]);models.push(first,second);
+    assert(first.visual.children.length===1&&second.visual.children.length===1,'Immediate ground mode caused duplicate async loads');
+    const a=meshes(first.visual).find(m=>m.morphTargetInfluences?.length),b=meshes(second.visual).find(m=>m.morphTargetInfluences?.length);
+    assert(a&&b&&a.morphTargetInfluences.length===5,'Animated HSU lost its five native shape keys');
+    assert(a.morphTargetInfluences!==b.morphTargetInfluences,'Cloned HSU instances share morph state');
+    first.render(0,0);second.render(0,0);const zero=a.morphTargetInfluences.slice();first.render(16,2400);const changed=a.morphTargetInfluences.slice();
+    assert(changed.some((v,i)=>Math.abs(v-zero[i])>.01),'Native HSU clip did not animate');
+    assert(b.morphTargetInfluences.every((v,i)=>Math.abs(v-zero[i])<1e-7),'One HSU animation modified another instance');
+    first.render(0,0);assert(a.morphTargetInfluences.every((v,i)=>Math.abs(v-zero[i])<1e-7),'Replay rewind did not restore native morph weights');
+    first.render(0,2400);first.render(0,2400);assert(a.morphTargetInfluences.every((v,i)=>Math.abs(v-changed[i])<1e-7),'Paused replay changed morph state');
+    checks.push('Real five-target HSU animation supports independent clones, pause and deterministic rewind');
+    assert(nativeItemCatalog.get(137).file!==nativeItemCatalog.get(170).file,'HSU stages collapsed into legacy aliases');
+    assert(nativeItemCatalog.get(114).file!==nativeItemCatalog.get(174).file,'Glowstick variants collapsed');
+    const key=new NativeItemModel(27);await key.ready;assert(!key.descriptor.heldFile&&key.visual.children.length===0,'Static key invented a held model');
+    key.inLevel();await key.ready;assert(meshes(key.visual).length===1,'Original key mesh did not load');models.push(key);
+    const abandoned=new NativeItemModel(170);abandoned.inLevel();abandoned.dispose();await abandoned.ready;assert(abandoned.visual.children.length===0,'Disposed item received a late model');
+    checks.push('Source variants remain distinct; static keys have no invented held model; disposed loads cannot reattach');
+    const powerCell=new NativeItemModel(131);powerCell.inLevel();await powerCell.ready;models.push(powerCell);
+    const cellMaterials=meshes(powerCell.visual).flatMap(mesh=>[].concat(mesh.material));
+    assert(cellMaterials.some(material=>material.map&&material.normalMap&&material.metalnessMap&&material.emissiveMap),'Power Cell lost its runtime surface maps');
+    checks.push('Power Cell loads its runtime albedo, normal, surface and emissive maps');
+    const artifact=new NativeItemModel(152);artifact.inLevel();await artifact.ready;models.push(artifact);
+    const artifactMeshes=meshes(artifact.visual);
+    assert(artifactMeshes.length>0&&artifactMeshes.every(mesh=>mesh.geometry.attributes.position),'Muted Artifact did not load');
+    assert(artifactMeshes.some(mesh=>[].concat(mesh.material).some(material=>material.map&&material.normalMap)),'Artifact lost native textures');
+    assert(artifact.descriptor.triangles===256,'Artifact is not the prepared Low mesh');
+    checks.push('All booster artifacts resolve to the textured 256-triangle Muted Low pickup');
+    const scene=new Scene(),camera=new PerspectiveCamera(35,1.6,.001,100);renderer.setSize(1100,680);document.body.append(renderer.domElement);
+    scene.add(new HemisphereLight(0xddeaff,0x273328,2));const light=new DirectionalLight(0xffffff,3);light.position.set(1,2,3);scene.add(light);
+    scene.add(artifact.root);const box=new Box3().setFromObject(artifact.root),center=box.getCenter(new Vector3()),size=box.getSize(new Vector3()).length();camera.position.copy(center).add(new Vector3(1,.7,1).multiplyScalar(size));camera.lookAt(center);renderer.render(scene,camera);
+    window.testResult={passed:true,checks,registeredItems:nativeItemCatalog.size};status.textContent='PASS\n'+checks.join('\n');
+    for(const model of models)model.dispose();
+}catch(error){window.testResult={passed:false,error:error.stack};status.textContent=error.stack;console.error(error)}
+</script></html>

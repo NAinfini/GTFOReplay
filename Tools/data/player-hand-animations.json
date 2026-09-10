@@ -1,0 +1,281 @@
+{
+  "gear": {
+    "Front_Rifle_1_GripAlign_reload": {
+      "left": {
+        "idle": "Left_Hand.Front_Rifle_1",
+        "reload": "Left_Hand.Rifle1_Reload"
+      },
+      "right": {
+        "idle": "Right_Hand.DefaultGrip"
+      }
+    },
+    "Front_Rifle_2_reload_0": {
+      "left": {
+        "idle": "Left_Hand.Front_Rifle_2",
+        "reload": "Left_Hand.Front_Rifle_2_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.DefaultGrip"
+      }
+    },
+    "Front_Rifle_3_reload_animation_1": {
+      "left": {
+        "idle": "Left_Hand.Front_Rifle_3_idle",
+        "reload": "Left_Hand.Front_Rifle_3_reload_animation"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_Rifle_3_idle",
+        "reload": "Right_Hand.Front_Rifle_3_reload_animation"
+      }
+    },
+    "Front_Rifle_4_reload_0": {
+      "left": {
+        "idle": "Left_Hand.Front_Rifle_4",
+        "reload": "Left_Hand.Front_Rifle_4_reload_60"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_Rifle_4",
+        "reload": "Right_Hand.Front_Rifle_4_reload_60"
+      }
+    },
+    "Front_AutoShotgun_1_animation_reload_0": {
+      "left": {
+        "idle": "Left_Hand.Front_AutoShotgun_1",
+        "reload": "Left_Hand.Front_AutoShotgun_1_animation_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_AutoShotgun_1",
+        "reload": "Right_Hand.Front_AutoShotgun_1_animation_reload"
+      }
+    },
+    "Front_AutoShotgun_2_Parts_Reload": {
+      "left": {
+        "idle": "Left_Hand.Front_AutoShotgun_2_Player_Idle",
+        "reload": "Left_Hand.Front_AutoShotgun_2_Player_Reload"
+      },
+      "right": {
+        "idle": "Right_Hand.DefaultGrip"
+      }
+    },
+    "Front_AutoShotgun_3_reload_0": {
+      "left": {
+        "idle": "Left_Hand.Front_AutoShotgun_3_idle",
+        "reload": "Left_Hand.Front_AutoShotgun_3_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_AutoShotgun_3_idle",
+        "reload": "Right_Hand.Front_AutoShotgun_3_reload"
+      }
+    },
+    "Machinegun_1_reload_1": {
+      "left": {
+        "idle": "Left_Hand.Machinegun_1_idle",
+        "reload": "Left_Hand.Machinegun_1_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Machinegun_1_idle",
+        "reload": "Right_Hand.Machinegun_1_reload"
+      }
+    },
+    "Front_Machinegun_2_Animation_reload_1": {
+      "left": {
+        "idle": "Left_Hand.Front_Machinegun_2_Animation_idle",
+        "reload": "Left_Hand.Front_Machinegun_2_Animation_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.DefaultGrip"
+      }
+    },
+    "Front_Pistol_1_reload": {
+      "left": {
+        "idle": "Left_Hand.Stock_Pistol_1",
+        "reload": "Left_Hand.Stock_Pistol_1_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Stock_Pistol_1",
+        "reload": "Right_Hand.Stock_Pistol_1_reload"
+      }
+    },
+    "Stock_Pistol_1_reload_1": {
+      "left": {
+        "idle": "Left_Hand.Stock_Pistol_1",
+        "reload": "Left_Hand.Stock_Pistol_1_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Stock_Pistol_1",
+        "reload": "Right_Hand.Stock_Pistol_1_reload"
+      }
+    },
+    "Revolver_Front_1_Reload_1": {
+      "left": {
+        "idle": "Left_Hand.Front_Revolver_1",
+        "reload": "Left_Hand.Front_Revolver_1_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_Revolver_1",
+        "reload": "Right_Hand.Front_Revolver_1_reload"
+      }
+    },
+    "Front_Revolver_2_Reload_0": {
+      "left": {
+        "idle": "Left_Hand.Front_Revolver_2_Idle",
+        "reload": "Left_Hand.Front_Revolver_2_Reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_Revolver_2_Idle",
+        "reload": "Right_Hand.Front_Revolver_2_Reload"
+      }
+    },
+    "Front_Precision_1_reload_1": {
+      "left": {
+        "idle": "Left_Hand.Front_Precision_1",
+        "reload": "Left_Hand.Front_Precision_1_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_Precision_1_idle"
+      }
+    },
+    "Front_Precision_2_reload_1": {
+      "left": {
+        "idle": "Left_Hand.Front_Precision_2",
+        "reload": "Left_Hand.Front_Precision_2_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_Precision_2",
+        "reload": "Right_Hand.Front_Precision_2_reload"
+      }
+    },
+    "Front_Precision_3_Parts_Reload": {
+      "left": {
+        "idle": "Left_Hand.Front_Precision_3_Player_Idle",
+        "reload": "Left_Hand.Front_Precision_3_Player_Reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Stock_Precision_2"
+      }
+    },
+    "Front_Shotgun_1_animation_reload_1": {
+      "left": {
+        "idle": "Left_Hand.Front_Shotgun_1",
+        "reload": "Left_Hand.Front_Shotgun_1_animation_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_Shotgun_1",
+        "reload": "Right_Hand.Front_Shotgun_1_animation_reload"
+      }
+    },
+    "Shotgun_front_2_reloadPump_1": {
+      "left": {
+        "idle": "Left_Hand.Shotgun_front_2_idle",
+        "reload": "Left_Hand.Shotgun_front_2_reloadPump"
+      },
+      "right": {
+        "idle": "Right_Hand.DefaultGrip"
+      }
+    },
+    "Front_Shotgun_3_reload_0": {
+      "left": {
+        "idle": "Left_Hand.Front_Shotgun_3",
+        "reload": "Left_Hand.Front_Shotgun_3_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Front_Shotgun_3",
+        "reload": "Right_Hand.Front_Shotgun_3_reload"
+      }
+    },
+    "SMG_Front_1_Reload_1": {
+      "left": {
+        "idle": "Left_Hand.SMG_Front_1_Idle",
+        "reload": "Left_Hand.SMG_Front_1_Reload"
+      },
+      "right": {
+        "idle": "Right_Hand.SMG_Front_1_Idle",
+        "reload": "Right_Hand.SMG_Front_1_Reload"
+      }
+    },
+    "SMG_Front_2_Reload_1": {
+      "left": {
+        "idle": "Left_Hand.SMG_Front_2_Idle",
+        "reload": "Left_Hand.SMG_Front_2_Reload"
+      },
+      "right": {
+        "idle": "Right_Hand.SMG_Front_2_Idle",
+        "reload": "Right_Hand.SMG_Front_2_Reload"
+      }
+    },
+    "SMG_Front_3_Reload_1": {
+      "left": {
+        "idle": "Left_Hand.SMG_Front_3_Idle",
+        "reload": "Left_Hand.SMG_Front_3_Reload"
+      },
+      "right": {
+        "idle": "Right_Hand.SMG_Front_3_Idle",
+        "reload": "Right_Hand.SMG_Front_3_Reload"
+      }
+    },
+    "SMG_Front_4_Reload_1": {
+      "left": {
+        "idle": "Left_Hand.SMG_Front_4_Idle",
+        "reload": "Left_Hand.SMG_Front_4_Reload"
+      },
+      "right": {
+        "idle": "Right_Hand.SMG_Front_4_Idle",
+        "reload": "Right_Hand.SMG_Front_4_Reload"
+      }
+    },
+    "Short_Shotgun_2_Parts_Reload": {
+      "left": {
+        "idle": "Left_Hand.Short_Shotgun_2_Player_Idle",
+        "reload": "Left_Hand.Short_Shotgun_2_Player_Reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Short_Shotgun_2_Player_Idle",
+        "reload": "Right_Hand.Short_Shotgun_2_Player_Reload"
+      }
+    },
+    "Stock_Bullpup_1_reload_1": {
+      "left": {
+        "idle": "Left_Hand.Stock_Bullpup_1",
+        "reload": "Left_Hand.Stock_Bullpup_1_reload"
+      },
+      "right": {
+        "idle": "Right_Hand.Stock_Bullpup_1",
+        "reload": "Right_Hand.Stock_Bullpup_1_reload"
+      }
+    }
+  },
+  "melee": {
+    "hammer": {
+      "left": {
+        "idle": "Left_Hand.SledgeHammer_fp_arms"
+      },
+      "right": {
+        "idle": "Right_Hand.SledgeHammer_fp_arms"
+      }
+    },
+    "spear": {
+      "left": {
+        "idle": "Left_Hand.Spear_Idle"
+      },
+      "right": {
+        "idle": "Right_Hand.Spear_Idle"
+      }
+    },
+    "knife": {
+      "left": {
+        "idle": "Left_Hand.Knife_Idle"
+      },
+      "right": {
+        "idle": "Right_Hand.Knife_Idle"
+      }
+    },
+    "bat": {
+      "left": {
+        "idle": "Left_Hand.Bat_Idle"
+      },
+      "right": {
+        "idle": "Right_Hand.Bat_Idle"
+      }
+    }
+  }
+}

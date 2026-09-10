@@ -1,0 +1,954 @@
+[
+  {
+    "asset_id": "architecture-00167065945c90f7",
+    "source_revision": "90cf2d4c17aee876220e8688916014f21087d419549e7373284380e9dabbeebe",
+    "name": "g_prop_DataCenter_1x1_ServerRack_a"
+  },
+  {
+    "asset_id": "architecture-00f03da8412f7d22",
+    "source_revision": "8eacdb783fa31a71c5db2482fa659f028580741bfb6fe7b9d655a49f16bd1957"
+  },
+  {
+    "asset_id": "architecture-01466c153f41c541",
+    "source_revision": "0d59251aa15969392d746536b88b779f854177a0019036557bee7212a06b99b5"
+  },
+  {
+    "asset_id": "architecture-0255ca04085457e7",
+    "source_revision": "c0729aa796b62efa1451050090c50099929cf23d9a2d8e4111304bd86ac45f04"
+  },
+  {
+    "asset_id": "architecture-032457aaa4b816d9",
+    "source_revision": "cc58f70b4ea833083b3d7b6242f13250a914a060e44c249f480a27fa46ab3b8c"
+  },
+  {
+    "asset_id": "architecture-03837c9709497af9",
+    "source_revision": "cbcf1ea7909e361efba98a5e0f0b96ad979c440c0911eeabe23a53af4e52a446"
+  },
+  {
+    "asset_id": "architecture-03daf81f971144b7",
+    "source_revision": "c7c8ae04185c94239f102d0bbd90a6ae2534ba7590cf091993ae60e5604acf8f"
+  },
+  {
+    "asset_id": "architecture-0751f9db2391df98",
+    "source_revision": "1e8d4e318234fc2a7edbb999cb9fba73c00829ebb525bf4b77f809c22b913c9b"
+  },
+  {
+    "asset_id": "architecture-08577ad6a0b1f882",
+    "source_revision": "5ac6f3a298f8ba938faf1b35d88c9eae4d209c6ce3e92b112eb06bbcb4d57468"
+  },
+  {
+    "asset_id": "architecture-08e6fded3ecc6c70",
+    "source_revision": "a76b5ba2e90c35f8ec0cb3db799e14f9d91b7762da6d37eef47e87ba374ea847"
+  },
+  {
+    "asset_id": "architecture-09c7650003586eda",
+    "source_revision": "e91fb3c1524ec347361220c8bf4eb63f1761fed5a7bf6595cff57e7390dcbdd6"
+  },
+  {
+    "asset_id": "architecture-0a9cbc19930ed0c3",
+    "source_revision": "786b6453b384a337545e433ac315b598fabc7d2d303d6cf87a33e8611f3fc003",
+    "name": "g_prop_generic_container_stack_covered_small_003"
+  },
+  {
+    "asset_id": "architecture-0b412052a9bd6c3f",
+    "source_revision": "e77ad3e6942ef948f69b1bacc8835fd9d19e34d21371d067a7ee2f70d533249d"
+  },
+  {
+    "asset_id": "architecture-0b51f8367154562d",
+    "source_revision": "2ef3db289a909e32a9f550d3ac14e2d766c8714c9cf85ac60888fa1b25ade2ae"
+  },
+  {
+    "asset_id": "architecture-0bf87a759be950e3",
+    "source_revision": "ae4e067134fa799324028254e2e29dbe63459aa042d0de7bb6455ec4e32fa9a2"
+  },
+  {
+    "asset_id": "architecture-0c8a9ac9ea312f0c",
+    "source_revision": "c4b82be858594af8cda27c6986efb82beb0c39d955c558f34d0731ee930fe1ff",
+    "name": "g_prop_generic_storage_shelf_a_300x250x150_tile_001"
+  },
+  {
+    "asset_id": "architecture-0f5ffa2cdd890674",
+    "source_revision": "af913d3144d03cbbd091365ddcadd7c62b0061b120b6f4c73f407fbbe5c4383f"
+  },
+  {
+    "asset_id": "architecture-10606b361f032e06",
+    "source_revision": "05ffa52ac0665775206f3a42d903353d2e569e4d11c7dee5df5848b50baa4e4e"
+  },
+  {
+    "asset_id": "architecture-1212ae7e71d778ea",
+    "source_revision": "60dae221eff9795d944f03b548a9fe74950584b05a07d498d66bd17dee47af7a"
+  },
+  {
+    "asset_id": "architecture-124a13d3265dd5c2",
+    "source_revision": "cef4f97822e14f9e06c537bff92dbfafbd5a73d5b6d2bbfd197a9f33702dde48",
+    "name": "g_prop_DataCenter_1x1_ServerRack_b"
+  },
+  {
+    "asset_id": "architecture-1268596cc33b063b",
+    "source_revision": "7d621a6a7c775be526a5a404028543db6f514e6cec3492a6a987ccf3091ea844"
+  },
+  {
+    "asset_id": "architecture-12ba0b1bf59e33a1",
+    "source_revision": "18cdd7d85e4ad63031744c3e8374aff7e60482bcb4c05553481e21fb3f881407"
+  },
+  {
+    "asset_id": "architecture-12c47c15349322b2",
+    "source_revision": "0f60204b085401a1ba7e1fc05810493f35a25bf7dc0bb60880947109ad0a1b77"
+  },
+  {
+    "asset_id": "architecture-13ea6f6a202a61bc",
+    "source_revision": "b3fa2dea88ad4162ee97cf4d2c7b64c075fda0bef67c782f8bec20e15eee3e8a"
+  },
+  {
+    "asset_id": "architecture-1497c9a850297981",
+    "source_revision": "81a08132899622165033ccc5ec4ec89aa8e5a5e8e2059aa354e317c5241193d3"
+  },
+  {
+    "asset_id": "architecture-1713bf07dbd42a03",
+    "source_revision": "4c36a20887220a12c58093af8375ff69f5779acdec1c39f045be3c9e327b2679"
+  },
+  {
+    "asset_id": "architecture-1754e6d5881c6a14",
+    "source_revision": "c2e161fe0726c87d22ec5d454ebde4792d5b2b50293dba928497e02d72005c67"
+  },
+  {
+    "asset_id": "architecture-193084cd8e5908c6",
+    "source_revision": "2b10436cb3bb7371043aa4436dec57406f04365ec7b0d4ef585b4e5e37b26ed1"
+  },
+  {
+    "asset_id": "architecture-19d371ffe133df33",
+    "source_revision": "26e351726c9bd16ca332173022e080f3607cb31e12252cc95791fe3f6499a33a"
+  },
+  {
+    "asset_id": "architecture-1a99c8e98ceeef97",
+    "source_revision": "cfef510d72d499229e4a42c22b29579c5666a1898da8d2ea3b6151de6379b6fd"
+  },
+  {
+    "asset_id": "architecture-1a9cb4000dc0949a",
+    "source_revision": "a10e5bf4aa8c8d03b79b20491c673e96899a0e5ab97fe2c417b07c9a7c357142",
+    "name": "g_shelf_generic_a"
+  },
+  {
+    "asset_id": "architecture-1c6463f3d396ca8c",
+    "source_revision": "5c81b2c2cb77bc7a0623ede869b8b4e7efbdda9c8539a1c94e89d01be43c365d",
+    "name": "g_prop_generic_container_liquid_cargo_001"
+  },
+  {
+    "asset_id": "architecture-1cfe8e60c998288f",
+    "source_revision": "c72f75a856b346bbeb144bbf7df54b7b57e0122e6f2623d22dade4103352e37d"
+  },
+  {
+    "asset_id": "architecture-1d6811d392ce3716",
+    "source_revision": "523f6bb18768c8f9a25f530d306e65945d974f636563d1163485f7f60204bc3c"
+  },
+  {
+    "asset_id": "architecture-1e0d4ded9698f7dd",
+    "source_revision": "d5069c6ec37dd2d95c6329a5e274d8329f00f3e2799b6fb383ca63f2035d7828"
+  },
+  {
+    "asset_id": "architecture-1fce76ce1a2b1822",
+    "source_revision": "e356a6f4b5f90c0c5147d764a1603f0aa429e76903b67856858b889ca26aa0e0"
+  },
+  {
+    "asset_id": "architecture-2179e97594e8d999",
+    "source_revision": "7f190a20da221ce75fdc97c1e796df9c9cdd16a1dca8ff2327ae51f3ecfa15ce",
+    "name": "g_prop_generic_container_stack_covered_small_001"
+  },
+  {
+    "asset_id": "architecture-21d9d3a999466861",
+    "source_revision": "6e178940432334194bd2cca9fa995c4d2cdabf3b7ce87a5d423fa7c1c04e83db"
+  },
+  {
+    "asset_id": "architecture-22c7d930e5a96aec",
+    "source_revision": "cfbfd5b3b46b802ce9da2f65c2fc5742f5203de1e91793f4043a781fb3574e35"
+  },
+  {
+    "asset_id": "architecture-23eedde313681498",
+    "source_revision": "82abdb31ed3f8a427bf1fe1e37e9484a65887502b9c9553326fea2ae55c3bb89"
+  },
+  {
+    "asset_id": "architecture-26618a080be1130f",
+    "source_revision": "549420a4d4db70bcb7b048a345bcc5ca96aba95cfa15d474be41e4561e84de1b"
+  },
+  {
+    "asset_id": "architecture-27fb254c2f8d2e31",
+    "source_revision": "b3fda43f893b0a93c6264e16d72b1cd0aa1293cdc5c9122d64eca23c0b3443d7"
+  },
+  {
+    "asset_id": "architecture-285ad2ab0c0499c8",
+    "source_revision": "e986fb20131f49941cd6759668807e08741fce61d458e7bab64960d7a5320f62"
+  },
+  {
+    "asset_id": "architecture-2ad3823d824dc425",
+    "source_revision": "2c8e570eb470bc723a90de32eb42de423a5c838f82989d86ebc40b9e5fd92496"
+  },
+  {
+    "asset_id": "architecture-2b0675b0c3b7d221",
+    "source_revision": "87491df739cd0bf06930739fededc91025833cec830c8bd8bb8fdddb283df883"
+  },
+  {
+    "asset_id": "architecture-2bb8ab59173575c7",
+    "source_revision": "75b5a9de76f99c968757ce5b78812c2d196e6baeda43dd3bd72f542fc1ea2e35"
+  },
+  {
+    "asset_id": "architecture-2c135dee8e5a8150",
+    "source_revision": "be085a7012fe7e8d969f74ea56df9e87bbc192b210e43580cd895874cbfba170"
+  },
+  {
+    "asset_id": "architecture-2d81840295c4f6d0",
+    "source_revision": "b554ed9626343c4d7dbd41ab5a20becdc51fc79f424b015a66d2fb41cc71c0bf"
+  },
+  {
+    "asset_id": "architecture-2f0316c933a54a37",
+    "source_revision": "a4cc9a517c3eddd5645e7b4a486e252463ff80f6794e52ecf0ff9095e647c9ed"
+  },
+  {
+    "asset_id": "architecture-2f8275a1b65122f2",
+    "source_revision": "0b1c452b05e045b99c254aa675e289f32b03f08a1a408ef73e2e2e7250758cff",
+    "name": "g_prop_generic_storage_shelf_b_300x375x150_001"
+  },
+  {
+    "asset_id": "architecture-2fea2ec5d2c74fa5",
+    "source_revision": "58335aa7b539f845dfa9cef3ced79f19fc2b95dae86fd6e3f9582e537e76a936"
+  },
+  {
+    "asset_id": "architecture-30e10e04e6775e21",
+    "source_revision": "aff8afb51779a40763c454568d0a740fa9efcd98503aeefb52eb2d09156a6e00",
+    "name": "g_prop_generic_container_liquid_cargo_003"
+  },
+  {
+    "asset_id": "architecture-327d7479a7ddb279",
+    "source_revision": "c17063aaa743a47ae40b8244c8a6b3a2d0684e953d65647fe8a06ee8ba965c95"
+  },
+  {
+    "asset_id": "architecture-3b41c2b23e65df21",
+    "source_revision": "f705cc2813b4efb939ae7c872bd93a58a7d08ef9f4a6200a0fbe3cd1f54f7707"
+  },
+  {
+    "asset_id": "architecture-3c1b090efb78f45e",
+    "source_revision": "0bcd166587ba03edda0db9acb896a015f092629abc61ed6290305a62d3feec5c"
+  },
+  {
+    "asset_id": "architecture-3d01c9b8de9d6384",
+    "source_revision": "1ba300a2e1d46ac593abb434eea551df571b37e047d56f8a53426564a5ec42a0"
+  },
+  {
+    "asset_id": "architecture-3d06a52edf02893e",
+    "source_revision": "b7e6ae2247cdbbbba72bc8a44c8415cf4435e0f3c5b7d3e4c8014a260eb79d38"
+  },
+  {
+    "asset_id": "architecture-3d187db60aa72e99",
+    "source_revision": "415cdffc0927c1f6b1a47f7304d7b7dc5a5e040fb4316f73b8d6e3148983b388"
+  },
+  {
+    "asset_id": "architecture-3f994d42ed0221b4",
+    "source_revision": "87d8dfffcb239092e741305fea4f87b526a546afcc36609090b47177b5fad2c1"
+  },
+  {
+    "asset_id": "architecture-3fb7f1723dfaefa0",
+    "source_revision": "d77c9a38dd6dc93df9ae119b9ecf5c4c32a7ff38490298a5ee15aa497cea995c",
+    "name": "g_prop_DataCenter_1x1_ServerContents_a_01"
+  },
+  {
+    "asset_id": "architecture-410ef8228560d775",
+    "source_revision": "0c952450a93164559effb1d436bef7eeb9f8709f2cf0f6e9bc0f6b4052ca9fbe",
+    "name": "g_prop_generic_container_stack_covered_small_002"
+  },
+  {
+    "asset_id": "architecture-4121733e9d10cb3c",
+    "source_revision": "d5335de0d231e7888f6eba2629bea7c7649469c95ac0ae1575e7fa1ce730f359",
+    "name": "g_prop_DataCenter_Shelf_Side"
+  },
+  {
+    "asset_id": "architecture-420e480a687b98d2",
+    "source_revision": "1c5518d03cb44e53b24c3c8b97eef012b2ac9b81d49e1d2ac03a7e33b6a6ce74"
+  },
+  {
+    "asset_id": "architecture-429e794c5c7c00de",
+    "source_revision": "2903c03ea90c4532c1cb582a069c0670646369bb63c47f33316293b50632e401"
+  },
+  {
+    "asset_id": "architecture-438e82231c211319",
+    "source_revision": "f49b088bc5c38cef4c5b38c0d74b3c616909f7e4d35e5e002c88b65b81871b16"
+  },
+  {
+    "asset_id": "architecture-43a970a2f818a8dc",
+    "source_revision": "00a2b430d06defefdf2e8244c2cc442e539c66eec3dc6e57ecff60eca4e366fe"
+  },
+  {
+    "asset_id": "architecture-473f179acb0e0c5d",
+    "source_revision": "5c7f0ef51cfb4d93581b68627648963d00c963a34d08227c2f14ac18a4fa5fb6"
+  },
+  {
+    "asset_id": "architecture-489e72ab305595ec",
+    "source_revision": "7f1ada8986d149030c7bbef6c342bcb5c6ee1ffe431b69bb641d0978017bc52c"
+  },
+  {
+    "asset_id": "architecture-4bd23038f35bc82a",
+    "source_revision": "9cdfcbca3724aa7b44d35a44faf29e6cfe397a4c48c31d1e1eb5d968d3d41c04"
+  },
+  {
+    "asset_id": "architecture-4f3043a709cb69cd",
+    "source_revision": "fa0cd115dde034b8ba5525911507a7fa7f3a82bda3d275dfed3561bce3186195"
+  },
+  {
+    "asset_id": "architecture-50c8fb736521c927",
+    "source_revision": "6f118bcc838d2d1eea055d96399f36d102e3b01792b195de9cbb0da9c16bd465"
+  },
+  {
+    "asset_id": "architecture-533ade03326420e2",
+    "source_revision": "9f9427363034b20d91563abedd2cfb2fcf9e7d3c2b70274d747ed07d19e9d662"
+  },
+  {
+    "asset_id": "architecture-53f18ff2f81aef6b",
+    "source_revision": "7b90c6c43fc2b442885d6351c53a698c77dda9d89328fe73fbc55524dd063cea"
+  },
+  {
+    "asset_id": "architecture-54c8542787d9ea47",
+    "source_revision": "ed7476929b3c79c70323dc864f17284fc51bcf6d9e9c2231ab4cf2c364ba135f"
+  },
+  {
+    "asset_id": "architecture-54e4f5a2ce440cde",
+    "source_revision": "1257e979a34b2a52d5e4c5fb445e5bb3bfbe4ddb214c1449d9536d853bf92876"
+  },
+  {
+    "asset_id": "architecture-555f75cc8f7577e3",
+    "source_revision": "4bb78ab6a643c4182447e7a8fa43e23c6a144fa42c27e761a6fcc27acca145a9"
+  },
+  {
+    "asset_id": "architecture-55935117d0b5422f",
+    "source_revision": "3257d7b3ab60fcd44352f4687062cdf76df9d236cec8969d2f0c51b75d66ab53"
+  },
+  {
+    "asset_id": "architecture-561384bb40060bec",
+    "source_revision": "454c423dae3d635ebad5078715c406fef9b21160dd610ab3bc65d64d624960fb"
+  },
+  {
+    "asset_id": "architecture-57adde0320be8ad1",
+    "source_revision": "fad91a273636655f9b0627e0cb8b31becd6800681d3896d36a67da097801e242",
+    "name": "g_prop_industrial_generator_001"
+  },
+  {
+    "asset_id": "architecture-586df1664613ed0a",
+    "source_revision": "3302d77b044be674119de856d9dec1a600bd7df0a2f29b6242823accc36adcac",
+    "name": "g_prop_industrial_tank_chemical_001"
+  },
+  {
+    "asset_id": "architecture-5a25963bbcedba86",
+    "source_revision": "9bf013cd3551dab4403b75e8a8dcf36f47c17a14871c432fb506929b3a5cc20b"
+  },
+  {
+    "asset_id": "architecture-5a319c6cd5835bd0",
+    "source_revision": "72b18bb218c6e4b5724fc8d901eb58eafe35aa8c84714124bd8f9f439ff8705d"
+  },
+  {
+    "asset_id": "architecture-5b7df5b36002ef20",
+    "source_revision": "c9444e6dbab532cffbd6c4d9b1b7fe1513a14da8b238a720333c748eafe8d44b"
+  },
+  {
+    "asset_id": "architecture-5c59c7c507079455",
+    "source_revision": "64bead511bf6b8e7c8c5bee98cad18d00ded78e10246bbc75fbc2e33d22af70f"
+  },
+  {
+    "asset_id": "architecture-5caf7664a32be0b5",
+    "source_revision": "78d8a2e52120c679cd78d07e76a6a6248a0b1d2daa6c04d2ab44e9ff0b996239"
+  },
+  {
+    "asset_id": "architecture-5f102bb46aa0f8b0",
+    "source_revision": "cf3f6e7da6b5ac9410e4c0d7a94a5d83d263623980ad8342aa203bd92bbb31a1"
+  },
+  {
+    "asset_id": "architecture-6066e7593a530864",
+    "source_revision": "5488f22ebbf9a5911e32fc84e17e17da3ac37dfcd804d57671627d70987fda1b"
+  },
+  {
+    "asset_id": "architecture-627a5a07ad95c2f2",
+    "source_revision": "2ca2efce78387a060172b492142f6fa536c8823b3747f5057b56cc5d4e978145",
+    "name": "g_prop_generic_container_liquid_cargo_002"
+  },
+  {
+    "asset_id": "architecture-630af8732d31c94e",
+    "source_revision": "e9f707a6efd912d97cf8bf3a6f63d7b8b6cece35c17cd72a1df322235ca78c35"
+  },
+  {
+    "asset_id": "architecture-6424f5620ce78df7",
+    "source_revision": "14f1fc1f8216ede3967b0019c1f55a91fcaa5b4f1858a6097d609ec5fc17c960"
+  },
+  {
+    "asset_id": "architecture-645147a73916dead",
+    "source_revision": "199a49f88fae19e6599f15923f97a60c7363a197c3ef7ffb8a62d2d06f5cdf3d"
+  },
+  {
+    "asset_id": "architecture-6555465e562ed17a",
+    "source_revision": "8a57d62e4e9c2fb780421fb5a4106e799164629f5552d2e05ce19ba7b97fafe6"
+  },
+  {
+    "asset_id": "architecture-6754814b1e8820a8",
+    "source_revision": "12bba6542f3b249f552d076f369ca4ab2230c3264f30ca2d4e3cf709a831f007"
+  },
+  {
+    "asset_id": "architecture-67dd208f2743f85f",
+    "source_revision": "25c84729556a45a5fb18523ef0b5de5e537a14440b38afb5746891fd7cb6a1fa"
+  },
+  {
+    "asset_id": "architecture-68cfc1805158788d",
+    "source_revision": "9112548e15a9795090a16e2e29b9073e0aea96dff9380efa0676623af7025f07"
+  },
+  {
+    "asset_id": "architecture-693088521c19ca27",
+    "source_revision": "fafe57b24eaba0a62c2e3906d60703a8f490eb5c9ebce83e1f06dc7963540722"
+  },
+  {
+    "asset_id": "architecture-69f66276619f66b2",
+    "source_revision": "5e6c56c636dbc1c51e7ff48774e3508fe4b3b631e3c019d64403b0cbd74c91c9"
+  },
+  {
+    "asset_id": "architecture-6df115cfdf0a792d",
+    "source_revision": "5efea26687a6f12628c2fda3787b99d4cfc443481faf3ff9f94578e1883c4300"
+  },
+  {
+    "asset_id": "architecture-701490c34496c369",
+    "source_revision": "9ca4616e499249df8f627f3c10b1963b69975c40e87c33646ed2b42fb978bf74",
+    "name": "g_prop_DataCenter_1x1_ServerContents_screen"
+  },
+  {
+    "asset_id": "architecture-710485144c8ab059",
+    "source_revision": "0d793ca4677d12d4f4d3e85812b22084c5e5b06fb7e66bb435201889c9483334"
+  },
+  {
+    "asset_id": "architecture-72eaa3052f98e963",
+    "source_revision": "864b1812d348259db64f43c8279cfb07a347586a51fc56f78118c6922d970c1a"
+  },
+  {
+    "asset_id": "architecture-7329e6526ca1005f",
+    "source_revision": "ad3c685f662664429364d8bf7a9a8aec3bd1c156dc43297e8ebcd61b192b8464"
+  },
+  {
+    "asset_id": "architecture-73d4b8e2a26daf75",
+    "source_revision": "baeda7469f61b56bf291d209cc22b0cbf795684ee4ed61759ea7ac1f27bf4c90"
+  },
+  {
+    "asset_id": "architecture-75ac075742e2b8f5",
+    "source_revision": "d3c0372263881c71339618e42a2a253707c9a2c9d5cc15f8fcabc691c1bedf7c"
+  },
+  {
+    "asset_id": "architecture-75cef9ee167717ad",
+    "source_revision": "07764ffa8b8bff8cdc4438f37b00aee9ef1d14cec92284a3e358b0e4554c264f"
+  },
+  {
+    "asset_id": "architecture-75d35b2ddd4e61fb",
+    "source_revision": "86ae4bcfbfc0ea0f58195b86da952dd1594784da9e202c3158934234d8a92e79",
+    "name": "g_prop_DataCenter_1x1_ServerContents_a_01"
+  },
+  {
+    "asset_id": "architecture-761ab31badfcb46f",
+    "source_revision": "67a675a9611690651ef1e0f8805bb4f7d34099a6a71c9b5d9e4b59cea3ce56cb",
+    "name": "g_shelf_generic_b"
+  },
+  {
+    "asset_id": "architecture-7631358231b64335",
+    "source_revision": "2633117e1670330ad6e732f4436b7fa4406ec4d85e61011a831d5aae65dda09d"
+  },
+  {
+    "asset_id": "architecture-7667bd222022699d",
+    "source_revision": "cbb1ef679e732e7722794ba4e0875d112948a0597a2ce4d70844ca812f4c9721"
+  },
+  {
+    "asset_id": "architecture-79a94f93a1bd53e2",
+    "source_revision": "19a2e37262542680a087cab4a7d428866209ee3eeea061298de574a2f5959a78"
+  },
+  {
+    "asset_id": "architecture-7a729efe1f564f12",
+    "source_revision": "d7d14f8e8616234447f1dea1700f798e36e86e416a7115cb6488ddf2eb37b769"
+  },
+  {
+    "asset_id": "architecture-7b44385fb03d790c",
+    "source_revision": "9c10a1a0ca109a943c4d823aea3c00219c29d415d022578c13d186d189e17376"
+  },
+  {
+    "asset_id": "architecture-7c6531e0b025b196",
+    "source_revision": "a0c7d220327225fbdda39bb9563f9b03ac8b607ec644c7ca98b1dd75e6ea2e34"
+  },
+  {
+    "asset_id": "architecture-7d492910e2d0c102",
+    "source_revision": "4c566c570524e502d115850538d8362d747b3eb0090e2060385443f8b3ce6c72"
+  },
+  {
+    "asset_id": "architecture-7fe39709ee97a21b",
+    "source_revision": "82d29d9fe37d409701e296ae4aa5b954a302846a025597d8e000f1e32e50a162"
+  },
+  {
+    "asset_id": "architecture-810b9d3e6bbd728a",
+    "source_revision": "c697b5831309391b885805bc876964feb8dd1fe49af77c518543fe4a801eed7d"
+  },
+  {
+    "asset_id": "architecture-82c4306092332acf",
+    "source_revision": "0f0fba3d0b62a742bbb3ffea15177ee22163f4e04fad3c58cfbeb75ea4469481"
+  },
+  {
+    "asset_id": "architecture-83e8fa46a1665d34",
+    "source_revision": "1daf748b46a31b9a3fb1b73ac01b0693c7a342b8e1e8d25d25270a3f8b000717"
+  },
+  {
+    "asset_id": "architecture-84d88acb9a6b4fdf",
+    "source_revision": "3846b8f8a22ac54600215eaffea4546f0e9b223970423a8b67b0ab20db1e990c"
+  },
+  {
+    "asset_id": "architecture-86161a563e45ccde",
+    "source_revision": "8a2e8026983a89e94dd1c2328194ef49229f58150c31ac4d0e68792bcc678f8d"
+  },
+  {
+    "asset_id": "architecture-87842f47d2d058bb",
+    "source_revision": "8546b69bb3095a8ff48ebeb85f55cd0470a7b5537371907da616faa825aec2cb"
+  },
+  {
+    "asset_id": "architecture-8835734b2cfd34ed",
+    "source_revision": "8df8266213e72020f5662cbc3dca4d4be58b897160c071dd68557ba7d2941be5"
+  },
+  {
+    "asset_id": "architecture-8945ef05f7641dc1",
+    "source_revision": "cebdfb703b251bbd30ddab098f01b9ed8f50548784bb96773a577cb6b9477f9e"
+  },
+  {
+    "asset_id": "architecture-8af22236b1fbd6ed",
+    "source_revision": "93eb9e3e04b73c5686190ded912e035783abc76fe273c86102cc562e7c65d0f2"
+  },
+  {
+    "asset_id": "architecture-8b825ad8e1de96d4",
+    "source_revision": "38bc3154aefb2bd627e9e7ff244f09fb8b39bac80683bbbfc7f8cddb948c4867"
+  },
+  {
+    "asset_id": "architecture-8c1c3f0a4061f517",
+    "source_revision": "5ef1423274d8a97a42b4c3cb65fcd55127f9590c3f3c96d9932711d4222447da"
+  },
+  {
+    "asset_id": "architecture-8e667cc67b8c203f",
+    "source_revision": "11b82f2672a713f75a7f40024d3c309a43ec97b1ef31891e598e6640708aac1b"
+  },
+  {
+    "asset_id": "architecture-8f7283f92de31a5d",
+    "source_revision": "29d9140b741bc1ec704b823a51f602a0e00e6d69e3caecee87f3bb941d81532d"
+  },
+  {
+    "asset_id": "architecture-91c166b55076eca0",
+    "source_revision": "b10760a4ff9c0ee1c111891110c52b6f7241fbcd57fe58e7f2c175230f3d0011"
+  },
+  {
+    "asset_id": "architecture-92e4fac1c3e2793c",
+    "source_revision": "f205ea88ca124665d7a336627c001a7c7fe443c5825f98fee669afca8eb33ea2"
+  },
+  {
+    "asset_id": "architecture-92f66801023b533e",
+    "source_revision": "d9ef3dc1ced4948855b2754f54ccd20033c11c4903dfde33b7b5a74c5c63c1b0"
+  },
+  {
+    "asset_id": "architecture-958d56341f4df654",
+    "source_revision": "4006b9b85bd847bdaa8aef49b481223772f3f2b6e5543890bcd6d9de3bca4b36"
+  },
+  {
+    "asset_id": "architecture-983b4ddd629c1600",
+    "source_revision": "427bb3b1d2b5011f4802358d0b129b3f17bd043bb39dd4b0edefa8304739964f"
+  },
+  {
+    "asset_id": "architecture-9a2206808f87587c",
+    "source_revision": "a5575039086ccc438fbe1d3b7b7831d8e3c325a382970fbdacb13b3eea0ab5f8"
+  },
+  {
+    "asset_id": "architecture-9aad9d23cb5f02ae",
+    "source_revision": "8db8d4a5020d351cbd5c48b5d8bfc341a4a8c9d028554f1e2a21071159036058"
+  },
+  {
+    "asset_id": "architecture-9b2bde6b13fe2549",
+    "source_revision": "9e4c67debc8074a0f153467b3f1fbb96d46bde123a42cc9ce366e31bed889b52"
+  },
+  {
+    "asset_id": "architecture-9b929f26eaf208ed",
+    "source_revision": "8926645cbb9fc90856e4ffb997604374cc5534f0a1ffa3c3325004428599370d",
+    "name": "g_prop_DataCenter_1x1_ServerContents_a_00"
+  },
+  {
+    "asset_id": "architecture-9cffbbf594033195",
+    "source_revision": "0a98909dd75455745045a8ab4c73bc8f171d0453abaacc3d4acd4679e5a31ded"
+  },
+  {
+    "asset_id": "architecture-9db76cef4d0eacb2",
+    "source_revision": "8d6d181ca5bef6412a6d397e918bbf7458e9f50360641b0982be0e9a9f6dc60d",
+    "name": "g_prop_DataCenter_1x1_ServerRack_Base"
+  },
+  {
+    "asset_id": "architecture-9ffbb1954a35c6ea",
+    "source_revision": "90d7d66f5cf7b613dcce8e74a7ecea9d97b283d2e3e8ff05e55edb6eab1e83a5"
+  },
+  {
+    "asset_id": "architecture-a0184bb85bfa4c09",
+    "source_revision": "0752e3b1effb594bcbd9b82b477a2c28a1e9cd6947ea28f36d56273f2b00575c"
+  },
+  {
+    "asset_id": "architecture-a1500fc8f30a1ded",
+    "source_revision": "9094e0aaab2476454b2df465a73149ec187e2eac9f1950970e2f4e2f0f6792c2"
+  },
+  {
+    "asset_id": "architecture-a205e9f91b5ca337",
+    "source_revision": "0430096ed31318b224021e88295af1b013d7091e5e642c32b52137e0b29493d8"
+  },
+  {
+    "asset_id": "architecture-a278d2ce09830439",
+    "source_revision": "cf069cb934afbb9a2e4104883d62695c9fa6e6ff16a2c19ae4daa563288f94b4"
+  },
+  {
+    "asset_id": "architecture-a48106179f304416",
+    "source_revision": "c4529ec2010cddee00536804eefab29bf9055cac28b0c4193ef0615f43dc0e22"
+  },
+  {
+    "asset_id": "architecture-a554e15e1fd8f976",
+    "source_revision": "836a00b0a9747c961535926f2e3221aaf645fa58584d753e973344be8c7e0c03"
+  },
+  {
+    "asset_id": "architecture-a5a184679a51cb39",
+    "source_revision": "1e28b33abe38c1c4de539572c89af2c7e8d157588aca0ffd296db2c1856f43b3"
+  },
+  {
+    "asset_id": "architecture-a6caccf384b1b0d3",
+    "source_revision": "65f14fd999180c71a258226ebda6f5e715a9b9872f0d5f309e4feb27d6fdd571"
+  },
+  {
+    "asset_id": "architecture-a826d7221c7f3a62",
+    "source_revision": "92e3cec10f6c0d345908e92dded7fab5a3a5beb8919b73d6c59691225658e4a8"
+  },
+  {
+    "asset_id": "architecture-a87f012af7f8aaf6",
+    "source_revision": "e48c2c8291a468f5fbab5ef5f5b42e8e76a7151032bfc9c23036d6e69ac27ca5"
+  },
+  {
+    "asset_id": "architecture-a8890d2670197fbc",
+    "source_revision": "ce3fe5b87a6379028e33ec158f35395af538cca0d85be117a811457f5bdf3bb2"
+  },
+  {
+    "asset_id": "architecture-a96db03af0316e4f",
+    "source_revision": "a41310a3e6baae9be8233d4563c5c70fc2eefcb0fb9d1b22b7b3d6256e8cc400",
+    "name": "g_prop_generic_container_stack_covered_001"
+  },
+  {
+    "asset_id": "architecture-ac2cc3ea1a457857",
+    "source_revision": "dacfd54498e5d8b2a83392662fe7905520352d8c03ad78cbe57c5818d62e87e7"
+  },
+  {
+    "asset_id": "architecture-acfc6114debb8173",
+    "source_revision": "fd122dcdad797166a0a9345fe660e797e5408e187d782124db774facedad6b35",
+    "name": "g_prop_DataCenter_1x1_ServerContents_b"
+  },
+  {
+    "asset_id": "architecture-af0c9148f10dd145",
+    "source_revision": "f275644a8e50467740b6d2bb9b78ba5cbc986c85f340dc2de86c031cc1c45f14"
+  },
+  {
+    "asset_id": "architecture-b020c36910152e99",
+    "source_revision": "f549662bdac71ebece273c32982b8ad57b992c86e0a9d0ec57aceba096f426eb"
+  },
+  {
+    "asset_id": "architecture-b0b1d45d86434b50",
+    "source_revision": "ca4975fcf1a7f883aa0ef94b667867eda3b3e4418e27702f2676dcc2534f2627"
+  },
+  {
+    "asset_id": "architecture-b0e6cfb818f91eed",
+    "source_revision": "c3186334f4cdd607d841fb339bf3eab5687e89ae843062f9d3156737680237f8"
+  },
+  {
+    "asset_id": "architecture-b108701318c32d89",
+    "source_revision": "f6816ceb655974e9191e60746630dd270d7c1c6fdf7236f2cc651dfeaf2642a3",
+    "name": "g_prop_generic_storage_shelf_b_600x375x150_001"
+  },
+  {
+    "asset_id": "architecture-b1aa40571bb1ba56",
+    "source_revision": "e0cfffc4f99017c0d2036e989710e7da131c3e526741a3d142cf9b67ab0466b3",
+    "name": "g_prop_generic_storage_shelf_sheet_cover_150_240_01"
+  },
+  {
+    "asset_id": "architecture-b421621ed8232018",
+    "source_revision": "5e51ac587ef2051059bc6c195f7eb3e28fda8c1d3bdea9c5b91ba195b874773a"
+  },
+  {
+    "asset_id": "architecture-b5deb3161187daa2",
+    "source_revision": "05def59139eb6acaedf0509b7f6809b4f23359c8be240470e03bc6f8454a1436"
+  },
+  {
+    "asset_id": "architecture-b612afdd10b34763",
+    "source_revision": "8ab90132927b42f7439c78778fa6bcd345e06c9cd4cb0725f4208e82c948e099"
+  },
+  {
+    "asset_id": "architecture-b6cf9bc371b003c9",
+    "source_revision": "a4e4309b58b3c32191ad75271aded43a4c2fdd9de0cf6625daead5e2263825fc",
+    "name": "g_prop_generic_storage_shelf_b_150x375x150_001"
+  },
+  {
+    "asset_id": "architecture-b7c9754ed232802a",
+    "source_revision": "a8bf2b3d545dae11dd9853f6f8f7b1c6af993bdd463bc392ed050f3c32bd6ad8",
+    "name": "g_prop_DataCenter_1x1_ServerContents_a_03"
+  },
+  {
+    "asset_id": "architecture-b9a1ae4f926ebb5a",
+    "source_revision": "ef22fb455bf680f4ca0f40cc8eaa8e9ec00e5e0b7ef15372ea21119009e211f3",
+    "name": "g_prop_generic_container_stack_covered_003"
+  },
+  {
+    "asset_id": "architecture-bca270fada5c82a6",
+    "source_revision": "259c8ab257bb2c104e02850503a13259b4baf2b865478b7a73bc0dc622faeeb3"
+  },
+  {
+    "asset_id": "architecture-bd41f2f3d05cdcff",
+    "source_revision": "1271ff3bc80e98f1f1d99fd7380e9dce9d5988267a9ff3f15c62ab036cb733ee",
+    "name": "g_prop_DataCenter_Shelf_Back"
+  },
+  {
+    "asset_id": "architecture-bdf8b79ca6e27556",
+    "source_revision": "a96747b53af88e021940c9fe47821b75711f05541b7d5a1a6c80802d5b67a8da"
+  },
+  {
+    "asset_id": "architecture-be8ac94d20b12e0f",
+    "source_revision": "cf20eece34076b4b5403f1f10ad01698c73668e8fafe1d6148a9535bfcc40aae"
+  },
+  {
+    "asset_id": "architecture-bf128b96b078cc9a",
+    "source_revision": "b9307026a0b894ae228165a5e0dda02e4c92973c2da4a05495d40649fa0328ef"
+  },
+  {
+    "asset_id": "architecture-c094f8158b72148c",
+    "source_revision": "366b59dabae1aa39836636e6a5920e13e09994d776eb623666c904f13b777995"
+  },
+  {
+    "asset_id": "architecture-c32dd60733e09764",
+    "source_revision": "3fe5a115ba39ea03ce76ef78269b799ebcf9f91f2167837d951ef5b0c10a87f5"
+  },
+  {
+    "asset_id": "architecture-c38ea7f7eb129fe0",
+    "source_revision": "d13621abf4b12952130c0c9577365eda63cdded7af9752058b9bb753e98fac78"
+  },
+  {
+    "asset_id": "architecture-c5f9de0c3ad57130",
+    "source_revision": "f369f5589e13f8ef0078c0c6fe90320081bf6426fefcd10800815edf538d9df3"
+  },
+  {
+    "asset_id": "architecture-c6cf425ec344b13a",
+    "source_revision": "9f9f13e217f59747f28065a8799bb2c8584d9eeec2aafd8d008085160d952a24"
+  },
+  {
+    "asset_id": "architecture-c7b4d84ba45b3dd8",
+    "source_revision": "7e7249401ec4fa96b2fa0921528bf0a74f1a10f46b5e8559b0d7a004f795b9af"
+  },
+  {
+    "asset_id": "architecture-c8114aeb3138edb3",
+    "source_revision": "daa4d8d7af02e5b07f38851fe6a6c89ee70bb87cbb68942cdc2a5202bfb5d7e9"
+  },
+  {
+    "asset_id": "architecture-c8276a6fe83fb8fd",
+    "source_revision": "9537a2a3111733b19dfc0da4d01291c1cbce0baea83b83d840d1210ee8c05de4",
+    "name": "g_prop_DataCenter_1x1_ServerContents_a_04"
+  },
+  {
+    "asset_id": "architecture-c8b83bf1d0f6225c",
+    "source_revision": "294d3a3c6a70a846b8f068f8f0f7bdb14678c47343f3854fc641ffe3f74bdd4a"
+  },
+  {
+    "asset_id": "architecture-cc753d9501ab376f",
+    "source_revision": "a2143ab1946c49c8dbb2fb02b4e8cb32a7587f59ef959660dbc86f4b8040c6c5"
+  },
+  {
+    "asset_id": "architecture-cca725f60232ab12",
+    "source_revision": "76e1c82ad775e4ec436135c165860a9f6e1dcfa2eeeaf8dab7512218c1ba14e9"
+  },
+  {
+    "asset_id": "architecture-cf2f2a922296586f",
+    "source_revision": "6c34b8d6ac9f16287e7f1d568d8f09ba338ac59e417a2bbb11b49b373b22721f"
+  },
+  {
+    "asset_id": "architecture-cf6b24efbeb52bc1",
+    "source_revision": "77e22a57f101d45ab0304c9f89122b73791bdfcd6a212bf13f4d50e6c04b2910"
+  },
+  {
+    "asset_id": "architecture-d0dd4fe6bc38ef99",
+    "source_revision": "48ce8d881351474f9826d7dac53e3ab82cb36e5176e0458961e237f459ca330c"
+  },
+  {
+    "asset_id": "architecture-d2286d03186f819c",
+    "source_revision": "0d61535277ed0b9bf3b2a121bda64808bbd372db1be21fd718351509e4726d35",
+    "name": "g_prop_generic_storage_shelf_sheet_cover_150_240_02"
+  },
+  {
+    "asset_id": "architecture-d4770d73edc63d24",
+    "source_revision": "80c1d6563b7e9722a089b9cf7e7c51c004f7c3612328979efb9a885b55a8831c",
+    "name": "g_prop_DataCenter_Shelf_Shelf_a"
+  },
+  {
+    "asset_id": "architecture-d4a0c50ffa318a7e",
+    "source_revision": "d46de74f1d84b9d7cb8c34800663806610fc9646d6dafd98698ba655cf8936ae"
+  },
+  {
+    "asset_id": "architecture-d558428253f4f4ba",
+    "source_revision": "baa992b3f07cb9ecc37594733045ba2012a8b4e27d1aaa5f8d8ba842de95307d"
+  },
+  {
+    "asset_id": "architecture-d717d9221fcaf286",
+    "source_revision": "14ae5851183eaf343a4d938569f6a79da5a90a588139ed4eac98208e22690f95"
+  },
+  {
+    "asset_id": "architecture-d76f7bcf4b56b735",
+    "source_revision": "302a0f94ee2c0b094e065cce82d06e4869eb4f64670ab79330f955bd8cfb0783",
+    "name": "g_prop_DataCenter_1x1_ServerContents_a_02"
+  },
+  {
+    "asset_id": "architecture-d7a75cd50cbbda00",
+    "source_revision": "7bf6de7ebf57e57c9714f3436dfb81c1c89330bec282118971fb3498a2609861"
+  },
+  {
+    "asset_id": "architecture-d856702b9b8c9109",
+    "source_revision": "d76d66ac792c17ad1591a8d8d41bec5a8c92f7bd08edce4d9daef7202e766a6b"
+  },
+  {
+    "asset_id": "architecture-d9aa33a113937522",
+    "source_revision": "85f24b57c977be17c0b4ea35f0ac31b7dfd634a803d3f49301b091b6f3f25638"
+  },
+  {
+    "asset_id": "architecture-d9e1d449ec078a39",
+    "source_revision": "0cadac2a7e6d2036618b50319d173a68a1a0cad9d546d0089025237c228471a8"
+  },
+  {
+    "asset_id": "architecture-da7d6278de558ed9",
+    "source_revision": "df537fed1b0c617083fbc97ffe14e7a58428563d9883e29ab633643f7e709768"
+  },
+  {
+    "asset_id": "architecture-dc8a85472a3fa7f3",
+    "source_revision": "ac92aad7c737824e2de9d76503dfd79f31f545e87cd02fa9e5a2935c8d2fded7"
+  },
+  {
+    "asset_id": "architecture-dd30cbf1df580ef3",
+    "source_revision": "94e784b30b5b01b5f41bf66f176454d27ded8fe0303f3f086623e742e0f644ab"
+  },
+  {
+    "asset_id": "architecture-df2ba392ed9ca87d",
+    "source_revision": "52491a4a1a3344353cace5ba1777c7812e0538df52e7cca8737b25b87a8be4b7"
+  },
+  {
+    "asset_id": "architecture-dfa4e41046c79dfd",
+    "source_revision": "2940f51e7f3a5d2839e3d01de73ce576d14e048a7afdd89d72a162b721b890aa"
+  },
+  {
+    "asset_id": "architecture-e03382a252f0da55",
+    "source_revision": "0ce0262405f46f73a32c2f0a42051ccc4370fa360b284d2f26931c51c986f933"
+  },
+  {
+    "asset_id": "architecture-e2eed205bc4bacba",
+    "source_revision": "5ea24dcb20bbcdc813d0e4f32f9717888f1a04e267bffd041e6fbf2fa5d2984a"
+  },
+  {
+    "asset_id": "architecture-e98e4c1a40cb015f",
+    "source_revision": "f0975f635c7321f842ace629fdbdfb99e534534e0b6f8faae28058e4b51559c6"
+  },
+  {
+    "asset_id": "architecture-ea78a5ab75294d14",
+    "source_revision": "05e59a6fcc3b78e970236e2b55403cacf2c64ada45123068ac1b2d0070e57e78"
+  },
+  {
+    "asset_id": "architecture-eb15bdde5dc64269",
+    "source_revision": "c0ecc8271d460cbb3f0ef6c9b47b1578d647c1b6584155b891db051db30e5b91",
+    "name": "g_prop_DataCenter_1x1_ServerContents_a_00"
+  },
+  {
+    "asset_id": "architecture-ebcd9c9cabc23e1a",
+    "source_revision": "391cf00141499f3058a3a641ce34612ff356c4a8c0661c1fa16282becd3f9d8a"
+  },
+  {
+    "asset_id": "architecture-ec8aee5c89a5ec3f",
+    "source_revision": "0d33136bf5f5e51e021835aa38a5b8b20e6e46344a28b58e23bfae990907df25"
+  },
+  {
+    "asset_id": "architecture-eca6907792e028f5",
+    "source_revision": "0958a265507f5aac2fcfb20f5bcbe5f76d39ca042d00bb90bee56d639899cb88"
+  },
+  {
+    "asset_id": "architecture-ecf02ed22c62095d",
+    "source_revision": "5ec1d31fae2bbcdb8272ebcac8210d83367f52c8ebc47ad155729dddf73e3d80"
+  },
+  {
+    "asset_id": "architecture-ed4b575cdc8e8bae",
+    "source_revision": "5e33471871c82dfe02ff2a43ec85c2bbbd6372253e2506b92ec911f117569b50"
+  },
+  {
+    "asset_id": "architecture-ed55c4f4f697a1ac",
+    "source_revision": "1c83ce7e5588ec2edfe112166ae3d8f3efeb90fccd62a0680803e3888f7bafb3"
+  },
+  {
+    "asset_id": "architecture-edf06b96da20a1e5",
+    "source_revision": "b7820a23bdf0d6ccd7ffb64a9a15ffc3f2b318446af48c4400386b6aeeba2782"
+  },
+  {
+    "asset_id": "architecture-ee1030ccdc5cb3e1",
+    "source_revision": "f213e5a55c45c2897feeb3d4b682faec6230bb452e146a49c33e94e4b7661aa2"
+  },
+  {
+    "asset_id": "architecture-ee38acb8df52e8bd",
+    "source_revision": "8ae4284639083681dab98fcfbc0660773b017b377c53f1c631b9aee437554fff",
+    "name": "g_prop_industrial_tank_storage_001"
+  },
+  {
+    "asset_id": "architecture-ee60cad72591b0f0",
+    "source_revision": "518cf5765be1035e56bd921fc685d4e87237dfe870d3043cfe0fd98d7632fdc6"
+  },
+  {
+    "asset_id": "architecture-ee985a4e3065160b",
+    "source_revision": "d0dc5db11c7c0c50b663f937944e64bebfdb36c0f824b238e7a99045482a9f90"
+  },
+  {
+    "asset_id": "architecture-ef603bfb36067f6f",
+    "source_revision": "0e92fafdecf3ff88b972289529976b2290103f9c2c5be1c0f43cdcc4100d09c6"
+  },
+  {
+    "asset_id": "architecture-f28eebb5a4e1d1b8",
+    "source_revision": "d6a65e5e4538628acff7fdcca7cdc7abc38d854953ae115a55bd758705afe976"
+  },
+  {
+    "asset_id": "architecture-f2cde3a2eaf52973",
+    "source_revision": "c00a1ece78246e90131150f38e8f1a32c33506832bdb6eae0ed65c74ea900a65"
+  },
+  {
+    "asset_id": "architecture-f34e7aec0284331d",
+    "source_revision": "242c6d7bac494f0cd5c87fc98380b1bb6601fe8584b36775c7c190579b4e53ca"
+  },
+  {
+    "asset_id": "architecture-f450863f24b77485",
+    "source_revision": "08bb18ba09476f46094742b2ef507923ab50c109f808576e8d3f78298cb7821c"
+  },
+  {
+    "asset_id": "architecture-f6513cf3404496b3",
+    "source_revision": "5d4a420b79244cf0b87316d26e6c25810646ad8cddc2a007a06b86ac49e36e7e"
+  },
+  {
+    "asset_id": "architecture-f844156e4f120001",
+    "source_revision": "0c1b8033440195a0f95d28b5ecf2dffba7bb3495e1d8d33f2ee229b816c93d38"
+  },
+  {
+    "asset_id": "architecture-fd6cdcf10fb255a0",
+    "source_revision": "cb630a860f41ccdc85a926529b2b27b95f6670ba5ea0179fc0d66dd0cafc0962"
+  },
+  {
+    "asset_id": "architecture-fdae59ea8981fd79",
+    "source_revision": "20f9ffaf509b813ac4c89fc6d5f4a43cae5814097a9a159302763d35f85068b5"
+  },
+  {
+    "asset_id": "architecture-fde92df0a1505c75",
+    "source_revision": "916933c6d67aa39e243a5d64fd1ba736baf0a365b77896be5fcffc2fc84238b3",
+    "name": "g_prop_DataCenter_Shelf_Frame_a"
+  },
+  {
+    "asset_id": "architecture-fe53cde0811a6c53",
+    "source_revision": "8167f63bfe4d77cc8a072eb2cf340dd69cf42b748743a076bac3c5653e6a8b1b"
+  },
+  {
+    "asset_id": "architecture-fea4f406d721e423",
+    "source_revision": "4e31715b70d64f3ece2598544958ea6e1665d752da519801003c751f6f26d02d",
+    "name": "g_prop_generic_storage_shelf_a_600x250x150_tile_001"
+  },
+  {
+    "asset_id": "architecture-feb38ee0ac44abed",
+    "source_revision": "a044e863146fd2bb924dfac40b82867795bc5fdf4472e58f86605883850b3807"
+  }
+]

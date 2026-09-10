@@ -1,0 +1,139 @@
+<!doctype html><meta charset="utf-8"><base href="/Viewer/assets/build/main/">
+<title>Player weapon grip validation</title>
+<style>body{margin:0;background:#192329;color:#dce4e1;font:15px system-ui}header{padding:12px;display:flex;align-items:center;gap:20px}select{padding:6px;font:inherit}canvas{display:block}#status{margin-left:auto}</style>
+<header>Player hand and weapon rig <select id="gear"></select><select id="pose"><option>idle</option><option>crouch</option><option>charge</option><option>swing</option><option>shove</option></select><span id="status">Loading…</span></header>
+<!-- IMPORTS -->
+<script type="module">
+import * as T from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {ASL_VM as vm} from '../replay/vm.js';
+import {configureModelLoader} from '../replay/model-loader.js';
+const status=document.querySelector('#status');
+const assert=(condition,message)=>{if(!condition)throw Error(message)};
+const fail=error=>{window.testResult={passed:false,error:String(error?.stack||error)};status.textContent=String(error);console.error(error)};
+window.addEventListener('unhandledrejection',event=>fail(event.reason));
+try{
+ const {Identifier}=(await vm.load('../profiles/vanilla/parser/identifier.js')).exports;
+ const {GearDatablock}=(await vm.load('../profiles/vanilla/datablocks/gear/models.js')).exports;
+ const {HumanFingerJoints,PlayerJoints}=(await vm.load('../profiles/vanilla/renderer/animations/human.js')).exports;
+ await vm.load('../profiles/vanilla/datablocks/items/items-vanilla.js');
+ const parts=['delivery','flashlight','front','grip','handle','head','mag','main','neck','payload','pommel','receiver','screen','sight','stock','targeting'];
+ for(const part of parts)await vm.load('../profiles/vanilla/datablocks/gear/parts/'+part+'-vanilla.js');
+ await vm.load('../profiles/vanilla/datablocks/gear/models-vanilla.js');
+ const {PlayerModel}=(await vm.load('../profiles/vanilla/renderer/player/model.js')).exports;
+ const {meleeGrips}=await (await fetch('../player-animations/rig.json')).json();
+ const gear=[...GearDatablock.datablock.entries()];
+ const scene=new T.Scene();scene.background=new T.Color('#192329');scene.add(new T.HemisphereLight(0xe1efff,0x786951,2.7));
+ const key=new T.DirectionalLight(0xffffff,4);key.position.set(2,4,5);scene.add(key);
+ const camera=new T.PerspectiveCamera(35,innerWidth/(innerHeight-55),.001,100);camera.position.set(-1.1,1.65,2.5);
+ const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(innerWidth,innerHeight-55);renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.toneMapping=T.ACESFilmicToneMapping;document.body.append(renderer.domElement);configureModelLoader(renderer);
+ const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,1.2,.15);controls.update();
+ const model=new PlayerModel();model.animOffset=0;scene.add(model.root);window.playerReview={model,scene,camera,renderer,controls};
+ assert(model.skeleton.keys.length===50,'player lost finger joints');
+ const player={id:1,snet:1n,slot:1,nickname:'Bishop',position:new T.Vector3(),rotation:new T.Quaternion(),lastEquippedTime:0,flashlight:false,flashlightRange:0};
+ const neutral={velocity:new T.Vector3(),crouch:0,targetLookDir:new T.Vector3(0,0,1),state:'stand',lastStateTransition:-Infinity,meleeCharging:false,lastMeleeChargingTransition:-Infinity,lastSwingTime:-Infinity,chargedSwing:false,throwCharging:false,lastThrowChargingTransition:-Infinity,lastThrowTime:-Infinity,isReloading:false,reloadDurationInSeconds:0,lastReloadTransition:-Infinity,lastShot:-Infinity,lastShoveTime:-Infinity,lastRevive:-Infinity,isDowned:false,lastDowned:-Infinity};
+ const database={gearTable:new Map()},backpack={slots:Array(8).fill(Identifier.unknown),vanity:[]};
+ let animation={...neutral};
+ function pose(name,time=10000,overrides={}){animation={...neutral,...overrides};if(name==='crouch'){animation.crouch=1;animation.state='crouch'}if(name==='charge'){animation.meleeCharging=true;animation.lastMeleeChargingTransition=time-1200}if(name==='swing'){animation.lastSwingTime=time-350;animation.chargedSwing=true}if(name==='shove')animation.lastShoveTime=time-200;model.render(.05,time,{root:camera},database,player,animation,undefined,backpack);renderer.render(scene,camera)}
+ async function equip(index,keepBackpack=false){player.equippedId=Identifier.create('Gear',0,gear[index][0]);if(!keepBackpack)backpack.slots=Array(8).fill(Identifier.unknown);backpack.slots[gear[index][1].type==='melee'?0:gear[index][1].type==='pistol'?1:3]=player.equippedId;pose('idle');await model.actor.ready;await model.equippedItem.model.ready;pose(document.querySelector('#pose').value);}
+ const select=document.querySelector('#gear');gear.forEach(([json,data],i)=>select.add(new Option(data.name+' · '+JSON.parse(json).Name,i)));
+ const hammer=gear.findIndex(([,data])=>data.name==='Hammer');select.value=hammer;await equip(hammer);
+ let samples=0,maxGripError=0,maxRightGripError=0,ikCalls=0;
+ const updateIK=model.leftIK.update.bind(model.leftIK);model.leftIK.update=()=>{ikCalls++;updateIK()};
+ for(const slot of [0,1,2,3]){player.slot=slot;pose('idle');await model.actor.ready;
+  for(const weapon of ['Hammer','Spear','Knife','Bat']){await equip(gear.findIndex(([,data])=>data.name===weapon));
+   for(const name of ['idle','crouch','charge','swing','shove']){ikCalls=0;pose(name);const twoHanded=weapon==='Hammer'||weapon==='Spear';assert(twoHanded?ikCalls===1:ikCalls===0,weapon+' incorrect left-arm IK');
+    if(twoHanded){const hand=model.visual.joints.leftHand.getWorldPosition(new T.Vector3()),target=model.meleeGripTarget.getWorldPosition(new T.Vector3());const error=hand.distanceTo(target);maxGripError=Math.max(maxGripError,error);assert(error<.0001,weapon+' '+name+' left hand missed native grip by '+error);const q=model.visual.joints.leftHand.getWorldQuaternion(new T.Quaternion()),t=model.meleeGripTarget.getWorldQuaternion(new T.Quaternion());assert(1-Math.abs(q.dot(t))<1e-5,weapon+' hand rotation missed native grip')}
+    const root=model.equippedItem.model.root,right=meleeGrips[weapon.toLowerCase()].right,hand=model.visual.joints.rightHand;
+    const error=hand.getWorldPosition(new T.Vector3()).distanceTo(root.localToWorld(new T.Vector3().copy(right.pos)));maxRightGripError=Math.max(maxRightGripError,error);assert(error<.0001,weapon+' '+name+' right hand missed native grip by '+error);
+    const rotation=root.getWorldQuaternion(new T.Quaternion()).multiply(new T.Quaternion().copy(right.rot));assert(1-Math.abs(rotation.dot(hand.getWorldQuaternion(new T.Quaternion())))<1e-5,weapon+' right grip rotation mismatch');
+    assert(root.scale.distanceTo(new T.Vector3(1,1,1))<1e-6,weapon+' unexpected model scale');
+    model.root.traverse(mesh=>{if(!mesh.isSkinnedMesh)return;mesh.skeleton.update();for(let i=0;i<mesh.geometry.attributes.position.count;i+=11){const p=mesh.getVertexPosition(i,new T.Vector3());assert([p.x,p.y,p.z].every(Number.isFinite),name+' nonfinite skin')}});samples++;
+   }
+  }
+ }
+ player.slot=1;await equip(hammer);pose('idle');await model.actor.ready;pose('idle');
+ const before=HumanFingerJoints.map(joint=>model.visual.joints[joint].quaternion.clone());pose('charge');pose('idle');
+ assert(before.every((q,i)=>1-Math.abs(q.dot(model.visual.joints[HumanFingerJoints[i]].quaternion))<1e-5),'finger pose did not restore after seeking');
+ const hammerRoot=model.equippedItem.model.root,hammerMatrix=hammerRoot.matrix.clone(),switches=['Assault Rifle','Hacking Tool','Hammer'];
+ for(const weapon of switches){await equip(gear.findIndex(([,data])=>data.name===weapon),true);pose('idle');assert(model.leftIK.target===(weapon==='Hammer'?model.meleeGripTarget:model.leftTarget),weapon+' retained previous IK target');assert(model.equippedItem.model.root.scale.distanceTo(new T.Vector3(1,1,1))<1e-6,weapon+' retained melee scale');}
+ assert(model.equippedItem.model.root===hammerRoot,'switch fixture did not retain backpack hammer');assert(hammerMatrix.elements.every((value,i)=>Math.abs(value-hammerRoot.matrix.elements[i])<1e-6),'hammer grip changed after switching');
+ // Measure the loaded glove skeleton in its native wrist basis. Driver-only
+ // checks missed detached skins, missing finger topology and discarded rotations.
+ let skinGripSamples=0,maxSkinGripError=0,maxSkinGripAngle=0;
+ function skinWrist(side,target){
+  const joint=side+'Hand',nativeRest=model.actor.reference.get(joint).clone().invert();
+  const expectedPosition=target.getWorldPosition(new T.Vector3()),expectedRotation=target.getWorldQuaternion(new T.Quaternion()).normalize();
+  const wrists=model.actor.active.rig.bones.filter(b=>b.joint===joint);assert(wrists.length>0,'missing skinned '+joint);
+  for(const {bone,rest} of wrists){
+   const actual=bone.matrixWorld.clone().multiply(rest.clone().invert()).multiply(nativeRest),p=new T.Vector3(),q=new T.Quaternion(),s=new T.Vector3();actual.decompose(p,q,s);
+   const distance=p.distanceTo(expectedPosition),angle=q.normalize().angleTo(expectedRotation);
+   maxSkinGripError=Math.max(maxSkinGripError,distance);maxSkinGripAngle=Math.max(maxSkinGripAngle,angle);
+   assert(distance<.0001,joint+' skin missed weapon target by '+distance);assert(angle<.0001,joint+' skin rotation missed weapon target by '+angle);
+  }
+ }
+ for(const slot of [0,1,2,3]){
+  player.slot=slot;
+  for(const weapon of ['Assault Rifle','Pistol','Shotgun','Sniper','Revolver','C-Foam Launcher','Mine Deployer','Bio Tracker','Hacking Tool']){
+   await equip(gear.findIndex(([,data])=>data.name===weapon));
+   for(const yaw of [-1.1,.7])for(const crouch of [0,1]){
+    player.position.set(3,0,-2);player.rotation.setFromAxisAngle(new T.Vector3(0,1,0),yaw);
+    const direction=new T.Vector3(0,.25,1).normalize().applyQuaternion(player.rotation);pose(crouch?'crouch':'idle',10000,{targetLookDir:direction});
+    const item=model.equippedItem.model;assert(item.rightHandGrip,weapon+' lost native right wrist');
+    const target=new T.Object3D();target.position.copy(item.rightHandGrip.pos);target.quaternion.copy(item.rightHandGrip.rot);item.root.add(target);target.updateWorldMatrix(true,false);skinWrist('right',target);target.removeFromParent();
+    if(item.leftHandGripRotation){item.leftHand.updateWorldMatrix(true,false);skinWrist('left',item.leftHand);}
+    skinGripSamples++;
+   }
+  }
+ }
+ const {sampleHands}=(await vm.load('../profiles/vanilla/datablocks/player/hands.js')).exports;
+ const {GearAnimDatablock}=(await vm.load('../profiles/vanilla/datablocks/gear/animation.js')).exports;
+ const handPackage=await (await fetch('../player-animations/hands.json')).json();
+ let handSamples=0,movingReloads=0;
+ for(const name of [...Object.keys(handPackage.gear),'ShotgunReload']){
+  const fold=GearAnimDatablock[name];
+  const body=model.skeleton.keys.filter(joint=>!HumanFingerJoints.includes(joint)).map(joint=>[joint,model.skeleton.joints[joint].quaternion.clone()]);
+  let first,moved=false;
+  for(const progress of [undefined,0,.25,.5,.75,.999,undefined]){
+   const samples=sampleHands(fold,undefined,progress);assert(samples.length===2,name+' lost hand mapping');
+   for(const hand of samples)model.skeleton.override(hand.frame,hand.mask);
+   assert(body.every(([joint,q])=>q.equals(model.skeleton.joints[joint].quaternion)),name+' overwrote a body or wrist joint');
+   const fingers=HumanFingerJoints.map(joint=>model.skeleton.joints[joint].quaternion.clone());
+   assert(fingers.every(q=>[q.x,q.y,q.z,q.w].every(Number.isFinite)),name+' invalid fingers');
+   if(progress===0)first=fingers;
+   if(first&&progress>0)moved ||= fingers.some((q,i)=>q.angleTo(first[i])>.01);
+   handSamples++;
+  }
+  if(moved)movingReloads++;
+ }
+ assert(movingReloads>20,'reload fingers are static');
+ await equip(gear.findIndex(([,data])=>data.name==='Assault Rifle'));
+ for(const progress of [0,.25,.5,.75,.99]){
+  pose('idle',10000,{isReloading:true,reloadDurationInSeconds:3,lastReloadTransition:10000-progress*3000});
+  for(const hand of sampleHands(model.equippedItem.model.reloadAnimation,undefined,progress))for(const [joint,value] of Object.entries(hand.frame.joints))assert(model.skeleton.joints[joint].quaternion.clone().normalize().angleTo(new T.Quaternion().copy(value.rot).normalize())<.0001,'PlayerModel lost reload fingers '+joint+' at '+progress);
+ }
+ let footSamples=0,maxFootLift=0;
+ for(const slot of [0,1,2,3]){
+  player.slot=slot;await equip(hammer);await model.actor.ready;
+  for(const elevation of [0,3,-2])for(const name of ['idle','crouch','charge','swing','shove'])for(const time of [10000,10250,10500]){
+   player.position.set(3,elevation,-2);pose(name,time);
+   assert(Number.isFinite(model.actor.footHeight()),'No skinned shoe vertices found');
+   assert(model.actor.footHeight()>=elevation-.0001,'Grounded shoe penetrated: '+JSON.stringify({slot,elevation,name,time,foot:model.actor.footHeight(),lift:model.offset.position.y}));
+   assert(model.root.position.y===elevation,'Foot placement changed recorded movement');
+   let skinBottom=Infinity;const vertex=new T.Vector3();
+   model.actor.active.scene.traverse(mesh=>{if(!mesh.isSkinnedMesh)return;mesh.updateMatrixWorld(true);mesh.skeleton.update();for(let i=0;i<mesh.geometry.attributes.position.count;i++){mesh.getVertexPosition(i,vertex).applyMatrix4(mesh.matrixWorld);skinBottom=Math.min(skinBottom,vertex.y)}});
+   assert(skinBottom>=elevation-.0001,'A shoe tip or other skin vertex penetrated: '+JSON.stringify({slot,name,time,skinBottom,elevation}));
+   maxFootLift=Math.max(maxFootLift,model.offset.position.y);footSamples++;
+  }
+  for(const state of ['jump','fall','climbLadder','downed','grabbedByTank']){
+   pose('idle',10000,{state});assert(model.offset.position.y===0,state+' retained grounded foot correction');
+  }
+  player.position.set(0,0,0);pose('crouch',10500);const lift=model.offset.position.y;pose('idle',10000);pose('crouch',10500);
+  assert(Math.abs(model.offset.position.y-lift)<.0001,'Foot placement accumulated when seeking');
+ }
+ player.position.set(0,0,0);player.rotation.identity();player.slot=1;await equip(hammer);pose('idle');
+ select.onchange=()=>equip(Number(select.value));document.querySelector('#pose').onchange=event=>pose(event.target.value);
+ window.playerReview={model,scene,camera,renderer,controls,player,pose,equip,gear};window.testResult={passed:true,characters:4,poses:samples,joints:PlayerJoints.length,maxGripError,maxRightGripError,skinGripSamples,maxSkinGripError,maxSkinGripAngle,handSamples,movingReloads,footSamples,maxFootLift,rewind:true,switches};status.textContent=`PASS · 4 characters / ${samples} melee poses / ${skinGripSamples} skinned gun and tool grips / ${footSamples} grounded poses`;
+ renderer.setAnimationLoop(()=>{controls.update();renderer.render(scene,camera)});
+}catch(error){fail(error)}
+</script>

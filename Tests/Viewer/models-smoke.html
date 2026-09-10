@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<base href="/Viewer/assets/assets/main/">
+<title>Runtime model and animation validation</title>
+<style>body{margin:0;background:#171d20;color:#dce4e1;font:16px system-ui}#status{padding:16px;white-space:pre-wrap}canvas{display:block}</style>
+<div id="status">Loading viewer models…</div>
+<script type="importmap">{"imports":{"@esm/@/rhu/":"/Viewer/assets/js3party/rhu/","@esm/@root/replay/model-loader.js":"/Viewer/assets/build/replay/model-loader.js","three/":"/Viewer/assets/node_modules/three/","@esm/@root/":"/artifacts/tests/models/","@esm/three":"/Viewer/assets/node_modules/three/build/three.module.js","@esm/three/":"/Viewer/assets/node_modules/three/","three":"/Viewer/assets/node_modules/three/build/three.module.js"}}</script>
+<script>for(const event of ['error','unhandledrejection'])addEventListener(event,e=>{window.testResult={passed:false,error:String(e.error||e.reason||e.message)}});</script>
+<script type="module">
+import * as T from '@esm/three';
+import {configureModelLoader} from '/Viewer/assets/build/replay/model-loader.js';
+import {Actor} from '/artifacts/tests/models/actor.js';
+import {actorCatalog} from '/artifacts/tests/models/actor-catalog.js';
+import {HumanJoints,construct} from '/artifacts/tests/models/driver.js';
+const status=document.querySelector('#status');
+const assert=(value,message)=>{if(!value)throw Error(message)};
+function driver(parent){
+ const d={keys:HumanJoints,joints:Object.fromEntries(HumanJoints.map(k=>[k,new T.Object3D()])),setPos(p){for(const k of HumanJoints)this.joints[k].position.copy(p[k])},setRot(p){for(const k of HumanJoints)this.joints[k].quaternion.copy(p[k])}};
+ construct(d);parent.add(d.joints.hip);return d;
+}
+const scene=new T.Scene();scene.background=new T.Color('#242b2e');
+scene.add(new T.HemisphereLight(0xdce7ff,0x665b43,2));
+const key=new T.DirectionalLight(0xffedd8,3);key.position.set(3,7,5);scene.add(key);
+const renderer=new T.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,580);renderer.setPixelRatio(1);document.body.append(renderer.domElement);configureModelLoader(renderer);
+const camera=new T.PerspectiveCamera(40,innerWidth/580,.01,200);camera.position.set(0,2.8,11);camera.lookAt(0,1,0);
+const point=new T.Vector3();
+function positions(parent){const values=[];parent.updateMatrixWorld(true);parent.traverse(m=>{if(m.isSkinnedMesh){m.skeleton.update();for(let i=0;i<m.geometry.attributes.position.count;i+=13){m.getVertexPosition(i,point).applyMatrix4(m.matrixWorld);values.push(...point)}}});return values}
+try{
+ const referenceDriver=driver(new T.Group());referenceDriver.joints.hip.updateMatrixWorld(true);
+ const reference=new Map(HumanJoints.map(k=>[k,referenceDriver.joints[k].matrixWorld.clone().invert()]));
+ const displayed=['woods','bishop','hackett','dauda'];let checks=0;
+ for(const desc of actorCatalog){
+  const parent=new T.Group(),d=driver(parent),actor=new Actor(desc.id,parent,d,reference);
+  await actor.ready;actor.update();const rest=positions(parent);assert(rest.every(Number.isFinite),desc.id+' nonfinite skin');
+  d.joints.leftUpperArm.rotation.z+=.6;d.joints.hip.position.y-=.2;actor.update(false);const moved=positions(parent);
+  if(rest.length && !['flyer','big-flyer','squid'].includes(desc.id))assert(rest.some((v,i)=>Math.abs(v-moved[i])>.001),desc.id+' animation unchanged');
+  construct(d);actor.update();const restored=positions(parent);assert(rest.every((v,i)=>Math.abs(v-restored[i])<.0001),desc.id+' rewind changed skin');
+  scene.add(parent);
+  const bounds=new T.Box3().setFromObject(parent,true),size=bounds.getSize(new T.Vector3()),center=bounds.getCenter(new T.Vector3());
+  const radius=Math.max(size.length()*.5,.001);
+  camera.near=radius*.001;camera.far=radius*10;camera.position.copy(center).add(new T.Vector3(0,0,radius*3));camera.lookAt(center);camera.updateProjectionMatrix();
+  actor.update(true,undefined,false,0);renderer.render(scene,camera);
+  const image0=renderer.domElement.toDataURL();
+  if(desc.group==='enemies'){
+   for(const tint of [0xc21f4e,0x18935e,0x20558c,0x7a1a8e]){
+    actor.update(true,tint,false,0);renderer.render(scene,camera);
+    assert(renderer.domElement.toDataURL()!==image0,desc.id+' aggro tint invisible');
+    const target=new T.Color(tint).getHSL({});
+    parent.traverse(m=>{if(m.isMesh)for(const material of Array.isArray(m.material)?m.material:[m.material]){
+     assert(material.color.getHSL({}).s>=target.s-.01,desc.id+' aggro color washed out');
+    }});
+   }
+   actor.update(true,undefined,false,0);renderer.render(scene,camera);
+   assert(renderer.domElement.toDataURL()===image0,desc.id+' aggro toggle failed to restore original');
+  }
+  let tentacles=0;parent.traverse(m=>{if(m.isMesh&&/^(IRF_.*Tentacle|infested_tentacle)/i.test(m.name))tentacles++;});
+  if(tentacles){
+   actor.update(true,undefined,false,1800);renderer.render(scene,camera);
+   assert(renderer.domElement.toDataURL()!==image0,desc.id+' tentacles did not deform');
+   actor.update(true,undefined,false,0);renderer.render(scene,camera);
+   assert(renderer.domElement.toDataURL()===image0,desc.id+' tentacle rewind not deterministic');
+  }
+  parent.removeFromParent();
+  if(displayed.includes(desc.id)){parent.position.x=(displayed.indexOf(desc.id)-1.5)*2;scene.add(parent);actor.update();}
+  else actor.dispose();
+  checks++;status.textContent=`Validated ${checks}/${actorCatalog.length}：${desc.name}`;
+ }
+ const a=new T.Group(),b=new T.Group(),one=new Actor('striker',a),two=new Actor('striker',b);await Promise.all([one.ready,two.ready]);one.update();two.update();
+ let ma,mb;a.traverse(m=>{if(m.isSkinnedMesh)ma=m});b.traverse(m=>{if(m.isSkinnedMesh)mb=m});
+ assert(ma.geometry===mb.geometry,'geometry not shared');assert(ma.skeleton.bones[0]!==mb.skeleton.bones[0],'bones shared');assert(ma.material!==mb.material,'tint shared');one.dispose();two.update();two.dispose();
+ const lateParent=new T.Group(),late=new Actor('striker',lateParent);late.dispose();await late.ready;assert(lateParent.children.length===0,'late attachment');
+ camera.near=.01;camera.far=100;camera.position.set(0,2.8,11);camera.lookAt(0,1,0);camera.updateProjectionMatrix();
+ renderer.render(scene,camera);window.testResult={passed:true,models:checks,triangles:renderer.info.render.triangles,calls:renderer.info.render.calls};
+ status.textContent=`Passed: ${checks} models loaded, skinned and restored on rewind; instance isolation, shared geometry and asynchronous cleanup.\nCurrent scene: ${renderer.info.render.triangles.toLocaleString()} triangles / ${renderer.info.render.calls} draw calls.`;
+}catch(error){window.testResult={passed:false,error:String(error)};status.textContent=error.stack;console.error(error)}
+</script></html>

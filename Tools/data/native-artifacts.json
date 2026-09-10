@@ -1,0 +1,83 @@
+[
+  {
+    "id": "artifact-muted",
+    "name": "Muted Artifact",
+    "nativePrefab": "pickup_artifact_a",
+    "assetId": "item-122",
+    "sourceMesh": {
+      "file": "sharedassets3.assets",
+      "pathId": 806,
+      "name": "g_artifact_shape_a"
+    },
+    "materials": [
+      {
+        "pathId": 227,
+        "name": "artifact_shape_texture_a"
+      },
+      {
+        "pathId": 232,
+        "name": "artifact_shape_inside_texture_a"
+      }
+    ],
+    "nodes": [
+      {
+        "name": "artifact_shape",
+        "translation": [
+          0,
+          0.07919999957084656,
+          0
+        ],
+        "rotation": [
+          -0.43500834703445435,
+          0.37046098709106445,
+          -0.1589462012052536,
+          0.8051475882530212
+        ],
+        "scale": [
+          1.426919937133789,
+          1.426919937133789,
+          1.426919937133789
+        ]
+      },
+      {
+        "name": "artifact_shape",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          -0.7071068286895752,
+          0,
+          0,
+          0.7071068286895752
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "g_artifact_shape",
+        "translation": [
+          0,
+          0,
+          -2.145767119543507e-8
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1.1838250160217285,
+          1.1838250160217285,
+          1.1838250160217285
+        ]
+      }
+    ],
+    "originalFile": "artifacts/item-material-review/models/item-122-pickup-1.glb"
+  }
+]

@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<base href="/Viewer/assets/assets/main/"><title>Enemy crawl and stagger validation</title>
+<style>body{margin:0;background:#1d292f;color:#dce4e1;font:16px system-ui}#status{padding:18px;white-space:pre-wrap}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px}figure{margin:0;background:#273a45}img{display:block;width:100%}figcaption{padding:8px 16px}</style>
+<div id="status">Loading original crawl and hit-reaction clips…</div><div class="grid"></div>
+<script>for(const event of ['error','unhandledrejection'])addEventListener(event,e=>{window.testResult={passed:false,error:String(e.error??e.reason??e.message)};document.querySelector('#status').textContent=window.testResult.error});</script>
+<script type="importmap">{"imports":{"@esm/@/rhu/":"/Viewer/assets/js3party/rhu/","@esm/@root/":"/artifacts/tests/models/","@esm/three":"/Viewer/assets/node_modules/three/build/three.module.js","@esm/three/":"/Viewer/assets/node_modules/three/","three":"/Viewer/assets/node_modules/three/build/three.module.js"}}</script>
+<script type="module">
+import * as T from 'three';
+import {Actor} from '/artifacts/tests/models/actor.js';
+import {actorCatalog} from '/artifacts/tests/models/actor-catalog.js';
+import {HumanJoints,construct} from '/artifacts/tests/models/driver.js';
+const assert=(value,message)=>{if(!value)throw Error(message)},status=document.querySelector('#status');
+function driver(parent){const d={keys:HumanJoints,joints:Object.fromEntries(HumanJoints.map(k=>[k,new T.Object3D()])),setPos(p){for(const k of HumanJoints)this.joints[k].position.copy(p[k])},setRot(p){for(const k of HumanJoints)this.joints[k].quaternion.copy(p[k])}};construct(d);parent.add(d.joints.hip);return d}
+function pose(d,frame){for(const k of HumanJoints){const p=frame.joints[k];if(p.rot)d.joints[k].quaternion.copy(p.rot);if(p.pos)d.joints[k].position.copy(p.pos)}}
+const point=new T.Vector3();
+function vertices(parent){const values=[];parent.updateMatrixWorld(true);parent.traverse(m=>{if(m.isSkinnedMesh){m.skeleton.update();for(let i=0;i<m.geometry.attributes.position.count;i+=13){m.getVertexPosition(i,point).applyMatrix4(m.matrixWorld);values.push(...point)}}});return values}
+const scene=new T.Scene();scene.background=new T.Color('#273a45');scene.add(new T.HemisphereLight(0xdce7ff,0x665b43,2));const light=new T.DirectionalLight(0xffedd8,3);light.position.set(3,7,5);scene.add(light);
+const renderer=new T.WebGLRenderer({antialias:true});renderer.setSize(520,330);renderer.setPixelRatio(1);const camera=new T.PerspectiveCamera(38,520/330,.01,100);
+function thumbnail(parent,title){scene.add(parent);const bounds=new T.Box3().setFromObject(parent,true),center=bounds.getCenter(new T.Vector3()),radius=bounds.getSize(new T.Vector3()).length()/2;camera.near=radius/1000;camera.far=radius*12;camera.position.copy(center).add(new T.Vector3(.6,.5,2.8).multiplyScalar(radius));camera.lookAt(center);camera.updateProjectionMatrix();renderer.render(scene,camera);const figure=document.createElement('figure'),img=document.createElement('img'),caption=document.createElement('figcaption');img.src=renderer.domElement.toDataURL();caption.textContent=title;figure.append(img,caption);document.querySelector('.grid').append(figure);parent.removeFromParent()}
+try{
+ const names=await fetch('/artifacts/tests/models/enemy-clips.json').then(r=>r.json());
+ const clips=await Promise.all(names.map(async name=>({name,...await fetch('/Viewer/assets/js3party/animations/'+name+'.json').then(r=>r.json())})));
+ const ref=driver(new T.Group());ref.joints.hip.updateMatrixWorld(true);const inverse=new Map(HumanJoints.map(k=>[k,ref.joints[k].matrixWorld.clone().invert()]));
+ const models=actorCatalog.filter(a=>a.group==='enemies'&&!['flyer','big-flyer','squid'].includes(a.id));let sampled=0;
+ for(const desc of models){
+  const parent=new T.Group(),d=driver(parent),actor=new Actor(desc.id,parent,d,inverse);await actor.ready;actor.update();
+  const rest=vertices(parent),hip=actor.active?.rig?.bones.find(b=>b.joint==='hip');assert(hip,desc.id+' missing humanoid skin');assert(Math.abs(new T.Vector3().setFromMatrixPosition(hip.rest).x)<.05,desc.id+' retains prefab preview placement');
+  for(const clip of clips){
+   for(const fraction of [0,.5,1]){pose(d,clip.frames[Math.round((clip.frames.length-1)*fraction)]);actor.update(true,undefined,false,1200);assert(vertices(parent).every(Number.isFinite),desc.id+'/'+clip.name+' nonfinite posed skin');sampled++}
+  }
+  construct(d);actor.update(false);actor.update(true);const restored=vertices(parent);assert(rest.every((v,i)=>Math.abs(v-restored[i])<.0001),desc.id+' pose/head rewind changed skin');
+  if(['shooter','striker','shadow','mother'].includes(desc.id)){
+   for(const name of ['CA_Idle_A','CF_Idle_A','RU_Hit_Heavy_Fwd_A']){const clip=clips.find(c=>c.name===name);pose(d,clip.frames[Math.round((clip.frames.length-1)*.5)]);actor.update();thumbnail(parent,desc.name+' · '+name)}
+  }
+  actor.dispose();status.textContent=`Validated ${desc.name}: ${sampled} original-animation samples`;
+ }
+ window.testResult={passed:true,models:models.length,enemyIds:models.flatMap(m=>m.enemyIds).length,clips:clips.length,samples:sampled};status.textContent=`PASS: ${models.length} enemy models · ${clips.length} original crawl / hit-reaction clips · ${sampled} samples; centered rigs, finite skins and rewind restoration.`;
+}catch(error){window.testResult={passed:false,error:String(error)};status.textContent=error.stack;console.error(error)}
+</script></html>

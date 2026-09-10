@@ -1,0 +1,934 @@
+[
+  {
+    "asset_id": "architecture-01855212372bbdd7",
+    "source_revision": "a6d2241a521fa17dc51b43334bc60996a81557a7bffc2f12dc091a339778f4b4"
+  },
+  {
+    "asset_id": "architecture-01f59ec7e32efdd7",
+    "source_revision": "50a2fd1a53815366e33caa7400d9cb4ef9b71e21bdbf82d6e88893e92c3567c7"
+  },
+  {
+    "asset_id": "architecture-028510d20be4cc4f",
+    "source_revision": "dd2cf654999625556c5214549259c5e36c333567a045f53f13ea21716fcd56b3"
+  },
+  {
+    "asset_id": "architecture-0298b8e48a7e457f",
+    "source_revision": "63c0c7f1c2296664bd7ae40a5b1f7d0146ed7eeb512bedb2eb4a000e4059e147"
+  },
+  {
+    "asset_id": "architecture-02dbaa947896bdc1",
+    "source_revision": "bbbc5a7ab2cdeb6a4ef79cf159e89a119a4b605f70400eac9fee4cd19f88dd95"
+  },
+  {
+    "asset_id": "architecture-03b832ffcbe4bbd7",
+    "source_revision": "4f2715afa9fd2677e3cc84ca50088f70d5e6fa9dccc5aa05caa772f9440c50c6"
+  },
+  {
+    "asset_id": "architecture-04e46c466d365237",
+    "source_revision": "414343116a8e397aa9d9716d4d1e21c147d047d3d0cbf672b0a32281a3e3e99b"
+  },
+  {
+    "asset_id": "architecture-0562f985835440a5",
+    "source_revision": "07769afa9fe2f9c20f1c6a1bbee027d4cdfc437c9d705d726eb72133e6b3222b"
+  },
+  {
+    "asset_id": "architecture-05b53bade8b31119",
+    "source_revision": "361ccf4b3d573a75372c200b4306be590c99be669927710bef26a2f24d6c386e"
+  },
+  {
+    "asset_id": "architecture-076b13669ca588f3",
+    "source_revision": "bc82ff2382a284da1718c3de3f4679ca76ba68ab3cce653d065c7d023e3a6a21"
+  },
+  {
+    "asset_id": "architecture-08fb6ccbfb2355f2",
+    "source_revision": "16a7692f67a3e81f8db32c94f8eb79ef3d7d85483bcc88c0a968a222a1144cc0"
+  },
+  {
+    "asset_id": "architecture-0937bf5eefd8a234",
+    "source_revision": "96131d5c61f4e4ca237a7cd7e771a1ab4272b85fa0c7aa86b23e91796b7ed19e"
+  },
+  {
+    "asset_id": "architecture-0a14b75fb822f6ca",
+    "source_revision": "b28d4a1ded403f253aa5fddcb6aff3b4ec620fde2e4767396a08b90c92c990d5"
+  },
+  {
+    "asset_id": "architecture-0a15402ff083bf3c",
+    "source_revision": "c37fb224c3732b424ea8d4a06cfd40c02055ce68ee06c13ab48f66b83092ec0a"
+  },
+  {
+    "asset_id": "architecture-0b9748846cdd2b77",
+    "source_revision": "9316f8a2c63300cdbded29602da52bd9563d5d7c89a60f98043e453829fc9e15"
+  },
+  {
+    "asset_id": "architecture-0d8f394a46e318ec",
+    "source_revision": "00e342ac602b3e01e6c98c3645aab8062136c22e7d79854c0b31312e2cb78f20"
+  },
+  {
+    "asset_id": "architecture-0de21c0f3885b41a",
+    "source_revision": "31db037f7da13b027ecea1e921593a3d284db32b7cf66c25637a31121ef09156"
+  },
+  {
+    "asset_id": "architecture-0f159906dc7fd158",
+    "source_revision": "2b36851222df2bb81e1e6380e84c913878ed315c2557c95b3ae84620d59e7fa1"
+  },
+  {
+    "asset_id": "architecture-0f1f3de49d7d0ab9",
+    "source_revision": "f08604558cf1474e7957e3a827e9cb168d03f446ea18aae86bb23649d66b0028"
+  },
+  {
+    "asset_id": "architecture-0f882f94b508ced4",
+    "source_revision": "122820bcc976c69d688e03a12baecfe5b598bca734d3fd3c33f8604985b3e225"
+  },
+  {
+    "asset_id": "architecture-0ff8172d949893f5",
+    "source_revision": "f8284cce5ea85b05c6b65caa17a4e3df254ca8a0321c5bb14373ac1d75deccef"
+  },
+  {
+    "asset_id": "architecture-1021553f6cea03cc",
+    "source_revision": "2de9479db6b9167dd010de0a1cba659bfa80586a4a08274e4c10308945f2bd5f"
+  },
+  {
+    "asset_id": "architecture-1043a3dce3f6f1ac",
+    "source_revision": "0014464dee8e09247e62c192b21f79329277aae8b6075db4bbb09f55804a5d45"
+  },
+  {
+    "asset_id": "architecture-10a01ea9dcabd570",
+    "source_revision": "b9ff67727e5456625270da4a83680c02d46d083c59d6a7493e70cac979b56c78"
+  },
+  {
+    "asset_id": "architecture-115214f08e73b095",
+    "source_revision": "e33cbfe9399ce97f1146cd3bf56a26419d28d88d18d9839b2218fbc46048de97"
+  },
+  {
+    "asset_id": "architecture-13056a6d8a79af1e",
+    "source_revision": "e9b978a14cb6c79fcbcafa0d57ef7f3ab9fe623490663adefcd679600d19f196"
+  },
+  {
+    "asset_id": "architecture-13765478d3dc8af7",
+    "source_revision": "99b1a7eee30aadab316f4dbf825688554c2b36b5806889a5a195bbe791a82a3b"
+  },
+  {
+    "asset_id": "architecture-15299999fd5bfee0",
+    "source_revision": "d982bc708b42a96fc79bef41acfdeb9608568b874bad24a577e0f868f6f35225"
+  },
+  {
+    "asset_id": "architecture-152cd537e2e88f91",
+    "source_revision": "df5216bab840583a561abaff547608d8694e485cce20ccfd7a1e070626498485"
+  },
+  {
+    "asset_id": "architecture-159fc98f7d2f9b35",
+    "source_revision": "258510db4a4e15d7a9e2762f0f022f50fd58120a12c7a176756a34a1dd433577"
+  },
+  {
+    "asset_id": "architecture-15cfc790cc6d963f",
+    "source_revision": "1dc6a9437199f5ec740d41e40efc676abddaa9cde4e924883066f92dee886b69"
+  },
+  {
+    "asset_id": "architecture-1632fe27e500d475",
+    "source_revision": "73918ce5d2b007b55640a5cc697ee1a13e8701fde3d387416be9af48e58ed6e5"
+  },
+  {
+    "asset_id": "architecture-16c5691b80295201",
+    "source_revision": "4593ce6c8dfd82b1e9b6fc3058bd0d2cf6cc99d0ca0af4a5fd9c2c4ee938a796"
+  },
+  {
+    "asset_id": "architecture-19e06838821c949b",
+    "source_revision": "d8075c0f632d42ca0bf5b2f164d5a630698ddbdc1326f1b4c647516f085ef828"
+  },
+  {
+    "asset_id": "architecture-1a78b3bfced62838",
+    "source_revision": "3d496186c523ade6560eb77522ce44a2474ab7c45312f5248d444be1e8215ea6"
+  },
+  {
+    "asset_id": "architecture-1b789c8275a9c2b1",
+    "source_revision": "05fd73a178c21d7dcd883be1e7c6494217fa6e8e8a02ab4c208189001e73289d"
+  },
+  {
+    "asset_id": "architecture-1bd3393af254e4e6",
+    "source_revision": "41a3ff85c7d4e4f7233f894b68afeed4e488a326907bb30a8fb619befac31d07"
+  },
+  {
+    "asset_id": "architecture-1bd71276ebfe0677",
+    "source_revision": "057244afa42366b43340c512d0efacba54d4eb9e01acd3ebd58c579d76820b73"
+  },
+  {
+    "asset_id": "architecture-1d21a2a408294e25",
+    "source_revision": "df9b6c2cf6862745d4b9ae977f24e4d3c206f8c977e3efcd3fb39545060d5ba6"
+  },
+  {
+    "asset_id": "architecture-1d6ad87b16abad59",
+    "source_revision": "270b39a2be4364eaf5e13b0c8ac064afbf30caac6dd92187e0a80bb120224d32"
+  },
+  {
+    "asset_id": "architecture-1eb2fd2ca26d121d",
+    "source_revision": "64fc213de737dff4c16564f6306dffccd863900a76f7b8264b16d77dcad95ce4"
+  },
+  {
+    "asset_id": "architecture-20d0128b661f92f0",
+    "source_revision": "f32e422f1c5aa3d8852a2768796eb4d007d64674fe3d59e0c4f06d5a39a25369"
+  },
+  {
+    "asset_id": "architecture-23aafcd80d048d65",
+    "source_revision": "e1ac4722c6c267cfe71304509457992b328026a8a20c478da6d97dc92668e29d"
+  },
+  {
+    "asset_id": "architecture-26e4b17b37c18a1b",
+    "source_revision": "f5e089e0018c8d1d7c462509afe363c1ba9869cf02a5513700b4a986bd54de3d"
+  },
+  {
+    "asset_id": "architecture-2873c0d7243bad67",
+    "source_revision": "eb5fe2b808441f26d20372663be672a31d61cbc491ef70d8b93dcc5abb1eae7d"
+  },
+  {
+    "asset_id": "architecture-2a5167a4a501e0f9",
+    "source_revision": "d7d1cd41ed04ef8b57e24c92c494355c9b3576a7670921047c4d35186e3f4deb"
+  },
+  {
+    "asset_id": "architecture-2b5a291c560d57d5",
+    "source_revision": "f18d6a5afad1bc991ed52c178298ef007fddc179b169afb876d097f90198a50b"
+  },
+  {
+    "asset_id": "architecture-2e1d33897156513f",
+    "source_revision": "592e3ddb824837a9d8a7717b8a543d13db30aa998d680c3f9a474d8b0eb9ab55"
+  },
+  {
+    "asset_id": "architecture-31ddf207c0d01dca",
+    "source_revision": "7eb559d5700191c78d65078af6abdcd1fa3820eaeac4b1e73caeb2ca0d9c3a5f"
+  },
+  {
+    "asset_id": "architecture-3264a7ee12fd43b6",
+    "source_revision": "d55e0f6e6c04966cd01911235db83d0ad1c2dee2c3b764e71811eb9152f14cb4"
+  },
+  {
+    "asset_id": "architecture-328e5e48a195f9ce",
+    "source_revision": "878fc25dfc78dd7c6ee8fda163627884ae310528f40d51f6058ba1a4cf2de711"
+  },
+  {
+    "asset_id": "architecture-337ca708c173c293",
+    "source_revision": "c110b41304fa9fbf2a474750da9500f7a4d81b0da352aebef1a46fe1341f9657"
+  },
+  {
+    "asset_id": "architecture-359d8fc2bb0c5b16",
+    "source_revision": "70070379e19c2221a7ece335ae9763759abd59d2d3ffd8d1034cbc08add680c6"
+  },
+  {
+    "asset_id": "architecture-36adadd936820955",
+    "source_revision": "60b72fd23b0d9a18fa87915d68a3ffed3aab18ab605b6c9ba289903dce703549"
+  },
+  {
+    "asset_id": "architecture-380b2fcdadff1bfc",
+    "source_revision": "a4b99562f067762b06dd041d982fdda519fed83bdd659f07011ee33a9af0e676"
+  },
+  {
+    "asset_id": "architecture-38863d5951ffa853",
+    "source_revision": "9ea39249b6515bffe501398c0d3c2e1cc4bb4bd061829b1330b9d8115cf5cc9a"
+  },
+  {
+    "asset_id": "architecture-392487e1000d817f",
+    "source_revision": "d6b9c347e3aa610c16f93f58ff8abadabe0d775d7e9dd7bebd59ee31f3120c86"
+  },
+  {
+    "asset_id": "architecture-395690e19bc3ea41",
+    "source_revision": "670fc930af991649812f9127f6bba74923e7c5a6cdf927f342138415ef808660"
+  },
+  {
+    "asset_id": "architecture-3d25e2bcacc5ac9e",
+    "source_revision": "4979068529ea58810acecb369e4ef1033acbf9bcbf72b42532511c9779fd358a"
+  },
+  {
+    "asset_id": "architecture-3d48026843d1dd56",
+    "source_revision": "4c21a7ec74756937f4eb33187b98795170c4bdc8b86d7886d811f0c1462fdbde"
+  },
+  {
+    "asset_id": "architecture-3d7db0a61ed782b2",
+    "source_revision": "dd9222ba1df0b606a9ab1c8ae6dda45faa48998d505e4618bf6924cfcf68f7a1"
+  },
+  {
+    "asset_id": "architecture-3db3f1c63bcd070a",
+    "source_revision": "bcbe9edfabd6c60b91bfdc94d49903b5da24bdeea990accd16d1b1b281ebf5c7"
+  },
+  {
+    "asset_id": "architecture-3f77c1e0f180d426",
+    "source_revision": "5fe4fce188f63233e356a3bed100d89f760570548d27a25654bc8288b45ec34b"
+  },
+  {
+    "asset_id": "architecture-3f8c07480cb057d1",
+    "source_revision": "d49f4ebf7af04278cbdadc2ead2626decedda34aa206d9de9b82932d1b71689e"
+  },
+  {
+    "asset_id": "architecture-3fb6fa6fe412d837",
+    "source_revision": "d75d5bb7358378f4c13ecca910f30840cda2d3ea49f14b19e01d0af679d9e5de"
+  },
+  {
+    "asset_id": "architecture-3fc3ebfda4668e50",
+    "source_revision": "82f01a7840c817c8c9f71bbe9f6545ed724e151fcd6ecf84816ad4a68964fa3d"
+  },
+  {
+    "asset_id": "architecture-41f37695114ac282",
+    "source_revision": "83d9fd2cd2039a3bc03288bcea1cfc1ded911a51fb7a69399088ff9a775b309f"
+  },
+  {
+    "asset_id": "architecture-4226197babc93b4e",
+    "source_revision": "799afbccd3404e1ac31df283a0bf2175bb072c367660a7d4797800593a2161a1"
+  },
+  {
+    "asset_id": "architecture-42e3e4633874d806",
+    "source_revision": "8edc9291391cc3dad326f2995127937d60d5298532829a59d2d44e036207208d"
+  },
+  {
+    "asset_id": "architecture-45557ba3fe8f9a76",
+    "source_revision": "153cf3cf88601d864b0f819da525bb79e39f11103eb43643d637192bca265795"
+  },
+  {
+    "asset_id": "architecture-4585d455f90a6081",
+    "source_revision": "322fb1396599b57dca7b5b761efbba75f159d9f5d78fc147873cfb47ae0ffd25"
+  },
+  {
+    "asset_id": "architecture-45def788de519e8a",
+    "source_revision": "91f139d90e81258252f90cc9c402604afcf9b9f7a50ad993452f81c12c5b4d2c"
+  },
+  {
+    "asset_id": "architecture-4767a80429ef8d81",
+    "source_revision": "d9dc2fd55f2cc1218e2294751244805ecb609cd4e42711c46ee2cca958e9db78"
+  },
+  {
+    "asset_id": "architecture-4a47faf56441952e",
+    "source_revision": "3eb2619dca8e4ebc8971479eef5d484f80b5912fb0e5d9fe3bcdcbb12041c715"
+  },
+  {
+    "asset_id": "architecture-4aa4f9719addcd38",
+    "source_revision": "a54d0daa98945de07be5f84c5987aa1fd81b2d2ae681d4ecac994e5aacbfae37"
+  },
+  {
+    "asset_id": "architecture-4b279828713aa256",
+    "source_revision": "388f55770ec68e9c4f61ed268a0036e510794178f429dd8753b9d36a072a5270"
+  },
+  {
+    "asset_id": "architecture-4d9753aee08d3ead",
+    "source_revision": "bdf6b394081fbfd2e6fbaeb286841b3bba14eadcc337d039214d08cf70317c05"
+  },
+  {
+    "asset_id": "architecture-4e028f5959a05957",
+    "source_revision": "9e4a1b0563c30880a265599dbed237fde24e0eb7bc322d46a1090b21ffca8053"
+  },
+  {
+    "asset_id": "architecture-4fab3c460eba0e25",
+    "source_revision": "211c4588db8829ef36bc24a5644b4718606c91fb0e402bbd85d5268ca2b72e32"
+  },
+  {
+    "asset_id": "architecture-5019f39179bf2fd3",
+    "source_revision": "9cc7104cd0dddbce3dcdae447b16247508ec486d75efe4dbcb5e0ee66087bdb7"
+  },
+  {
+    "asset_id": "architecture-54c98a69d3ec88df",
+    "source_revision": "9abfb18badb7324296261f2b0eb1bc99964cffbb10415ae7caa48ddd5c07101a"
+  },
+  {
+    "asset_id": "architecture-567500ecb7298948",
+    "source_revision": "bf8fa90c7398b330d7f0b35d35c0b3ef7e3d113aaec817c24e432acd855afde9"
+  },
+  {
+    "asset_id": "architecture-5945e41cba7edf8e",
+    "source_revision": "d205ac32f9bc37f474687a70bf09b7a87c736937d69219b425a1672b51437105"
+  },
+  {
+    "asset_id": "architecture-59e356f2c09cbaa5",
+    "source_revision": "f689a897bafd9c6f82680eea5a57f228941d08061903856debd32a698e16d057"
+  },
+  {
+    "asset_id": "architecture-5ad3acda70aa9b73",
+    "source_revision": "2263bbe13f7dbcaeea648e41b7065ccc69fd8c62bb9e1b71f0d65b7dbce17f18"
+  },
+  {
+    "asset_id": "architecture-5cb930b5c4a3794b",
+    "source_revision": "e2b47bd65a67428a2922e563e6e1da2b300ce2d0e749332d411ab4ae63d7185a"
+  },
+  {
+    "asset_id": "architecture-5df5d8b23ddddf38",
+    "source_revision": "9ed6a519a12f14f66d5431e4f30c1011f70951a7d13a192e947f43579b2c2af1"
+  },
+  {
+    "asset_id": "architecture-5e65be9b594bf7ca",
+    "source_revision": "c5951114924b43049c28224b366839a583bb88fc7a010083997bc90ed2e923d4"
+  },
+  {
+    "asset_id": "architecture-5f01a48eb8a7201c",
+    "source_revision": "4aa76455933a8ef08e7cad0eaba8e4bd822ca9233fb977f3ca6d0b3b45b6817d"
+  },
+  {
+    "asset_id": "architecture-5f07e57430976dc4",
+    "source_revision": "686ccca4b4eef12e519407287f819046bb740ac1dc2a468e95e69ed98381433c"
+  },
+  {
+    "asset_id": "architecture-605f71cb7a6d4687",
+    "source_revision": "308418721d4718754b402afdace219f21eee13623ee2b9da7038810906a5aacf"
+  },
+  {
+    "asset_id": "architecture-615d4c3364c21f15",
+    "source_revision": "23b4e049e893027601af505447ddba0e7c37ba182a0746992ae91d402c4860ae"
+  },
+  {
+    "asset_id": "architecture-63c1422dce344834",
+    "source_revision": "3a87115723c196115aae9b37a64c9e9dbc07f94436fb51b43a425894f7f0f781"
+  },
+  {
+    "asset_id": "architecture-644013281dacb08f",
+    "source_revision": "0f552f41b1eb7e86f99e1f759aa9a6fa2adb0fef9e86fca1d5f2930c2cfa89a1"
+  },
+  {
+    "asset_id": "architecture-645dd08e9820bc31",
+    "source_revision": "b85e710a838f63eae6e51f90228ad6f37941c76d5e594b5f26791bfa25eac9c6"
+  },
+  {
+    "asset_id": "architecture-6560207f3779d9f2",
+    "source_revision": "d59489624e7b6ba8a87b23e8b96fa36d2c84939996003343c8eb43ff74d578c2"
+  },
+  {
+    "asset_id": "architecture-6ce7d44cce9fc7a8",
+    "source_revision": "0beea5eb7a75db63dd0bc5127f930d1dbdfccf5bd82f4e2c705009a2ed8ce05b"
+  },
+  {
+    "asset_id": "architecture-6dfa21684e039166",
+    "source_revision": "cff9415df3b69e4412b748f9b97ddb37de6abbdd7079f40ac2ee3f3c0a6dd8b5"
+  },
+  {
+    "asset_id": "architecture-6e0e723fd79ccb90",
+    "source_revision": "eb95c1fdb07735a2ff8d1bf189e1bdcbc0d9e6728531702f87e1d0240964e18a"
+  },
+  {
+    "asset_id": "architecture-6e7ec7d1e5c389c3",
+    "source_revision": "5fbd649a573d9eee0cb66a1f841f7c079b15da0499f9db5f10bffa2bc5a882dd"
+  },
+  {
+    "asset_id": "architecture-7134576565c29a1a",
+    "source_revision": "3b360108330345479cc0b3991c25bc36785341675c049a4026684a0304a4efa4"
+  },
+  {
+    "asset_id": "architecture-71abe13ce272f72f",
+    "source_revision": "de4e618d770fe986d15de6ab61b09d393a4377761bc53a60ebc206f8a705f800"
+  },
+  {
+    "asset_id": "architecture-728af726eafaeb5b",
+    "source_revision": "3a43f61404b6fa956fd5b80df48c9795f4765b40a80a9f1fd8eff2af50792a47"
+  },
+  {
+    "asset_id": "architecture-7298f2a8cf26682d",
+    "source_revision": "566bd5ac8022fde5977ba03517bff917270a8ff60e1310e499f21265a8a62f35"
+  },
+  {
+    "asset_id": "architecture-757273c0275457a0",
+    "source_revision": "fb233d096c6ecab026317aeb4cb2983b2e58d111dd45a029ea231c3f84e26cfe"
+  },
+  {
+    "asset_id": "architecture-775eb35057b00b89",
+    "source_revision": "80692b6762ce709e6cb61e33345fa0537452faacfad300814289dad8c33603cc"
+  },
+  {
+    "asset_id": "architecture-78a3770836a40a3f",
+    "source_revision": "46832b5695b549f4d6bfebc665fea7e17f92be5b793793088fbc3bec7c847eaa"
+  },
+  {
+    "asset_id": "architecture-790cf86ff92d956b",
+    "source_revision": "00f0358e0f4ec70f83db21f0d61ddc32cfdcacc4f0ec697ffb467f404dda28aa"
+  },
+  {
+    "asset_id": "architecture-79cd4e1e6775b030",
+    "source_revision": "b7c047ee8cf9d5d5a3e62c1cb5ab8e7886b672fff90de899da275d5a43a95d86"
+  },
+  {
+    "asset_id": "architecture-7c2dc17710bb2d71",
+    "source_revision": "47f082f9544113922bbd6056ba4928cc54b8c6d01fd80b4072621b4594df06f5"
+  },
+  {
+    "asset_id": "architecture-7d05be61c40b573f",
+    "source_revision": "486a91d1049f5959065f7a5087f3fca6bd9eeb5db5b046ade0d3cd13b5696e52"
+  },
+  {
+    "asset_id": "architecture-7d86667e41dae00a",
+    "source_revision": "6c1d663348384b9cbf9759d70fb635d468719b05c6f1bb7851990ae4699793ef"
+  },
+  {
+    "asset_id": "architecture-7e20cc1058e0f726",
+    "source_revision": "86da0eeea3330e3af2917ace93983e624c7aa6a7d4da32633e783567b64cd68a"
+  },
+  {
+    "asset_id": "architecture-7e443f46487b059f",
+    "source_revision": "e1cd63277b357bfb14b9e94661c4862c9bb0a6c868a2e9947e3f5983d758180f"
+  },
+  {
+    "asset_id": "architecture-80de235aa3774090",
+    "source_revision": "dc895a2361056935c774bffe841c81c1d046616025ebc55f3fa7a27025e8dad4"
+  },
+  {
+    "asset_id": "architecture-8138c48525f19a61",
+    "source_revision": "e19991d2d8360d30d42c70f84a75fba616e054ff8a10298ed9025f2f95da156a"
+  },
+  {
+    "asset_id": "architecture-816edb74b682bc97",
+    "source_revision": "cf8c08d4e1a999a1d20766ebeb773927b34af617c22971a346cc0df60fb21c9d"
+  },
+  {
+    "asset_id": "architecture-828308d9b72bd9ba",
+    "source_revision": "9af2320f69ec6f15c256a236d515fa4eee33ca1517289ac4ec31d7952b28d96b"
+  },
+  {
+    "asset_id": "architecture-835f7144219a2536",
+    "source_revision": "2a370a7807c4ef8a671a2a718e91fd5487b679dc2a7c80ae5f5fae44885ffe8f"
+  },
+  {
+    "asset_id": "architecture-852a4a6cf02fc156",
+    "source_revision": "e693fa4767d71fe372e280f6a89544c3ada6021b6e6ef77297ede79b5a532844"
+  },
+  {
+    "asset_id": "architecture-8588c43ae9dc9058",
+    "source_revision": "cf234e18e7ae940b4221f1d9540c9a40dfe9fdfc70b36cff7d33ced17212ebb1"
+  },
+  {
+    "asset_id": "architecture-85c8f4b1f501b955",
+    "source_revision": "94dc2b6ed8ab53a099a40592b65ab8e6710ed3102d222423c22151380214d661"
+  },
+  {
+    "asset_id": "architecture-86e48eb856e5a54c",
+    "source_revision": "114d1b7c4d86635fa08b5ff011aa618cd69b82d856a3b116397750a7d99abf7f"
+  },
+  {
+    "asset_id": "architecture-87cc5e76c0ebc6c4",
+    "source_revision": "c1276db0e657752dd46401b21acf2e268926f70f04552be0cc135e5c40c6eb04"
+  },
+  {
+    "asset_id": "architecture-890b9e33f0c18259",
+    "source_revision": "3305300c39eb998d4763cb0a619fe7599edc34f20cada315b421096cb3a77b59"
+  },
+  {
+    "asset_id": "architecture-89bfd6deb52ad5cc",
+    "source_revision": "397c5cac662c1b1ee6b7ba6393914153df19f1c29003e0dfadfa3301ef35a767"
+  },
+  {
+    "asset_id": "architecture-8a3f145e8e86cef1",
+    "source_revision": "041b5ed10b25a0f4c3e034d68b270c0fa174e4e25a7ab04708d603164bbdeb23"
+  },
+  {
+    "asset_id": "architecture-8b2a6b7a9b108cbb",
+    "source_revision": "21f1b8e6e26996dc041ac5f2917e1edb5f684e88e5303c3612a2e312fdde16cd"
+  },
+  {
+    "asset_id": "architecture-8d18202d088fe887",
+    "source_revision": "372043b5d2c25a24359c80aa3ffe50c07be3ead8a7bfb2883af35f7d1707b063"
+  },
+  {
+    "asset_id": "architecture-8d74f0b20e075729",
+    "source_revision": "1a3fdcd074b825401f9cd10a6c0c6eedb09db1055331668cc4a97b7e99454374"
+  },
+  {
+    "asset_id": "architecture-8def1a0e1f744298",
+    "source_revision": "3c7283e9805f97e489b77980ff03b0c7c9050c136ec8f84105ebf90138263572"
+  },
+  {
+    "asset_id": "architecture-8fff129a22cfe89c",
+    "source_revision": "510f792e4225bc0f85e97532c8273794c10d666f4ce136408215d1a06a8af76d"
+  },
+  {
+    "asset_id": "architecture-9021906097f3f31c",
+    "source_revision": "f697ba0e48d4f4f0b7a0b33e18d0bcf336e77f57b0dc3021fcf6c8ae004483ab"
+  },
+  {
+    "asset_id": "architecture-915fe6e8fdcad097",
+    "source_revision": "f75009fa778cbe18cbefe7064411cdb572b13121f6e2c4b41fd1f7abdf4f6e4a"
+  },
+  {
+    "asset_id": "architecture-9737c69da8be4aae",
+    "source_revision": "892185807dca3a21a26ee545980b7d3111eb0a8a9f9c46bf9b1b8e63369a0690"
+  },
+  {
+    "asset_id": "architecture-9969628f7a62f78b",
+    "source_revision": "e21e64574fe7677c81550bb3bc5fd9d03f4cf2b99fd2aa9bee54585ee18e7521"
+  },
+  {
+    "asset_id": "architecture-9c21eb7b3fea3f2f",
+    "source_revision": "cc9799ab64155435ae93ad2a8a9da4865cce78c00c403530d05b54cf89dd9d4f"
+  },
+  {
+    "asset_id": "architecture-9c4779e2b8bf8db6",
+    "source_revision": "895d70fff9bc081b76d2596a702914dcf45cde32772e7f762f191341d1dad510"
+  },
+  {
+    "asset_id": "architecture-9ceef7cfea21f4e2",
+    "source_revision": "3b90c1634327a04a011724bcdf63a552445cfdc08eadfacff8334433e5308afa"
+  },
+  {
+    "asset_id": "architecture-9d6af86868140182",
+    "source_revision": "e4bded9471557671fd0dec9e35d4699d58be6aed06808baf7faa971c51c30cc8"
+  },
+  {
+    "asset_id": "architecture-9f96069081c84830",
+    "source_revision": "4c7827e8427375f7276d5e203fb40fc548bb942867fc8efd6543d2ce1e07b7e8"
+  },
+  {
+    "asset_id": "architecture-9fc770a3df41f8a8",
+    "source_revision": "11b48232c635055603d279e8faad3916f2bc67483b3a0b987c18a7a56a7baa40"
+  },
+  {
+    "asset_id": "architecture-a2c5efe526f28017",
+    "source_revision": "3c3007f7d23da5afad54b3a94603fb6e82796585810a3ad71d53f207fd5c1852"
+  },
+  {
+    "asset_id": "architecture-a35c35d8ba6fe07b",
+    "source_revision": "2e897718c716d452ccfab92e4af04f961d094055c27d165f41f25fe1bd1b0377"
+  },
+  {
+    "asset_id": "architecture-a4432df6bf86b23b",
+    "source_revision": "19263c74184b2e694baaacf131eebaf32710c0666f930f5835571d97ed8a8f37"
+  },
+  {
+    "asset_id": "architecture-a46495cf6662b0f3",
+    "source_revision": "9ea3efa8a0ea14597e6e44c3691cffdba01e8d9da7bfee1bb22c9a4f66dd4a2e"
+  },
+  {
+    "asset_id": "architecture-a58aff5d8480a3b0",
+    "source_revision": "9b2649b476183332bff7ece054081e5c298824f5dcb2a44875831a8f9fd87dd3"
+  },
+  {
+    "asset_id": "architecture-a6313333fa43ef43",
+    "source_revision": "8b1109d909199b8963149844d4f3456b5cfb3f656702e8647f61a0c6c198d06d"
+  },
+  {
+    "asset_id": "architecture-a634737736b4e1c3",
+    "source_revision": "0b4f32f66215410fe40158a025681e84fcd28d667e6b68f27f951d4b045f401b"
+  },
+  {
+    "asset_id": "architecture-a8df81c1c00e08f8",
+    "source_revision": "fc6ae0663de4b66f7e06c3e1f88460f62146063666e77fcb6d7ddbc6cbf50a5c"
+  },
+  {
+    "asset_id": "architecture-a91cc97b0208debe",
+    "source_revision": "e77ad2f0b628019808f9c3a5c57223352b30946499b92f277cf5ba1b897eb1cb"
+  },
+  {
+    "asset_id": "architecture-a92e60ee04cc2f4d",
+    "source_revision": "fb80eaafd9051596f843f56e08d7d11ec5c40a266b4fcb73f829a41f3a905569"
+  },
+  {
+    "asset_id": "architecture-aa6f446a796fa6e7",
+    "source_revision": "9ce390d5cf5045fa93bf55ae87be5e2a87cc46d59d39b664175291e2d7bf273d"
+  },
+  {
+    "asset_id": "architecture-aede88463de9a4d9",
+    "source_revision": "fbb03f86bdf4e2d83a8b61f823b5d20afef42dbebc652139b32afe33db2d9a02"
+  },
+  {
+    "asset_id": "architecture-af71a308a747e023",
+    "source_revision": "58a2b2f65e2248f5a7a73265821b4446eca6d5f947b0f9c1df1b672833e230e6"
+  },
+  {
+    "asset_id": "architecture-af9fcebdfa39320a",
+    "source_revision": "bdeaa359f6490d3eebafdf798953ddfff917b492214b0b97c41b15973eb154a3"
+  },
+  {
+    "asset_id": "architecture-b1180e0958611609",
+    "source_revision": "004bfa03b81cb5cb5a8b996c614391a11b02f0cf78342633a62834110359e644"
+  },
+  {
+    "asset_id": "architecture-b18474311582f907",
+    "source_revision": "95d4ba9bbd4f10d629b12bc5f930133ee7121cfa3e6faa96bc49a5d9f890179c"
+  },
+  {
+    "asset_id": "architecture-b1f800e670994447",
+    "source_revision": "7ad936e794b1ab8e0c5bc216fa37de1cc3b61bc2eb80ee2e47827e3af74a50fc"
+  },
+  {
+    "asset_id": "architecture-b3d25573114e51f3",
+    "source_revision": "30286f09c08b27c9b8812090d89bc934f8137965790e749ec867cbd23bf81b3c"
+  },
+  {
+    "asset_id": "architecture-b42ab2f9dd6d9224",
+    "source_revision": "d329aa4ad47f8e5c27a5851de3415f7ad5a99706b55b88f2f7b199bf460584fd"
+  },
+  {
+    "asset_id": "architecture-b4856a12c8802689",
+    "source_revision": "e75a83e75a66344a1e8360af67f1a767597cea610837955d7cf6b579bd2eca27"
+  },
+  {
+    "asset_id": "architecture-b4f348cfe8082170",
+    "source_revision": "15eed3a56cf38e56e0f45a19813ebab807707ea8cd584b79ab9b98541385d0b5"
+  },
+  {
+    "asset_id": "architecture-b68d6126d1aef203",
+    "source_revision": "b53f0b98e7827215e7c1386e7d2d1637a526515a8871de7bf1ccb41a4cf00fd5"
+  },
+  {
+    "asset_id": "architecture-b69c1b55fcb76811",
+    "source_revision": "f6f2217269a03d23212f289e83e4985dc3e3da6a35d5b2a03c48310b1a24dbb7"
+  },
+  {
+    "asset_id": "architecture-b6a0c66da2c93a16",
+    "source_revision": "2ea4d8dec0917fbc10afdb8585adc6d1b12f57bc239b1d3bfb99fe2680284f90"
+  },
+  {
+    "asset_id": "architecture-b883916bf0d59910",
+    "source_revision": "4166888bb9502c44f3ce006060d88c9d315acc4368c7019095b2e9ccb3d38106"
+  },
+  {
+    "asset_id": "architecture-b8a093c87e0d44e2",
+    "source_revision": "cca6fb21d7c14f4c0e7edcff00b951b7d8fd839687df927c2cec07bf1b3f89d5"
+  },
+  {
+    "asset_id": "architecture-baaf7ac3c218ea19",
+    "source_revision": "5ddc250d172df70b371b72ad7edf594ea9c52c5198b5b167a50228b80183e111"
+  },
+  {
+    "asset_id": "architecture-bb49049b7f10fb81",
+    "source_revision": "dba1b7e252a9ad57465823c8a16e59e91ca892a18262e46e127c30afe3813123"
+  },
+  {
+    "asset_id": "architecture-be381a93db90326d",
+    "source_revision": "4aec226068393611e05c27b742e3b9a3967425cd1be467f03b614588e7c3662a"
+  },
+  {
+    "asset_id": "architecture-bedf4f498e0d3bc4",
+    "source_revision": "0dea0bf7e21d00ff66d39203dcd222d63c2abf870250ead85b04c0cb374be901"
+  },
+  {
+    "asset_id": "architecture-c068cccc88966090",
+    "source_revision": "146385936ac7f66ab190cc2526f51154b816fa6caf0ad3385515b3ab4edacb71"
+  },
+  {
+    "asset_id": "architecture-c18f37f1f3934549",
+    "source_revision": "18c0f2e5ece2aaf9f8ae4a3aba6c119ef6c88c8966192c62773ae585b8ac669c"
+  },
+  {
+    "asset_id": "architecture-c3d9a67326ceeef4",
+    "source_revision": "1488c8d292fbaec6c756cbd2149034bb2740a29f101cb3bd40660cb901c302d5"
+  },
+  {
+    "asset_id": "architecture-c401b0a3afbe32f9",
+    "source_revision": "5938af1ed2e89a104d52f59339bf807a8662f442912c7ee6464f651d19531d87"
+  },
+  {
+    "asset_id": "architecture-c477223a6a9719b2",
+    "source_revision": "091357cf2980ab43a5b42bc5bba5ee3325e46bf8930f9a83baf96b5541dafaa1"
+  },
+  {
+    "asset_id": "architecture-c5723cb17dd9f702",
+    "source_revision": "2e74e0b6caf4b72c79bdb4b18379ffa091467e8c5c4d840653758d4aab29e1b7"
+  },
+  {
+    "asset_id": "architecture-c8118b0ba8a31a27",
+    "source_revision": "f275989fcd7e78bc3e22526bb26ac8c5ceb6f111e006bc61cbf35447203df86f"
+  },
+  {
+    "asset_id": "architecture-c81cb66d2c73b834",
+    "source_revision": "ce9aff0994281fee91a9be7eb395b556e2689842b54d1f73b19cf735c2bd9ab2"
+  },
+  {
+    "asset_id": "architecture-c91aad8cfeea3daf",
+    "source_revision": "606fc7a8a7ede9ded1b6ee3a7abdad74721b0ec59368316b4891ee69c9863ed0"
+  },
+  {
+    "asset_id": "architecture-cba2c28b1d05df42",
+    "source_revision": "891d55fa45919931b50d59e0061216eaf43592b595bac8b04894191e2f5ba037"
+  },
+  {
+    "asset_id": "architecture-d11f142a7c1f3322",
+    "source_revision": "811f1402100e5b7f64523c1b92dbc864ec4561efc9f1982032650f655021ac01"
+  },
+  {
+    "asset_id": "architecture-d1308f6fd9ea2102",
+    "source_revision": "c68ff4084d25852be7e674f1fb8a76a263ebba6539fb0c0ba27e4838d6a0ab24"
+  },
+  {
+    "asset_id": "architecture-d1edc9e472fb664a",
+    "source_revision": "38a0e4ca74c9e9c54fb519d99df874fa9eeb269179d1c757423c6fb5b92b8355"
+  },
+  {
+    "asset_id": "architecture-d2204586652b3d7c",
+    "source_revision": "e2c9229032de469ff9d10e97020d8ff03ad8b69d9ae69b58e9e2c6e071c6d95e"
+  },
+  {
+    "asset_id": "architecture-d2259294c7e5fd3d",
+    "source_revision": "a4045868cea614fe91b65863d35f49ea919ef7f5c040d1f449975bb79a7bfc5b"
+  },
+  {
+    "asset_id": "architecture-d2e4f67a8e5a33ad",
+    "source_revision": "71b1e8f8c15aa6ab02fb639a907b470a8fb0b454f45a2a1c3bf1db649a6b256f"
+  },
+  {
+    "asset_id": "architecture-d339e9164dcc71a4",
+    "source_revision": "964bf8bd16ea68373d50e287c90e58e3638aa57a0c3ce89d141a317691dcaa83"
+  },
+  {
+    "asset_id": "architecture-d44293240524f143",
+    "source_revision": "3094fb8aa5c48e96555f5d440193235b144626053642efb84053ebc31775ffe0"
+  },
+  {
+    "asset_id": "architecture-d55614019e6b6737",
+    "source_revision": "02faf0ed9c1667e184b189ee6cb8414121a6e655c2d57bb12b49eed8e6e33be2"
+  },
+  {
+    "asset_id": "architecture-d5809917ca07e817",
+    "source_revision": "925c17c97bef686ff6a2c229f8fc51289266c26c0435cd636288cd3f9b966e42"
+  },
+  {
+    "asset_id": "architecture-d5c34d68cfdedcdf",
+    "source_revision": "fffa2ad75e04be69fd5fe2e4d88be5fac260b2d5b7bf39fce5fe83003c867a41"
+  },
+  {
+    "asset_id": "architecture-d660e8c7b1d6d80e",
+    "source_revision": "b8ba7f6d1d4529ce0436ae86733861886655b59fb8c70577b62e0b3f5f5e9cf8"
+  },
+  {
+    "asset_id": "architecture-d66cc8d36dcf640f",
+    "source_revision": "7be311fa47f34764452b1b77a23bc3053cdf7485d237faae3540c75590dfd2ec"
+  },
+  {
+    "asset_id": "architecture-d74634f5e8b362a0",
+    "source_revision": "edc2ef9f369d63653f28a713ff273b0870871719bde508a8aa546ce5b0c1a6a3"
+  },
+  {
+    "asset_id": "architecture-da084c72b18b3e11",
+    "source_revision": "ff33593bd981518ed171e71baaa1b5dce18d5ad0700785d823c6a6c2445f7300"
+  },
+  {
+    "asset_id": "architecture-dc58014a3d15f82c",
+    "source_revision": "d5e0f38027a4093afa3ab68d5a3e8bf5a18bfa295f407a70633dc4d3d9a20aff"
+  },
+  {
+    "asset_id": "architecture-de9f57f34106c980",
+    "source_revision": "81929e13ac20eb186bfc7cdd5e4bed50766c13b23ba3fe4a9660960cdb0a3ec1"
+  },
+  {
+    "asset_id": "architecture-deb649af75fff119",
+    "source_revision": "a222e39477aeae316d4c810e8ffff600ddc1e5f7a2add531065b1a97101ae37b"
+  },
+  {
+    "asset_id": "architecture-df6e5daa59a03d80",
+    "source_revision": "4359060ec2bccd92e9db72a56adab4304e177a29bdd0e27293f36a63661bd501"
+  },
+  {
+    "asset_id": "architecture-df9bd5ebb90a7ce6",
+    "source_revision": "59577b65c059351e69cae054c526b58487d6d5f8a638ffd1e0c726679909d568"
+  },
+  {
+    "asset_id": "architecture-dfc78e95b5ba2cf6",
+    "source_revision": "12ed04ccf667130df05414971365775d9d98b8a7d38523ef9d10a41d741c7130"
+  },
+  {
+    "asset_id": "architecture-dfef05ad012718bd",
+    "source_revision": "99d765c3c37af294da6e15aea3ebbc11c69cf972830a622f437f83d6ed453654"
+  },
+  {
+    "asset_id": "architecture-e17a028f35c4b506",
+    "source_revision": "78bcc350c6f7f12c1dd4b2043be70ad8316011719ecf7a3dbf67829d02590a17"
+  },
+  {
+    "asset_id": "architecture-e1974cdcf7370e65",
+    "source_revision": "24137aaf1bd67b74875a695b26627d41581db80aecd28d66f8d22be1d7d4dc6b"
+  },
+  {
+    "asset_id": "architecture-e2a903ded75676b1",
+    "source_revision": "89970fc41d24f0ddf47240dec295ea56c62be1a755af73d2362a07b30bae5c2d"
+  },
+  {
+    "asset_id": "architecture-e2d4cdec5699302e",
+    "source_revision": "8aab700a6ce5c3f6ec00cf88edc965167a70fcae212f1f3a93600cbbbbebbaa5"
+  },
+  {
+    "asset_id": "architecture-e3ed4b0f87fe9acf",
+    "source_revision": "da1375355028b0b47cdb38b9256847632927f70c1fb715eefec6cff8269595fd"
+  },
+  {
+    "asset_id": "architecture-e43e550148a20e8e",
+    "source_revision": "18eb62217a724c8930cb3bb0b4f7a7fe09dd688b5af35ff33d12fe4338a87b66"
+  },
+  {
+    "asset_id": "architecture-e586752fa9170383",
+    "source_revision": "2750716c6b9e9acdec9ae6265c48b05a41c2b494b5d3647a2848c5680e254376"
+  },
+  {
+    "asset_id": "architecture-e638340af3766773",
+    "source_revision": "a7b1ec742edccddfeb073488c4245ef6c0942108fe7630bd7429e299eb9e0f5c"
+  },
+  {
+    "asset_id": "architecture-e900b2718f137603",
+    "source_revision": "af06f8e1a38ce40429a89da8863add78dcd585fb62511121cd19ececa3ef8dff"
+  },
+  {
+    "asset_id": "architecture-e9bd2d4a788be4d7",
+    "source_revision": "a0ce0ebaf4d7c92ba2386085bf0e02730722c168f149947d9e99199cbc165c3a"
+  },
+  {
+    "asset_id": "architecture-e9d2def20dd6733c",
+    "source_revision": "7304e87c7598d493aa5bae4c8ef62bb8b9b4a7a1b7cb225e52273fa6b7ef3671"
+  },
+  {
+    "asset_id": "architecture-eb09fb086ab80539",
+    "source_revision": "d9dc878a0767f0e95ee0742f7a7d7b7f1b6710decdcf351c4dd5c1f4009cb25c"
+  },
+  {
+    "asset_id": "architecture-eb673c91d3582ad8",
+    "source_revision": "3266059dabb47e0dcf51f1721cb553bb0d92c2707048a6d981c0b77611ac31a2"
+  },
+  {
+    "asset_id": "architecture-ecb898c0edb4d0f0",
+    "source_revision": "e85f5a1bfb47d79eb4ec657620b1c6812237a6c3901357fb12a659455c7fef8a"
+  },
+  {
+    "asset_id": "architecture-ed7582ca1046170c",
+    "source_revision": "efbd496887a7475d495e7368d5b02ab1ea7efc805c52a1c4e521548b94fe3218"
+  },
+  {
+    "asset_id": "architecture-f0e600ca13da291d",
+    "source_revision": "56f6ec0581bd565cca4161ff1fcbb8b7a6ea95d9c81e1ecc04df9146a316cff6"
+  },
+  {
+    "asset_id": "architecture-f25ff8ca9e430e56",
+    "source_revision": "1a4cc697be880eae8a67bb3588e027b4a09a39433be55fa056a5ae797a7980a1"
+  },
+  {
+    "asset_id": "architecture-f2ebb59306aca444",
+    "source_revision": "9c491a3a807e956641a10a24f2c31ea35d7bbeb310e5042d3d2099e4dcc02444"
+  },
+  {
+    "asset_id": "architecture-f31142513834ab5e",
+    "source_revision": "66762580950c609f93c90fc6da44e964d880cfda15f8a34f527eed88a23c9372"
+  },
+  {
+    "asset_id": "architecture-f3b89ecf205812ed",
+    "source_revision": "b7a7ae44b2daa246173baa3cca82235ee125c2379341eb33e049c6fa7cb7b960"
+  },
+  {
+    "asset_id": "architecture-f4ea30708d81921f",
+    "source_revision": "e20186f18e7a66a9ba915d3bf29bec577d5ebe4e80dbf0cf1957630262bf750e"
+  },
+  {
+    "asset_id": "architecture-f52152a8255a58ad",
+    "source_revision": "3bb1c45a7cb2f25362660b8cf3d1b43e82be86ee4f06bd52685db4e28d84f001"
+  },
+  {
+    "asset_id": "architecture-f5fb7e52ac0b2f04",
+    "source_revision": "ad39f16469aa6295c2530a0f997fe406a0c96a9e17acbd6d5aa6b6c41222ffc5"
+  },
+  {
+    "asset_id": "architecture-f8720e3d3f07a9f1",
+    "source_revision": "0bb186af7053ac8620311119602fddae22cecb615db1c3af2e16b4c6b4a88071"
+  },
+  {
+    "asset_id": "architecture-f9405d64d8a07922",
+    "source_revision": "310c0570a17e2c4b7c5c19ed4f2da3200899b510ea630101e94f0ab9b48a504b"
+  },
+  {
+    "asset_id": "architecture-fba1c0dda68194ea",
+    "source_revision": "4246a683ca05002f183d47ec139ac3d6b64902e1007f5161c52a4ddd53a56947"
+  },
+  {
+    "asset_id": "architecture-fd286931ccefe8e8",
+    "source_revision": "37060ac3a5e906b7b35f3db25c32a872eab083b5a9baeb74ace812a10b407e23"
+  },
+  {
+    "asset_id": "architecture-fe84ebe2ab273ccf",
+    "source_revision": "01f52c15854ebb5073046529b2589c24f14ad963e13249271d4acf89a0f68326"
+  },
+  {
+    "asset_id": "architecture-fee90914a596e4bc",
+    "source_revision": "016f149e5d9ef7bfac246669948025026c15b1e37efbabf28b43ab335e799cbd"
+  }
+]

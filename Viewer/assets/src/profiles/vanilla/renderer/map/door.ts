@@ -48,8 +48,11 @@ export class DoorModel extends ObjectWrapper<Group> {
             this.locks = [new EnvironmentLock("door"), new EnvironmentLock("door")];
             this.native.ready.then(() => {
                 if (this.disposed || this.native.failed) return;
+                const lockPanels = this.native.assetId === "weak-door-8x4"
+                    ? ["panel_align_A01_1", "panel_align_B01_1"]
+                    : ["button_align_B01", "button_align_A01"];
                 for (let i = 0; i < this.locks.length; i++) {
-                    const align = this.native!.node(i === 0 ? "LockHolderAlignA" : "LockHolderAlignB");
+                    const align = this.native.node(lockPanels[i]);
                     if (!align) { this.native.useBasicShape(new Error(`Missing source lock attachment in ${asset}.`)); return; }
                     align.add(this.locks[i].root);
                 }

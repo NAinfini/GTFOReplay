@@ -39,6 +39,7 @@ test('real native doors use source-sized panels, destroy blades and locks, and r
   const blade=model.native.node(size==='Small'?'DoorBlade':'DoorBlade001');assert.ok(blade);
   const matrices=()=>{model.root.updateMatrixWorld(true);const result=[];model.native.model.traverse(n=>{if(n.isMesh)result.push(...n.matrixWorld.elements)});return result};
   model.update(0,{id:1,status:'Closed'},weak);const closed=matrices();assert.equal(blade.visible,true);assert.equal(model.locks[0].melee.root.visible,true);assert.equal(model.locks[1].hack.root.visible,true);
+  assert.deepEqual(model.locks.map(lock=>lock.root.parent.name),size==='Small'?['button_align_B01','button_align_A01']:['panel_align_A01_1','panel_align_B01_1']);
   model.update(6000,{id:1,status:'Open',change:1000},weak);assert.notDeepEqual(matrices(),closed);
   model.update(6000,{id:1,status:'Destroyed'},weak);assert.equal(blade.visible,false);assert.equal(model.locks[0].melee.root.visible,false);assert.equal(model.locks[1].hack.root.visible,false);
   model.update(0,{id:1,status:'Closed'},weak);assert.equal(blade.visible,true);assert.deepEqual(matrices(),closed);

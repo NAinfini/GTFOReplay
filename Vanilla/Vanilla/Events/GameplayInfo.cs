@@ -47,14 +47,14 @@ namespace Vanilla.Events {
             if (layer == null) return;
             var objectives = layer.m_wardenObjective;
             if (objectives != null) {
-                var lines = new List<string>();
+                string current = "";
                 if (objectives.m_progressionObjectives != null) foreach (var objective in objectives.m_progressionObjectives) {
                     if (objective == null) continue;
-                    lines.Add(Clean(objective.m_header?.text));
-                    lines.Add(Clean(objective.m_text?.text));
+                    var lines = new[] { Clean(objective.m_header?.text), Clean(objective.m_text?.text) };
+                    var text = string.Join("\n", lines.Where(line => line.Length > 0));
+                    if (text.Length > 0) current = text;
                 }
-                lines.Add(Clean(objectives.m_items?.text));
-                Publish("Objective", 0, "Mission", string.Join("\n", lines.Where(line => line.Length > 0)));
+                Publish("Objective", 0, "Mission", current);
             }
             var timer = layer.m_objectiveTimer;
             Publish("Timer", 0, timer == null ? "" : timer.CurrentTimerTitle,

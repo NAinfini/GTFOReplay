@@ -12,7 +12,15 @@ const style = Style(({ css }) => {
         font:13px/1.45 "Segoe UI","Microsoft YaHei UI",sans-serif;font-variant-numeric:tabular-nums;
         text-shadow:0 1px 3px #000,0 1px 1px #000;white-space:pre-wrap;overflow-wrap:anywhere;
     `;
-    css`${panel} .scans {width:min(300px,100%);max-height:50%;overflow:auto;scrollbar-width:thin;scrollbar-color:#c2ccd766 transparent;pointer-events:auto;}
+    css`${panel} .objective {box-sizing:border-box;width:min(420px,100%);padding:10px 12px 11px;border-left:2px solid #dba852;background:#111820dc;box-shadow:0 5px 18px #00000045;pointer-events:auto;text-shadow:none;}
+    ${panel} .objective summary {display:flex;align-items:center;justify-content:space-between;gap:12px;color:#e5ba68;cursor:pointer;list-style:none;font-family:Oxanium,"Segoe UI",sans-serif;font-size:12px;font-weight:600;letter-spacing:.08em;user-select:none;}
+    ${panel} .objective summary::-webkit-details-marker {display:none;}
+    ${panel} .objective summary::after {content:"−";color:#a7b1c1;font:16px/1 "Segoe UI",sans-serif;}
+    ${panel} .objective:not([open]) summary::after {content:"+";}
+    ${panel} .objective summary:focus-visible {outline:2px solid #dba852;outline-offset:4px;}
+    ${panel} .objective p {margin:7px 0 0;color:#d3dce3;font-size:13px;line-height:1.5;}
+    ${panel} .objective + .scans {margin-top:12px;}
+    ${panel} .scans {width:min(300px,100%);max-height:50%;overflow:auto;scrollbar-width:thin;scrollbar-color:#c2ccd766 transparent;pointer-events:auto;}
     ${panel} .messages {position:absolute;bottom:0;left:0;width:min(340px,100%);max-height:40%;overflow:auto;scrollbar-width:thin;scrollbar-color:#c2ccd766 transparent;pointer-events:auto;}
     ${panel} section + section {margin-top:16px;}
     ${panel} strong {display:block;font-family:Oxanium,"Segoe UI",sans-serif;font-size:13px;font-weight:500;letter-spacing:.025em;}
@@ -47,6 +55,7 @@ export const TacticalDisplay = () => {
             const key = JSON.stringify(state);
             if (key === previous) return;
             previous = key;
+            const objectiveOpen = (dom.wrapper.querySelector('.objective') as HTMLDetailsElement | null)?.open ?? true;
             const fragment = document.createDocumentFragment();
             const scans = document.createElement('div'); scans.className = 'scans';
             const messages = document.createElement('div'); messages.className = 'messages';
@@ -75,10 +84,15 @@ export const TacticalDisplay = () => {
                 if (scan.percent === undefined) note(root, 'Progress not recorded');
                 if (scan.detail) note(root, scan.detail);
             }
+            if (state.objective?.text) {
+                const objective = document.createElement('details'); objective.className = 'objective'; objective.open = objectiveOpen;
+                const summary = document.createElement('summary'); summary.textContent = 'MISSION OBJECTIVE'; summary.title = 'Show or hide mission objective';
+                const text = document.createElement('p'); text.textContent = state.objective.text;
+                objective.append(summary, text); fragment.append(objective);
+            }
             if (state.timer?.text) section(state.timer.title || 'COUNTDOWN', state.timer.text);
             for (const alarm of state.alarms) section(alarm.title || 'ALARM', alarm.text, 'alarm');
             for (const wave of state.waves) section(wave.title, wave.text);
-            if (state.objective?.text) section('MISSION', state.objective.text);
             if (state.intel?.text) section(state.intel.title, state.intel.text);
             if (state.terminal?.text) section(state.terminal.title, state.terminal.text);
             if (state.alarmed > 0) section(`ALERTED ENEMIES ${state.alarmed}`);

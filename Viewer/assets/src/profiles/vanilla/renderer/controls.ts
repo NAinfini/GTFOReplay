@@ -11,7 +11,7 @@ import { Camera } from "./renderer.js";
 import { continuityFocus, EventDirector, resolveEventFocus, type EventFocus } from "../library/eventCamera.js";
 
 const cameraProbeOffsets = [[0,0,0],[.2,0,0],[-.2,0,0],[0,.2,0],[0,0,.2],[0,0,-.2]];
-const cameraSideViews = [[3,0],[-3,0],[0,3],[0,-3]];
+const automaticShots: [number, number, number][] = [[3.4,1.4,-3.4],[-3.6,2.1,-2.8],[3.2,1.7,3.5],[-2.8,2.4,3.1]];
 
 declare module "@esm/@root/replay/datastore.js" {
     interface DataStoreTypes {
@@ -72,9 +72,10 @@ export class Controls {
     private readonly cameraAnchor = new Vector3();
     private readonly cameraDirection = new Vector3();
     private readonly cameraProbe = new Vector3();
-    private readonly cameraCandidate = new Vector3();
-    private readonly cameraBest = new Vector3();
     private readonly cameraRay = new Raycaster();
+    private readonly automaticOffset = new Vector3();
+    private automaticShot = 0;
+    private shotSubject?: string;
 
     private cameraClearance(position: Vector3, dimension: number) {
         const length = this.cameraDirection.copy(position).sub(this.cameraAnchor).length();
@@ -100,20 +101,8 @@ export class Controls {
 
     private keepCameraVisible(position: Vector3, dimension: number) {
         position.sub(this.cameraAnchor).clampLength(0,5).add(this.cameraAnchor);
-        let clear=this.cameraClearance(position,dimension);
-        this.cameraBest.copy(position).sub(this.cameraAnchor).setLength(clear).add(this.cameraAnchor);
-        // A corner may block the preferred orbit completely. Try close side
-        // views, rather than moving the camera beyond the intervening wall.
-        if (clear < 1.5) for (const [x,z] of cameraSideViews) {
-            this.cameraCandidate.set(x,.6,z).add(this.cameraAnchor);
-            const candidate=this.cameraClearance(this.cameraCandidate,dimension);
-            if (candidate > clear) {
-                clear=candidate;
-                this.cameraBest.copy(this.cameraCandidate).sub(this.cameraAnchor).setLength(clear).add(this.cameraAnchor);
-            }
-            if (clear >= 2.5) break;
-        }
-        position.copy(this.cameraBest);
+        const clear=this.cameraClearance(position,dimension);
+        position.sub(this.cameraAnchor).setLength(clear).add(this.cameraAnchor);
     }
 
     public cancelEventFocus() { ++this.revision; this.pendingFocus = undefined; this.director.reset(); }
@@ -134,6 +123,7 @@ export class Controls {
 
     public enableAutoCamera() {
         this.cancelEventFocus(); this.firstPerson(false); this.autoCamera(true); this.targetSlot(undefined);
+        this.shotSubject = undefined;
         if (this.fakeCamera.position.lengthSq()<1) this.fakeCamera.position.set(0,2,-4);
         this.up = this.down = this.forward = this.backward = this.left = this.right = false;
     }
@@ -147,6 +137,10 @@ export class Controls {
     private frameSubject(target: EventFocus) {
         if (this.subject?.key !== target.key) {
             this.transition = { position: this.camera.root.position.clone(), rotation: this.camera.root.quaternion.clone(), elapsed: 0 };
+        }
+        if (this.autoCamera() && this.shotSubject !== target.key) {
+            this.shotSubject = target.key;
+            this.automaticOffset.set(...automaticShots[this.automaticShot++ % automaticShots.length]);
         }
         this.subject = target;
         this.targetSlot(!this.autoCamera() && target.type === 'player' ? target.slot : undefined);
@@ -631,7 +625,7 @@ export class Controls {
                     }
                     return;
                 }
-                const offset = this.desiredPosition.copy(this.fakeCamera.position);
+                const offset = this.desiredPosition.copy(this.autoCamera() ? this.automaticOffset : this.fakeCamera.position);
                 if (this.autoCamera() && offset.lengthSq()<1) offset.set(0,2,-4);
                 if (this.autoCamera()) offset.clampLength(2,5);
                 offset.y += 1;
@@ -644,6 +638,10 @@ export class Controls {
                 offset.add(target.position);
                 const dimensionChanged = renderer.get("Dimension") !== target.dimension;
                 renderer.set("Dimension", target.dimension);
+                if (this.autoCamera()) {
+                    this.cameraAnchor.copy(target.position).y += 1.2;
+                    this.keepCameraVisible(offset,target.dimension);
+                }
                 const transition = this.transition;
                 // Long map jumps and dimension changes use a clean cut, not a flight through walls.
                 if (transition && !dimensionChanged && transition.position.distanceToSquared(offset) < 35 * 35 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -656,7 +654,6 @@ export class Controls {
                     camera.root.position.copy(offset); camera.root.quaternion.copy(this.desiredRotation); this.transition = undefined;
                 }
                 if (this.autoCamera()) {
-                    this.cameraAnchor.copy(target.position).y += 1.2;
                     this.keepCameraVisible(camera.root.position,target.dimension);
                     camera.root.lookAt(this.cameraAnchor);
                 }

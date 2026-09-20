@@ -198,6 +198,19 @@ test('automatic coverage keeps mode separate from its player, survives clicks an
     pause(true);time(60000);step(1);assert.equal(controls.autoCamera(),true);
 });
 
+test('automatic coverage changes the shot angle when it changes subjects', () => {
+    const {controls,players,time,pause,step,root}=setup();
+    const first={id:1,slot:0,nickname:'One',position:new three.Vector3(),dimension:0,rotation:new three.Quaternion()};
+    const second={id:2,slot:1,nickname:'Two',position:new three.Vector3(10,0,0),dimension:0,rotation:new three.Quaternion()};
+    players.set(1,first);players.set(2,second);pause(false);step(.7);
+    const firstOffset=root.position.clone().sub(first.position);
+    for(let t=1000;t<=12000;t+=1000){time(t);step(1);}
+    const secondOffset=root.position.clone().sub(second.position);
+    assert.equal(controls.slot,1);
+    assert.ok(firstOffset.x>0&&secondOffset.x<0,'successive subjects kept the same camera side');
+    assert.ok(firstOffset.distanceTo(secondOffset)>2,'successive subjects kept the same framing angle');
+});
+
 test('event inspection and wheel retain auto mode through event retirement and continuation', () => {
     const {controls,players,enemies,time,pause,step}=setup();
     const player={id:1,slot:0,nickname:'Player',position:new three.Vector3(),dimension:0,rotation:new three.Quaternion()};

@@ -33,16 +33,17 @@ for(const width of [1440,720]){
  w.setSize(width,900);await w.webContents.executeJavaScript('setState()');await new Promise(r=>setTimeout(r,120));
  const check=await w.webContents.executeJavaScript(`(()=>{
   const h=window.hud,r=h.wrapper.getBoundingClientRect(),bar=h.wrapper.querySelector('progress'),style=getComputedStyle(h.wrapper);
-  const scans=h.wrapper.querySelector('.scans').getBoundingClientRect(),messages=h.wrapper.querySelector('.messages').getBoundingClientRect();
+  const objective=h.wrapper.querySelector('.objective'),objectiveRect=objective.getBoundingClientRect(),scans=h.wrapper.querySelector('.scans').getBoundingClientRect(),messages=h.wrapper.querySelector('.messages').getBoundingClientRect();
   return {width:innerWidth,left:r.left,right:r.right,height:r.height,text:h.wrapper.innerText,progress:bar?.value,overflow:h.wrapper.scrollWidth>h.wrapper.clientWidth,
-   transparent:style.backgroundColor==='rgba(0, 0, 0, 0)'&&style.borderTopWidth==='0px'&&style.boxShadow==='none',thin:getComputedStyle(bar).height==='3px',separated:scans.bottom<messages.top};
+   transparent:style.backgroundColor==='rgba(0, 0, 0, 0)'&&style.borderTopWidth==='0px'&&style.boxShadow==='none',thin:getComputedStyle(bar).height==='3px',
+   objectiveOpen:objective.open,objectiveScroll:objective.scrollHeight>objective.clientHeight,separated:objectiveRect.bottom<=scans.top&&scans.bottom<messages.top};
  })()`);
- if(check.overflow||check.left<0||check.right>check.width||check.progress!==63||!check.text.includes('EXTRACTION')||!check.text.includes('UPLINK VERIFIED')||!check.text.includes('CLASS V')||!check.transparent||!check.thin||!check.separated)throw Error(JSON.stringify(check));
+ if(check.overflow||check.left<0||check.right>check.width||check.progress!==63||!check.text.includes('MISSION OBJECTIVE')||!check.text.includes('EXTRACTION')||!check.text.includes('UPLINK VERIFIED')||!check.text.includes('CLASS V')||!check.transparent||!check.thin||!check.objectiveOpen||check.objectiveScroll||!check.separated)throw Error(JSON.stringify(check));
  results.push(check);
  // A normal hidden window supports DOM captures; reject missing image evidence.
  const image=await w.webContents.capturePage(undefined,{stayHidden:true,stayAwake:true});if(image.isEmpty())throw Error('Empty HUD capture');const png=image.toPNG();
  fs.writeFileSync(path.join(out,'hud-'+width+'.png'),png);
 }
-await w.webContents.executeJavaScript(`setState('unknown');if(!hud.wrapper.innerText.includes('Progress not recorded')||getComputedStyle(hud.wrapper.querySelector('progress')).visibility!=='hidden')throw Error('Unknown progress looks active');setState('empty');if(!hud.wrapper.hidden)throw Error('Empty HUD remains visible');`);
+await w.webContents.executeJavaScript(`hud.wrapper.querySelector('.objective summary').click();if(hud.wrapper.querySelector('.objective').open)throw Error('Objective did not hide');setState('unknown');if(hud.wrapper.querySelector('.objective').open)throw Error('Objective visibility was not preserved');if(!hud.wrapper.innerText.includes('Progress not recorded')||getComputedStyle(hud.wrapper.querySelector('progress')).visibility!=='hidden')throw Error('Unknown progress looks active');setState('empty');if(!hud.wrapper.hidden)throw Error('Empty HUD remains visible');`);
 fs.writeFileSync(path.join(out,'result.json'),JSON.stringify({passed:true,results},null,2));app.exit(0);
 }catch(error){fs.writeFileSync(path.join(out,'result.json'),JSON.stringify({passed:false,error:String(error.stack)},null,2));app.exit(1);}});

@@ -42,6 +42,9 @@ app.on('web-contents-created',(_,contents)=>{
             window.floorReport={excludedInstances,disabledModels,surfaces:surfaces.length,loadedIdentities:loaded.size,missing,untextured:[...new Set(untextured)],models,diagnostics:view.api().header.get('Vanilla.Map.NativeSurfaceDiagnostics')};
             const navigation=[...renderer.get('Maps').values()].flat();
             const fallback=[...renderer.get('NavigationFallback').values()].flat();
+            const projectedArea=meshes=>meshes.reduce((sum,mesh)=>{const p=mesh.geometry.attributes.position,i=mesh.geometry.index;for(let n=0;n<(i?.count??p.count);n+=3){const a=i?i.getX(n):n,b=i?i.getX(n+1):n+1,c=i?i.getX(n+2):n+2;sum+=Math.abs((p.getX(b)-p.getX(a))*(p.getZ(c)-p.getZ(a))-(p.getZ(b)-p.getZ(a))*(p.getX(c)-p.getX(a)))/2;}return sum;},0);
+            window.floorReport.navigationArea=projectedArea(navigation);
+            window.floorReport.fallbackArea=projectedArea(fallback);
             if(!native.navigationReady)throw Error('Fallback support classification incomplete');
             if(!surfaces.some(s=>s.enabled) && !fallback.some(mesh=>mesh.geometry.attributes.position.count>0))throw Error('Missing native floors lost their default ground');
             window.floorReport.navigationTriangles=native.navigationTriangles;
@@ -59,7 +62,7 @@ app.on('web-contents-created',(_,contents)=>{
                     view.time(t);await wait(50);renderer.render(0,view.api());
                     for(const player of view.api().get('Vanilla.Player').values()){
                         const model=renderer.get('Players').get(player.id),anim=view.api().get('Vanilla.Player.Animation').get(player.id);
-                        if(!model)continue;
+                        if(!model?.actor||!anim)continue;
                         ray.set(new T.Vector3(player.position.x,player.position.y+1,player.position.z),new T.Vector3(0,-1,0));
                         const ground=ray.intersectObjects(fallback.filter(m=>m.visible),false)[0]?.point.y;
                         const foot=model.actor.footHeight();
@@ -74,7 +77,7 @@ app.on('web-contents-created',(_,contents)=>{
             const camera=renderer.get('Camera').root,position=players[0]?.position;
             if(position){camera.position.set(position.x+10,position.y+17,position.z-15);camera.lookAt(position.x,position.y,position.z);}
             await wait(250);renderer.render(0,view.api());
-            return {excludedInstances,penetration:window.floorReport.penetration,disabledModels,passed:missing.length===0,recording:${JSON.stringify(path.basename(recording))},surfaces:surfaces.length,loadedIdentities:loaded.size,missing,untextured:[...new Set(untextured)],models,navigationTriangles:native.navigationTriangles,fallbackAvailable:true,playback:true,seeking:true,diagnostics:view.api().header.get('Vanilla.Map.NativeSurfaceDiagnostics')};
+            return {excludedInstances,penetration:window.floorReport.penetration,disabledModels,passed:missing.length===0,recording:${JSON.stringify(path.basename(recording))},surfaces:surfaces.length,loadedIdentities:loaded.size,missing,untextured:[...new Set(untextured)],models,navigationTriangles:native.navigationTriangles,navigationArea:window.floorReport.navigationArea,fallbackArea:window.floorReport.fallbackArea,fallbackAvailable:true,playback:true,seeking:true,diagnostics:view.api().header.get('Vanilla.Map.NativeSurfaceDiagnostics')};
         })()`);
         fs.writeFileSync(path.join(output,'scene.png'),(await contents.capturePage()).toPNG());finish(result);
     }catch(error){const details=await contents.executeJavaScript('window.floorReport ?? {}').catch(()=>({}));finish({...details,passed:false,error:String(error.stack||error)})}});

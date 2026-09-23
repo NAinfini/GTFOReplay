@@ -211,6 +211,24 @@ test('automatic coverage changes the shot angle when it changes subjects', () =>
     assert.ok(firstOffset.distanceTo(secondOffset)>2,'successive subjects kept the same framing angle');
 });
 
+test('automatic coverage preserves user orbit and zoom around the current subject', () => {
+    const {controls,players,time,pause,step,root}=setup();
+    players.set(1,{id:1,slot:0,nickname:'One',position:new three.Vector3(),dimension:0,rotation:new three.Quaternion()});
+    pause(false);step(.7);
+    const initial=root.position.clone();
+    controls.fakeCamera.position.set(-2,1,3);
+    time(1000);step(0);
+    assert.equal(controls.orbitControls.enabled,true);
+    assert.equal(controls.orbitControls.maxDistance,5);
+    assert.ok(root.position.distanceTo(initial)>2,'automatic shot overwrote the adjusted orbit');
+    assert.ok(root.position.x<0 && root.position.z>0);
+    controls.fakeCamera.position.multiplyScalar(.75);
+    time(2000);step(0);
+    assert.ok(root.position.distanceTo(new three.Vector3(0,1.2,0))<5);
+    assert.equal(controls.autoCamera(),true);
+    assert.equal(controls.targetSlot(),undefined);
+});
+
 test('event inspection and wheel retain auto mode through event retirement and continuation', () => {
     const {controls,players,enemies,time,pause,step}=setup();
     const player={id:1,slot:0,nickname:'Player',position:new three.Vector3(),dimension:0,rotation:new three.Quaternion()};

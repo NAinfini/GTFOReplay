@@ -156,7 +156,12 @@ indirect batching. The Recorder snapshots matching source instances and finalize
 transforms before this room job; destroyed sources survive in the recording, and
 surviving sources are deduplicated. Unmatched recognized identities now produce
 diagnostics even when some other floors succeeded. The game log reports preserved
-room-merge source counts for live verification.
+room-merge source counts for live verification. The hook resolves the dimension
+from the room's course node: room merging can precede dimension-root setup, so
+looking only in the registered root table can silently lose those sources. The
+capture log also reports room-merge calls and calls without an available
+dimension. An in-game recording is still required to verify the hook runs at
+the expected point in the current GTFO build.
 
 Geometry 0.0.4 appends one float32 support Y per vertex after the theme bytes.
 A downward static-world ray records collision height independently of navigation;
@@ -172,3 +177,17 @@ Those missing native identities/placements and collision samples cannot be recov
 from this file. Unit tests exercise removed merge sources, deduplication, support
 separation and binary alignment. Real-game Harmony timing and collision sampling
 still require a new expedition; no live capture acceptance is claimed.
+
+## R6D3 missing-floor audit (2026-09-23)
+
+The 2026-09-22 R6D3 recording has 21,930 captured native instances and 113
+loaded identities with no missing Viewer resource. Its capture log reports zero
+room-merge sources preserved. The navigation projection covers 47,716 square
+meters, of which 17,194 remain default ground after known native floors are
+subtracted. Of 41 sampled default-ground positions, only two overlap a recorded
+native floor within 1.25 meters vertically. These measurements identify a
+capture/asset-coverage gap, not a missing texture or mainly a clipping error.
+The original mesh identities and transforms omitted from this recording cannot
+be reconstructed from navigation geometry. Generic theme textures are not used
+to conceal the gap. A new recording with the updated capture hook and its
+room-merge counts is needed before additional source assets can be matched.

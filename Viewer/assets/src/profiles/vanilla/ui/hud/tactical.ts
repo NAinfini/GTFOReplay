@@ -93,7 +93,6 @@ export const TacticalDisplay = () => {
             if (state.timer?.text) section(state.timer.title || 'COUNTDOWN', state.timer.text);
             for (const alarm of state.alarms) section(alarm.title || 'ALARM', alarm.text, 'alarm');
             for (const wave of state.waves) section(wave.title, wave.text);
-            if (state.intel?.text) section(state.intel.title, state.intel.text);
             if (state.terminal?.text) section(state.terminal.title, state.terminal.text);
             if (state.alarmed > 0) section(`ALERTED ENEMIES ${state.alarmed}`);
             if (scans.childNodes.length) fragment.append(scans);

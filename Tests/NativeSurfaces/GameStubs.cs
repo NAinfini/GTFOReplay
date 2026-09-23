@@ -45,7 +45,9 @@ namespace UnityEngine {
     public static class InternalStaticBatchingUtility { public static void CombineGameObjects() { } }
 }
 namespace LevelGeneration {
-    public sealed class LG_Area : UnityEngine.Component { }
+    public sealed class Dimension { public int DimensionIndex = 2; }
+    public sealed class AIG_CourseNode { public Dimension m_dimension = new(); }
+    public sealed class LG_Area : UnityEngine.Component { public AIG_CourseNode m_courseNode = new(); }
     public sealed class LG_MergeStaticMeshes { public LG_Area m_area = new(); public bool Build() => true; }
     public sealed class LG_DimensionRoot : UnityEngine.Component { public int LinkedDimensionIndex; public void Setup() { } }
     public sealed class LG_PrefabSpawner { public UnityEngine.GameObject OnBuild() => new(); }

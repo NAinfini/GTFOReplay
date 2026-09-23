@@ -27,7 +27,7 @@ const zh: typeof en = {
     opening: { extracting: "正在解压录像…", readingDuration: "正在读取录像总时长…", loadingScene: "正在加载回放场景…", bytes: "{{percent}}% · {{loaded}} / {{total}} MiB" },
     loadProgress: "已加载到 {{loaded}}", loadStopped: "加载已停止 · 可播放至 {{loaded}}", liveLoaded: "实时录像 · 可播放至 {{loaded}}", unloadedHint: "浅色：已加载 · 深色：待加载。可在已加载范围内跳转。",
     firstPerson: "第一人称", firstPersonHint: "根据记录的动作近似还原所选玩家的视角和手部动画；关闭后返回第三人称。", selectPlayerForFirstPerson: "请先选择要跟随的玩家。",
-    camera: "镜头", autoCamera: "自动追踪事件", autoCameraHint: "提前最多 3 秒跟随已记录的重要事件。通常停留 6–12 秒，并轮换玩家；更紧急事件可在 3 秒后切换。拖动镜头、滚轮或移动键接管，普通点击不退出自动模式。",
+    camera: "镜头", autoCamera: "自动追踪事件", autoCameraHint: "提前最多 3 秒跟随已记录的重要事件。通常停留 6–12 秒，并轮换玩家；更紧急事件可在 3 秒后切换。拖动可环绕目标，滚轮可缩放，仍保持自动模式；移动键接管镜头。",
     languageName: "简体中文",
     statsUnavailable: "未记录",
     statsScope: "整个回放 · — 表示数据不可用",

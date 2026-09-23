@@ -27,6 +27,6 @@ export function tacticalState(api: ReplayApi, dimension: number) {
     }
     return { scans,
         alarmed: alarmedIds.size,
-        objective: latest('Objective'), timer: latest('Timer'), intel: transient(latest('Intel')), terminal: transient(latest('Terminal')),
+        objective: latest('Objective'), timer: latest('Timer'), terminal: transient(latest('Terminal')),
         alarms: info.filter(row => row.channel === 'Alarm' && row.text), waves: info.filter(row => row.channel === 'Wave' && row.text) };
 }

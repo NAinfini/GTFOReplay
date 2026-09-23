@@ -21,12 +21,15 @@ namespace Vanilla.Map {
         private static readonly List<string> diagnostics = new();
         private static Dictionary<string, Asset[]>? catalog;
         private static readonly string[] UnitySuffixes = { " (Instance)", " (Clone)", "(Clone)" };
+        private static int roomMerges;
+        private static int mergesWithoutDimension;
         private static bool finished = true;
         private static bool failed;
 
         [ReplayInit]
         private static void Init() {
-            captured.Clear(); merged.Clear(); culledEnabled.Clear(); roots.Clear(); diagnostics.Clear(); finished = false; failed = false;
+            captured.Clear(); merged.Clear(); culledEnabled.Clear(); roots.Clear(); diagnostics.Clear();
+            roomMerges = mergesWithoutDimension = 0; finished = false; failed = false;
         }
 
         [ReplayOnExpeditionEnd]
@@ -39,20 +42,20 @@ namespace Vanilla.Map {
         private static void BeforeRoomMerge(LG_MergeStaticMeshes __instance) {
             if (finished || failed) return;
             try {
+                ++roomMerges;
+                // Room builds can precede LG_DimensionRoot.Setup. The area's course
+                // node already owns the dimension, even when roots is still empty.
+                var dimension = __instance.m_area.m_courseNode?.m_dimension;
+                if (dimension == null) { ++mergesWithoutDimension; return; }
                 foreach (var renderer in __instance.m_area.GetComponentsInChildren<MeshRenderer>(true)) {
                     SaveEnabled(renderer);
                     var id = renderer.GetInstanceID();
                     if (!captured.TryGetValue(id, out var source) || merged.ContainsKey(id)) continue;
-                    var active = true;
-                    for (var parent = renderer.transform; parent != null; parent = parent.parent) {
-                        var root = roots.Values.FirstOrDefault(value => value.transform == parent);
-                        if (root != null) {
-                            merged[id] = new(source.Asset, (byte)root.LinkedDimensionIndex,
-                                source.Enabled && active, renderer.transform.localToWorldMatrix);
-                            break;
-                        }
+                    var active = __instance.m_area.gameObject.activeSelf;
+                    for (var parent = renderer.transform; parent != null && parent != __instance.m_area.transform; parent = parent.parent)
                         active &= parent.gameObject.activeSelf;
-                    }
+                    merged[id] = new(source.Asset, (byte)dimension.DimensionIndex,
+                        source.Enabled && active, renderer.transform.localToWorldMatrix);
                 }
             } catch (Exception error) { Fail(error); }
         }
@@ -229,7 +232,7 @@ namespace Vanilla.Map {
                     diagnostics.Add($"No exact native floor identities matched this level; retaining basic navigation geometry. Scanned={seen.Count}; capturedBeforeBatching={captured.Count}; unresolvedBatches={unresolvedBatches}.");
                 }
                 foreach (var identity in unmatched) diagnostics.Add($"Unmatched native floor identity: {identity}");
-                APILogger.Warn($"Captured {instances.Count} native scene instances, including {floorCount} enabled floor instances and {merged.Count} sources preserved before room merging.");
+                APILogger.Warn($"Captured {instances.Count} native scene instances, including {floorCount} enabled floor instances and {merged.Count} sources preserved before room merging (roomMerges={roomMerges}, withoutDimension={mergesWithoutDimension}).");
             } catch (Exception error) { instances.Clear(); Fail(error); }
             finally {
                 try { Replay.Trigger(new rNativeSurfaces(instances, diagnostics.ToArray())); }

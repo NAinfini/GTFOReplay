@@ -59,13 +59,15 @@ var diagnosticCount = (ushort)Replay.Header.Values[0];
 if ((ushort)Replay.Header.Values[1 + diagnosticCount] != 1) throw new Exception("Native empty material slots must preserve exact identity.");
 Console.WriteLine("PASS: native empty material slots.");
 
-Call("Init"); Call("OnDimensionSetup", root); root.gameObject.Descendants.Clear();
+Call("Init"); root.gameObject.Descendants.Clear();
 identity = document.RootElement.GetProperty("models").EnumerateArray().First(row => row.GetProperty("kind").GetString() == "floor").GetProperty("capture");
 var mergeJob = new LG_MergeStaticMeshes();
 var removedFloor = Floor(80);
+removedFloor.transform.parent = mergeJob.m_area.transform;
 mergeJob.m_area.gameObject.Descendants.Add(removedFloor);
 Call("BeforeRoomMerge", mergeJob);
-// GTFO's room merger removes the source object, so the final hierarchy cannot find it.
+// Room merging can run before dimension-root setup, then destroy the source.
+Call("OnDimensionSetup", root);
 root.gameObject.Descendants.Clear();
 Call("Capture");
 if ((ushort)Replay.Header.Values[0] != 0 || (uint)Replay.Header.Values[4] != 1 || (float)Replay.Header.Values[20] != 80)

@@ -65,8 +65,9 @@ New Recorder builds emit `Vanilla.Bioscan.Info` for scan status/occupancy change
 the game's extraction flag and player requirement. `Vanilla.Gameplay.Info` carries mission,
 Warden intel, objective timer, alarm and observed wave messages plus terminal commands/output.
 The Viewer maintains their state through normal snapshots and exposes useful text in event
-search. Timer text updates are hidden from the default event timeline. Intel and terminal
-HUD messages expire after 12 replay seconds; persistent objectives and active alarms remain.
+search. Timer text updates are hidden from the default event timeline. Warden intel remains
+searchable but is not overlaid on the Viewer. Terminal HUD
+messages expire after 12 replay seconds; persistent objectives and active alarms remain.
 Terminal history stays in the event list. Text is rendered with `textContent`.
 
 HUD text comes from the recording client's game UI; terminal output is captured after a

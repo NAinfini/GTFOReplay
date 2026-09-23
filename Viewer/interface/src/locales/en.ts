@@ -25,7 +25,7 @@ const en = {
     opening: { extracting: "Extracting recording…", readingDuration: "Reading recording duration…", loadingScene: "Loading replay scene…", bytes: "{{percent}}% · {{loaded}} / {{total}} MiB" },
     loadProgress: "Loaded to {{loaded}}", loadStopped: "Loading stopped · available to {{loaded}}", liveLoaded: "Live · available to {{loaded}}", unloadedHint: "Light: loaded · Dark: pending. Seek within the loaded range.",
     firstPerson: "First person", firstPersonHint: "Reconstruct this player's view and hands from recorded actions. Camera and animations are approximate. Turn off to return to third person.", selectPlayerForFirstPerson: "Select a player to use first person.",
-    camera: "Camera", autoCamera: "Auto events", autoCameraHint: "Anticipates recorded events by up to 3 seconds. Holds shots for 6–12 seconds and rotates players; urgent events may interrupt after 3. Drag, wheel or movement keys take control; a plain click keeps auto mode.",
+    camera: "Camera", autoCamera: "Auto events", autoCameraHint: "Anticipates recorded events by up to 3 seconds. Holds shots for 6–12 seconds and rotates players; urgent events may interrupt after 3. Drag to orbit or scroll to zoom without leaving auto mode. Movement keys take control.",
     languageName: "English",
     statsUnavailable: "Not recorded",
     statsScope: "Entire recording · — means unavailable",

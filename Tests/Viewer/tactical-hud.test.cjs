@@ -20,11 +20,12 @@ test('scans retain per-circle progress and extraction semantics; dimensions and 
 });
 test('mission and alarm persist; expired terminal output and future messages do not leak across seeking',async()=>{
  const {tacticalState}=await load();
- const info=new Map([['o',{channel:'Objective',text:'Return to extraction',time:10}],['a',{channel:'Alarm',title:'CLASS V',text:'Active',time:20}],['s',{channel:'Alarm',text:'',time:30}],['t',{channel:'Terminal',text:'UPLINK VERIFIED',time:100}]]);
+ const info=new Map([['o',{channel:'Objective',text:'Return to extraction',time:10}],['a',{channel:'Alarm',title:'CLASS V',text:'Active',time:20}],['s',{channel:'Alarm',text:'',time:30}],['t',{channel:'Terminal',text:'UPLINK VERIFIED',time:100}],['i',{channel:'Intel',text:'Warden intel',time:100}]]);
  const data=new Map([['Vanilla.Gameplay.Info',info]]);
  assert.equal(tacticalState(api(data,1000),0).terminal.text,'UPLINK VERIFIED');
  const expired=tacticalState(api(data,13000),0);assert.equal(expired.terminal,undefined);assert.equal(expired.objective.text,'Return to extraction');assert.equal(expired.alarms.length,1);
  assert.equal(tacticalState(api(data,0),0).terminal,undefined);
+ assert.equal('intel' in tacticalState(api(data,1000),0),false);
 });
 
 test('game information exposes useful searchable details without timer traffic in the default timeline',async()=>{

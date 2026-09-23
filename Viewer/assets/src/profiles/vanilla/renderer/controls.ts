@@ -73,7 +73,6 @@ export class Controls {
     private readonly cameraDirection = new Vector3();
     private readonly cameraProbe = new Vector3();
     private readonly cameraRay = new Raycaster();
-    private readonly automaticOffset = new Vector3();
     private automaticShot = 0;
     private shotSubject?: string;
 
@@ -109,6 +108,7 @@ export class Controls {
 
     public followPlayer(slot?: number) {
         this.cancelEventFocus(); this.autoCamera(false);
+        this.orbitControls.maxDistance = 30;
         if (slot === undefined) this.firstPerson(false);
         this.subject = undefined; this.targetName(undefined); this.targetSlot(slot);
         this.transition = undefined;
@@ -117,12 +117,14 @@ export class Controls {
     public setFirstPerson(enabled: boolean) {
         if (enabled && this.targetSlot() === undefined) return;
         this.cancelEventFocus(); this.autoCamera(false);
+        this.orbitControls.maxDistance = 30;
         this.firstPerson(enabled); this.transition = undefined;
         this.orbitControls.enabled = !enabled && !!this.subject && this.subject.type !== 'point';
     }
 
     public enableAutoCamera() {
         this.cancelEventFocus(); this.firstPerson(false); this.autoCamera(true); this.targetSlot(undefined);
+        this.orbitControls.maxDistance = 5;
         this.shotSubject = undefined;
         if (this.fakeCamera.position.lengthSq()<1) this.fakeCamera.position.set(0,2,-4);
         this.up = this.down = this.forward = this.backward = this.left = this.right = false;
@@ -140,7 +142,7 @@ export class Controls {
         }
         if (this.autoCamera() && this.shotSubject !== target.key) {
             this.shotSubject = target.key;
-            this.automaticOffset.set(...automaticShots[this.automaticShot++ % automaticShots.length]);
+            this.fakeCamera.position.set(...automaticShots[this.automaticShot++ % automaticShots.length]);
         }
         this.subject = target;
         this.targetSlot(!this.autoCamera() && target.type === 'player' ? target.slot : undefined);
@@ -201,6 +203,7 @@ export class Controls {
         this.targetSlot(targetSlot);
         this.relativeRot(relativeRot);
         this.autoCamera(autoCamera);
+        this.orbitControls.maxDistance = autoCamera ? 5 : 30;
         this.firstPerson(firstPerson);
         this.subject = subject; this.targetName(subject?.name);
     }
@@ -215,7 +218,7 @@ export class Controls {
         this.orbitControls.enablePan = false;
         this.orbitControls.enabled = false;
         this.orbitControls.minDistance = 2;
-        this.orbitControls.maxDistance = 30;
+        this.orbitControls.maxDistance = 5;
 
         this.speed = 20;
         const mouse = {
@@ -506,7 +509,7 @@ export class Controls {
         }
         this.slot = this.subject?.type === 'player' ? players.get(this.subject.id!)?.slot : undefined;
         this.targetSlot(this.autoCamera() ? undefined : this.slot);
-        this.orbitControls.enabled = !this.firstPerson() && !!this.subject && this.subject.type !== 'point';
+        this.orbitControls.enabled = !this.firstPerson() && !!this.subject && (this.autoCamera() || this.subject.type !== 'point');
 
         this.raycaster.setFromCamera(this.mousePos, camera.root);
 
@@ -625,7 +628,7 @@ export class Controls {
                     }
                     return;
                 }
-                const offset = this.desiredPosition.copy(this.autoCamera() ? this.automaticOffset : this.fakeCamera.position);
+                const offset = this.desiredPosition.copy(this.fakeCamera.position);
                 if (this.autoCamera() && offset.lengthSq()<1) offset.set(0,2,-4);
                 if (this.autoCamera()) offset.clampLength(2,5);
                 offset.y += 1;

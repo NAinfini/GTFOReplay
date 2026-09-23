@@ -5,6 +5,7 @@
 # Local AI tooling, instructions and working notes are not project deliverables.
 .codex/
 .agents/
+.serena/
 .claude/
 .cursor/
 .aider*
